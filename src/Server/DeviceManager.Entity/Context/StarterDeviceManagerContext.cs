@@ -18,8 +18,6 @@ namespace DeviceManager.Entity.Context
         public DbSet<Device> Devices { get; set; }
         public DbSet<Session> Sessions { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<HMI> HMIs { get; set; }
-        public DbSet<CommunicationModule> CommModules { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

@@ -15,28 +15,19 @@ namespace DeviceManager.Entity.Context.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [Required]
-        public DeviceType DeviceType { get; set; }
-        
+        public string Group { get; set; }
+
         [Required]
         public string Name { get; set; }
         
         [Required]
-        public string FirmwareVersion { get; set; }
-
-        [Required]
-        public string OrderNumber { get; set; }
+        public string HardwareInfo { get; set; }
 
         [Required]
         public string Address { get; set; }
         
         public string Address2 { get; set; }
 
-        public virtual HMI HMI { get; set; }
-
-        public virtual CommunicationModule CommModule { get; set; }
-
-        [DefaultValue(1)]
-        public AccessType AccessType { get; set; }
+        public string ConnectedModuleInfo { get; set; }
     }
 }

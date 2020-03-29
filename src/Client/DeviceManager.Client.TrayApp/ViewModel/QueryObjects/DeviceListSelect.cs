@@ -11,17 +11,17 @@ namespace DeviceManager.Client.TrayApp.ViewModel
     {
         public static IEnumerable<DeviceListViewModel> MapDeviceToViewModel(this IEnumerable<Device> devices)
         {
-            return devices.GroupBy(d => d.ProductFamily).Select(d => new DeviceListViewModel
+            return devices.GroupBy(d => d.DeviceGroup).Select(d => new DeviceListViewModel
             {
                 Type = d.Key,
                 DeviceList = d.AsEnumerable().Select(i => new DeviceItemViewModel 
                 {
                     Id = i.Id,
                     
-                    Name = $"{i.Name}\t{i.MlfbAndVersion}\t[{i.Address}]", 
+                    Name = $"{i.Name}\t{i.HardwareInfo}\t[{i.Address}]", 
                     // (<Mlfb> <FWver> [<Addr1>]/[<Addr2>]
                     
-                    Tooltip = $"Modules: {i.ConnectedModuleInfo}\r\nConnect via: {i.AvailableVia}\r\nChecked out by: {i.UsedBy}", 
+                    Tooltip = $"Modules: {i.ConnectedModuleInfo}\r\nChecked out by: {i.UsedBy}", 
                     // Modules: <Im> <FWver>, <HMI> <FWver> \r\nConnect via: <Im>, <Hmi> (only for starters) \r\nUsed by: <userfriendlyname>
                     
                     IsAvailable = i.IsAvailable,

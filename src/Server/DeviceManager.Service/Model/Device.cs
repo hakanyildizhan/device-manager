@@ -10,11 +10,10 @@ namespace DeviceManager.Service.Model
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string MlfbAndVersion { get; set; }
-        public string ProductFamily { get; set; }
+        public string HardwareInfo { get; set; }
+        public string DeviceGroup { get; set; }
         public string Address { get; set; }
         public string ConnectedModuleInfo { get; set; }
-        public string AvailableVia { get; set; }
         public bool IsAvailable { get; set; }
         public string UsedBy { get; set; }
     }

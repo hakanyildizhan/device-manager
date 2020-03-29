@@ -55,13 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Context\Entity\CommunicationModule.cs" />
     <Compile Include="Context\Entity\Device.cs" />
-    <Compile Include="Context\Entity\Enum\AccessType.cs" />
-    <Compile Include="Context\Entity\Enum\CommunicationModuleType.cs" />
-    <Compile Include="Context\Entity\Enum\DeviceType.cs" />
-    <Compile Include="Context\Entity\Enum\HMIModuleType.cs" />
-    <Compile Include="Context\Entity\HMI.cs" />
     <Compile Include="Context\Entity\Session.cs" />
     <Compile Include="Context\Entity\User.cs" />
     <Compile Include="Context\StarterDeviceManagerContext.cs" />
@@ -85,6 +79,10 @@
     <Compile Include="Migrations\202003252030181_NullableSessionFinishTime.designer.cs">
       <DependentUpon>202003252030181_NullableSessionFinishTime.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202003291927348_ModelGeneralization.cs" />
+    <Compile Include="Migrations\202003291927348_ModelGeneralization.designer.cs">
+      <DependentUpon>202003291927348_ModelGeneralization.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -107,6 +105,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202003252030181_NullableSessionFinishTime.resx">
       <DependentUpon>202003252030181_NullableSessionFinishTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003291927348_ModelGeneralization.resx">
+      <DependentUpon>202003291927348_ModelGeneralization.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
