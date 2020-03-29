@@ -193,6 +193,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         private void Exit()
         {
             DisableTimer();
+            (System.Windows.Application.Current.MainWindow as MainWindow).trayIcon.Visibility = System.Windows.Visibility.Hidden;
             System.Windows.Application.Current.Shutdown();
         }
     }
