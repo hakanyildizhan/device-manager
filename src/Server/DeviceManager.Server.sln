@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceManager.Api", "DeviceManager.Api\DeviceManager.Api.csproj", "{DA517655-74E8-4174-B011-6C021E83BB66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceManager.Entity", "DeviceManager.Entity\DeviceManager.Entity.csproj", "{D28A525D-6DA9-46E9-A6ED-EBBC78ABCEB3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceManager.Service", "DeviceManager.Service\DeviceManager.Service.csproj", "{4D4F496C-62DE-4CDF-A2CF-37D6352A20BD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DA517655-74E8-4174-B011-6C021E83BB66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA517655-74E8-4174-B011-6C021E83BB66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA517655-74E8-4174-B011-6C021E83BB66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA517655-74E8-4174-B011-6C021E83BB66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D28A525D-6DA9-46E9-A6ED-EBBC78ABCEB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D28A525D-6DA9-46E9-A6ED-EBBC78ABCEB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D28A525D-6DA9-46E9-A6ED-EBBC78ABCEB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D28A525D-6DA9-46E9-A6ED-EBBC78ABCEB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D4F496C-62DE-4CDF-A2CF-37D6352A20BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D4F496C-62DE-4CDF-A2CF-37D6352A20BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D4F496C-62DE-4CDF-A2CF-37D6352A20BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D4F496C-62DE-4CDF-A2CF-37D6352A20BD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5BB9DDE8-610F-4369-9D0A-E79F982C7063}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 4
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://yildizhanhakan.visualstudio.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = DeviceManager.Entity\\DeviceManager.Entity.csproj
+		SccProjectName1 = DeviceManager.Entity
+		SccLocalPath1 = DeviceManager.Entity
+		SccProjectUniqueName2 = DeviceManager.Service\\DeviceManager.Service.csproj
+		SccProjectName2 = DeviceManager.Service
+		SccLocalPath2 = DeviceManager.Service
+		SccProjectUniqueName3 = DeviceManager.Api\\DeviceManager.Api.csproj
+		SccProjectName3 = DeviceManager.Api
+		SccLocalPath3 = DeviceManager.Api
+	EndGlobalSection
+EndGlobal

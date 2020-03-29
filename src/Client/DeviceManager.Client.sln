@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceManager.Client.TrayApp", "DeviceManager.Client.TrayApp\DeviceManager.Client.TrayApp.csproj", "{286A8847-A4F3-4F9F-9E27-6F01C7B55A7F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceManager.Client.Service", "DeviceManager.Client.Service\DeviceManager.Client.Service.csproj", "{2627477B-01E1-4C37-BC13-3F8354D0C318}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{286A8847-A4F3-4F9F-9E27-6F01C7B55A7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{286A8847-A4F3-4F9F-9E27-6F01C7B55A7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{286A8847-A4F3-4F9F-9E27-6F01C7B55A7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{286A8847-A4F3-4F9F-9E27-6F01C7B55A7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2627477B-01E1-4C37-BC13-3F8354D0C318}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2627477B-01E1-4C37-BC13-3F8354D0C318}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2627477B-01E1-4C37-BC13-3F8354D0C318}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2627477B-01E1-4C37-BC13-3F8354D0C318}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D9E44DE2-5AD7-4D7B-84AB-308D8566E74C}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://yildizhanhakan.visualstudio.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = DeviceManager.Client.Service\\DeviceManager.Client.Service.csproj
+		SccProjectName1 = DeviceManager.Client.Service
+		SccLocalPath1 = DeviceManager.Client.Service
+		SccProjectUniqueName2 = DeviceManager.Client.TrayApp\\DeviceManager.Client.TrayApp.csproj
+		SccProjectName2 = DeviceManager.Client.TrayApp
+		SccLocalPath2 = DeviceManager.Client.TrayApp
+	EndGlobalSection
+EndGlobal
