@@ -1,0 +1,22 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "twitter-bootstrap-wizard@1.2",
+      "destination": "ClientLibraries/twitter-bootstrap-wizard"
+    },
+    {
+      "library": "jquery@3.4.1",
+      "destination": "ClientLibraries/jquery"
+    },
+    {
+      "library": "twitter-bootstrap@4.4.0",
+      "destination": "ClientLibraries/twitter-bootstrap"
+    },
+    {
+      "library": "modernizr@2.8.3",
+      "destination": "ClientLibraries/modernizr"
+    }
+  ]
+}

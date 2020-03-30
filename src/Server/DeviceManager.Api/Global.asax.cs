@@ -13,6 +13,7 @@ namespace DeviceManager.Api
     {
         protected void Application_Start()
         {
+            IoCConfig.RegisterComponents();
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

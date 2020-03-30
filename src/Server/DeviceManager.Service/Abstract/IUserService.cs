@@ -22,5 +22,11 @@ namespace DeviceManager.Service
         /// <param name="name"></param>
         /// <returns></returns>
         Task<bool> SetFriendlyNameAsync(string domainUserName, string name);
+
+        /// <summary>
+        /// Gets a list of users connected to the server.
+        /// </summary>
+        /// <returns></returns>
+        IList<UserInfo> GetUserInfo();
     }
 }

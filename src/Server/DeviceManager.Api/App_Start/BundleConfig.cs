@@ -12,19 +12,23 @@ namespace DeviceManager.Api
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+                        "~/ClientLibraries/jquery/jquery.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-                        "~/Scripts/modernizr-*"));
+                        "~/ClientLibraries/modernizr/modernizr.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js"));
+                        "~/ClientLibraries/twitter-bootstrap/js/bootstrap.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap-wizard").Include(
+                        "~/ClientLibraries/twitter-bootstrap-wizard/jquery.bootstrap.wizard.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                        "~/ClientLibraries/twitter-bootstrap/css/bootstrap.css",
+                        "~/Content/Styles/site.css",
+                        "~/Content/Styles/loading-button.css"));
         }
     }
 }

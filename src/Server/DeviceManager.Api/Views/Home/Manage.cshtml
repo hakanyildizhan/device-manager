@@ -1,0 +1,248 @@
+﻿
+@{
+    ViewBag.Title = "Manage";
+}
+
+
+<h2>Import hardware list</h2>
+<div id="rootwizard">
+
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="container">
+                <ul>
+                    <li class="nav-item tab">
+                        <a class="nav-link" href="#tab1" data-toggle="tab">Upload Your File</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">></a>
+                    </li>
+                    <li class="nav-item tab">
+                        <a class="nav-link disabled" href="#tab2" data-toggle="tab">Preview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">></a>
+                    </li>
+                    <li class="nav-item tab">
+                        <a class="nav-link disabled" href="#tab3" data-toggle="tab">Confirm</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">></a>
+                    </li>
+                    <li class="nav-item tab">
+                        <a class="nav-link disabled" href="#tab4" data-toggle="tab">Summary</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content">
+        <div class="tab-pane" id="tab1">
+            <div class="tab-content">
+                <p>Excel (*.xls/*.xlsx) and Offline OneNote Section files (*.one) are supported.</p>
+                <div class="input-group">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .one" onchange="onFileSelected()" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
+                        <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
+                    </div>
+                    @*<div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">Upload</button>
+                        </div>*@
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="tab2">
+            <div class="tab-content">
+                Step 3: Your file is being uploaded...
+                @using (Html.BeginForm("UploadFile", "Home", FormMethod.Post, new { id = "fileUpload", enctype = "multipart/form-data" }))
+                {
+                    <button id="upload" type="submit">In progress</button>
+                }
+                <span id="upload-finished-message">Upload is completed. Click Next to see the results.</span>
+                <span id="upload-finished-message-error">An error occurred during upload. Please try again later.</span>
+            </div>
+        </div>
+        <div class="tab-pane" id="tab3">
+            <div class="tab-content">
+                Upload Statistics:
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Upload session ID:</td>
+                            <td id="session-id"></td>
+                        </tr>
+                        <tr>
+                            <td>Successfully uploaded:</td>
+                            <td id="successfully-uploaded"></td>
+                        </tr>
+                        <tr>
+                            <td>Failed:</td>
+                            <td id="failed"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div id="upload-error"></div>
+            </div>
+        </div>
+
+        <ul class="pager wizard">
+            <li class="next"><a href="#" data-content="Done">Next</a></li>
+        </ul>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(function () {
+        $('#rootwizard').bootstrapWizard({
+            onTabShow: function (tab, navigation, index) {
+                // set progress bar
+                var total = navigation.find('li.tab').length;
+                var current = index + 1;
+                console.log(current);
+
+                function makeNextActive() {
+                    $('#rootwizard .wizard li.next').removeClass('disabled');
+                    $('#rootwizard .wizard li.next').unbind('click', false);
+                    $('#rootwizard .wizard li.next a').unbind('click', false);
+                }
+
+                function makeNextDisabled() {
+                    $('#rootwizard .wizard li.next').addClass('disabled');
+                    $('#rootwizard .wizard li.next').bind('click', false);
+                    $('#rootwizard .wizard li.next a').bind('click', false);
+                }
+
+                // initially make Next button disabled
+                makeNextDisabled();
+
+                // tab 1
+                // make Next clickable when user selects a file to upload
+                if (current === 1) {
+                    $('#rootwizard input.custom-file-input').change(function () {
+                        makeNextActive();
+                    });
+                }
+
+                // tab 2
+                // make Next clickable when user selects a file to upload
+                if (current === 2) {
+                    $('#rootwizard form#fileUpload').submit();
+                }
+
+                // tab 3
+                // upload file automatically
+                if (current === 3) {
+                    $('#rootwizard form#fileUpload').submit();
+                }
+            },
+
+            onNext:
+                // Tabs other than the active one will be disabled
+                // Next button text will change to its data-content attribute value
+                function onNext(previousTabInfo) {
+                    var previousTab = previousTabInfo[0];
+                    var nextTab = $(previousTab).next().next('.tab');
+
+                    $(previousTab).find('a').addClass('disabled');
+                    $(nextTab).find('a').removeClass('disabled');
+
+                    var isLastTab = $(nextTab).next().length === 0;
+                    if (isLastTab) {
+                        $('li.next').addClass('disabled');
+                        var nextButton = $('li.next').find('a[data-content]');
+                        $(nextButton).text($(nextButton).attr('data-content'));
+                    }
+                }
+        });
+    });
+
+    function onFileSelected() {
+        var name = document.getElementById('inputGroupFile04');
+        //console.log('Selected file: ' + name.files.item(0).name);
+
+        $(name).next('.custom-file-label').html(name.files.item(0).name);
+
+        //$('input#selectedFile').val(name.files.item(0).name);
+        //$('input#selectedFile').show();
+        // console.log('File size: ' + name.files.item(0).size);
+    }
+
+    $('#fileUpload').submit(function (e) {
+        e.preventDefault(); // stop the standard form submission
+
+        var formdata = new FormData();
+        formdata.append('file', $('input#inputGroupFile04').prop('files')[0]);
+        //formdata.append('DataType', 'Demand');
+
+        var uploadButton = $('button#upload');
+        $(uploadButton).addClass('loader active');
+
+        function makeButtonUnclickable(btn) {
+            $(btn).click(function () {
+                var input = this;
+                input.disabled = true;
+            });
+        }
+
+        function makeNextActive() {
+            $('#rootwizard .wizard li.next').removeClass('disabled');
+            $('#rootwizard .wizard li.next').unbind('click', false);
+            $('#rootwizard .wizard li.next a').unbind('click', false);
+        }
+
+        $.ajax({
+            url: this.action,
+            type: this.method,
+            data: formdata,
+            dataType: 'json',
+            cache: false,
+            contentType: false,
+            //contentType: "application/json",
+            processData: false,
+            success: function (data) {
+                $(uploadButton).removeClass('loader active');
+
+                if (data.uploadResult === "Succeeded") {
+                    $(uploadButton).text('Success');
+                    $(uploadButton).addClass('success animated pulse');
+                    $('div#upload-error').hide();
+                }
+                else if (data.uploadResult === "PartiallySucceeded") {
+                    $(uploadButton).text('Partial Success');
+                    $(uploadButton).addClass('partial-success animated pulse');
+                    $('div#upload-error').hide();
+                }
+                else if (data.uploadResult === "Failed") {
+                    $(uploadButton).text('Error');
+                    $(uploadButton).addClass('error animated pulse');
+                    $('div#upload-error').text(data.error);
+                    $('div#upload-error').show();
+                }
+
+                makeButtonUnclickable(uploadButton);
+                $('span#upload-finished-message').show();
+                //$('#rootwizard .wizard li.next').removeClass('disabled');
+                makeNextActive();
+
+                $('td#session-id').text(data.sessionId);
+                $('td#successfully-uploaded').text(data.succeededLines);
+                $('td#failed').text(data.failedLines);
+
+                //console.log('Error: ' + data.error);
+            },
+            error: function (xhr, error, status) {
+                console.log(error, status);
+                $(uploadButton).text('Error');
+                $(uploadButton).addClass('error animated pulse');
+                makeButtonUnclickable(uploadButton);
+                $('span#upload-finished-message-error').show();
+            }
+        });
+    });
+
+</script>
+

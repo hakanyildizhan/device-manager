@@ -1,26 +1,57 @@
-﻿<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS, and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
+﻿@using DeviceManager.Api.Model
+@model StatusPageViewModel
+
 <div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET Web API is a framework that makes it easy to build HTTP services that reach
-            a broad range of clients, including browsers and mobile devices. ASP.NET Web API
-            is an ideal platform for building RESTful applications on the .NET Framework.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301870">Learn more &raquo;</a></p>
+    <div class="col-lg-6 content">
+        <h2>User List</h2>
+        <p>This is a list of users connected to the server currently.</p>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">User name</th>
+                    <th scope="col">Friendly name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.UserList.Count; i++)
+                {
+                    <tr>
+                        <th scope="row">@(i+1)</th>
+                        <td>@Model.UserList[i].UserName</td>
+                        <td>@Model.UserList[i].FriendlyName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301871">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301872">Learn more &raquo;</a></p>
+    <div class="col-lg-10 content">
+        <h2>Hardware List</h2>
+        <p>This is a list of hardware uploaded to the server.</p>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Hardware Group</th>
+                    <th scope="col">Hardware Name</th>
+                    <th scope="col">Hardware Address</th>
+                    <th scope="col">Connected Module Info</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.HardwareList.Count; i++)
+                {
+                    <tr>
+                        <th scope="row">@(i+1)</th>
+                        <td>@Model.HardwareList[i].DeviceGroup</td>
+                        <td>@Model.HardwareList[i].Name</td>
+                        <td>@Model.HardwareList[i].Address</td>
+                        <td>@Model.HardwareList[i].ConnectedModuleInfo</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>
+
+

@@ -15,6 +15,17 @@ namespace DeviceManager.Service
         [Dependency]
         public DeviceManagerContext DbContext { get; set; }
 
+        public IList<UserInfo> GetUserInfo()
+        {
+            IList<UserInfo> userList = new List<UserInfo>();
+            DbContext.Users.ToList().ForEach(u => userList.Add(new UserInfo 
+            { 
+                UserName = u.DomainUsername,
+                FriendlyName = u.FriendlyName
+            }));
+            return userList;
+        }
+
         public async Task<RegisterResult> RegisterUserAsync(string domainUserName)
         {
             User user = DbContext.Users.Where(u => u.DomainUsername.Equals(domainUserName)).FirstOrDefault();

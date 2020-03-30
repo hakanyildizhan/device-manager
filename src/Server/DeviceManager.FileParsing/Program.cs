@@ -11,8 +11,8 @@ namespace DeviceManager.FileParsing
     {
         static void Main(string[] args)
         {
-            string oneNotePath = @"C:\Users\USER\Documents\OneNote Not Defterleri\Test Notebook\Yeni Bölüm 1.one";
-            string oneNotePageName = "Sayfa 1";
+            string oneNotePath = @"\\evosoft.com\dfsroot_nbg$\008_Projects\735035_SIRIUS_TIA_INT_ISTK\01_Projects\01_Starter\01_SoftStarter\Documentation\SoftStarter_Notebook\Hardware.one";
+            string oneNotePageName = "New Rack Order";
             string excelFilePath = @"C:\Users\USER\Documents\test.xlsx";
 
             //IParser parser = new ExcelParser(excelFilePath);
@@ -25,7 +25,5 @@ namespace DeviceManager.FileParsing
             IParser excelParser = new ExcelParser(path);
             IList<Hardware> hardwareList = excelParser.Parse();
         }
-
-        
     }
 }

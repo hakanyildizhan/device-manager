@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 
@@ -68,6 +69,7 @@ namespace DeviceManager.FileParsing
 
         private string GetCellValue(string cellContent)
         {
+            cellContent = cellContent.Replace(Environment.NewLine, " ");
             XmlDocument cellXml = new XmlDocument();
             try
             {
@@ -75,7 +77,7 @@ namespace DeviceManager.FileParsing
             }
             catch (XmlException)
             {
-                return cellContent;
+                return Regex.Replace(cellContent, "<.*?>", String.Empty);
             }
 
             return cellXml.InnerText;
