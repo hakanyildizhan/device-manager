@@ -9,7 +9,7 @@ using Unity;
 
 namespace DeviceManager.Service
 {
-    public class DeviceListService : IDeviceService
+    public class DeviceService : IDeviceService
     {
         [Dependency]
         public DeviceManagerContext DbContext { get; set; }
