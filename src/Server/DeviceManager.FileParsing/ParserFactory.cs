@@ -12,11 +12,11 @@ namespace DeviceManager.FileParsing
         public static IParser CreateParser(string filePath, string pageName = null)
         {
             string extension = new FileInfo(filePath).Extension;
-            if (extension == "xls" || extension == "xlsx")
+            if (extension == ".xls" || extension == ".xlsx")
             {
                 return new ExcelParser(filePath);
             }
-            else if (extension == "one")
+            else if (extension == ".one")
             {
                 return new OneNoteParser(filePath, pageName);
             }

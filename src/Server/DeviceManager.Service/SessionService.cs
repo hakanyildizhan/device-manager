@@ -37,6 +37,17 @@ namespace DeviceManager.Service
             return true;
         }
 
+        public async Task<bool> EndActiveSessionsAsync()
+        {
+            DbContext.Sessions.Where(s => s.IsActive).ToList().ForEach(s =>
+            {
+                s.IsActive = false;
+                s.FinishedAt = DateTime.UtcNow;
+            });
+            await DbContext.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<bool> EndSessionAsync(string userName, int deviceId)
         {
             Session activeSession = DbContext.Sessions

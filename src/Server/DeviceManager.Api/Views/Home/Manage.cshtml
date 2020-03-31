@@ -1,98 +1,82 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Manage";
 }
 
+<div class="row">
+    <div class="col-lg-12 content">
+        <h2>Import hardware list</h2>
+        <div id="rootwizard">
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <div class="container">
+                        <ul>
+                            <li class="nav-item tab">
+                                <a class="nav-link" href="#tab1" data-toggle="tab">Select File</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">></a>
+                            </li>
+                            <li class="nav-item tab">
+                                <a class="nav-link disabled" href="#tab2" data-toggle="tab">Preview & Confirm</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">></a>
+                            </li>
+                            <li class="nav-item tab">
+                                <a class="nav-link disabled" href="#tab3" data-toggle="tab">Finish</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
 
-<h2>Import hardware list</h2>
-<div id="rootwizard">
+            <div class="tab-content">
+                <div class="tab-pane" id="tab1">
+                    <div class="tab-content">
+                        <p>Excel (*.xls/*.xlsx) and Offline OneNote Section files (*.one) are supported.</p>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .one" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
+                                <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
+                            </div>
+                            <div id="pageName" hidden="hidden" class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">OneNote page name</span>
+                                </div>
+                                <input id="inputPageName" type="text" class="form-control" onchange="onPageNameSelected()" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab2">
+                    <div class="tab-content">
+                        @using (Html.BeginForm("UploadFile", "Home", FormMethod.Post, new { id = "fileUpload", enctype = "multipart/form-data" }))
+                        {
+                            <button id="upload" hidden="hidden" type="submit">In progress</button>
+                        }
+                        <span id="upload-finished-message" hidden="hidden">Import is completed. Click Next to confirm data import.</span>
+                        <span id="upload-finished-message-error" hidden="hidden">An error occurred during upload. Please try again later.</span>
+                        @using (Html.BeginForm("ImportData", "Home", FormMethod.Post, new { id = "importData", enctype = "multipart/form-data" }))
+                        {
+                            @*<div id="hardwarePreview" hidden="hidden"></div>*@
+                            @*<button id="confirm" type="submit" class="btn btn-primary">Confirm</button>*@
+                        }
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab3">
+                    <div class="tab-content">
+                        <span id="import-finished-message" hidden="hidden">Hardware list was imported successfully.</span>
+                        <span id="import-finished-message-error" hidden="hidden">An error occurred during the operation. Please try again later.</span>
+                    </div>
+                </div>
 
-    <div class="navbar">
-        <div class="navbar-inner">
-            <div class="container">
-                <ul>
-                    <li class="nav-item tab">
-                        <a class="nav-link" href="#tab1" data-toggle="tab">Upload Your File</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">></a>
-                    </li>
-                    <li class="nav-item tab">
-                        <a class="nav-link disabled" href="#tab2" data-toggle="tab">Preview</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">></a>
-                    </li>
-                    <li class="nav-item tab">
-                        <a class="nav-link disabled" href="#tab3" data-toggle="tab">Confirm</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">></a>
-                    </li>
-                    <li class="nav-item tab">
-                        <a class="nav-link disabled" href="#tab4" data-toggle="tab">Summary</a>
-                    </li>
+                <ul class="pager wizard">
+                    <li class="next"><a href="#" data-content="Done">Next</a></li>
                 </ul>
             </div>
         </div>
     </div>
-
-    <div class="tab-content">
-        <div class="tab-pane" id="tab1">
-            <div class="tab-content">
-                <p>Excel (*.xls/*.xlsx) and Offline OneNote Section files (*.one) are supported.</p>
-                <div class="input-group">
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .one" onchange="onFileSelected()" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
-                        <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
-                    </div>
-                    @*<div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">Upload</button>
-                        </div>*@
-                </div>
-            </div>
-        </div>
-        <div class="tab-pane" id="tab2">
-            <div class="tab-content">
-                Step 3: Your file is being uploaded...
-                @using (Html.BeginForm("UploadFile", "Home", FormMethod.Post, new { id = "fileUpload", enctype = "multipart/form-data" }))
-                {
-                    <button id="upload" type="submit">In progress</button>
-                }
-                <span id="upload-finished-message">Upload is completed. Click Next to see the results.</span>
-                <span id="upload-finished-message-error">An error occurred during upload. Please try again later.</span>
-            </div>
-        </div>
-        <div class="tab-pane" id="tab3">
-            <div class="tab-content">
-                Upload Statistics:
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>Upload session ID:</td>
-                            <td id="session-id"></td>
-                        </tr>
-                        <tr>
-                            <td>Successfully uploaded:</td>
-                            <td id="successfully-uploaded"></td>
-                        </tr>
-                        <tr>
-                            <td>Failed:</td>
-                            <td id="failed"></td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div id="upload-error"></div>
-            </div>
-        </div>
-
-        <ul class="pager wizard">
-            <li class="next"><a href="#" data-content="Done">Next</a></li>
-        </ul>
-    </div>
 </div>
-
 
 
 <script type="text/javascript">
@@ -122,21 +106,66 @@
                 // tab 1
                 // make Next clickable when user selects a file to upload
                 if (current === 1) {
-                    $('#rootwizard input.custom-file-input').change(function () {
-                        makeNextActive();
+                    $('#rootwizard input#inputGroupFile04').change(function () {
+                        $(this).next('.custom-file-label').html(this.files.item(0).name);
+                        if (this.files.item(0).name.endsWith('one')) {
+                            $('div#pageName').show();
+                        }
+                        else {
+                            $('div#pageName').hide();
+                            makeNextActive();
+                        }
+                        //makeNextActive();
                     });
                 }
 
                 // tab 2
-                // make Next clickable when user selects a file to upload
+                // upload file automatically
                 if (current === 2) {
                     $('#rootwizard form#fileUpload').submit();
                 }
 
                 // tab 3
-                // upload file automatically
+                //
                 if (current === 3) {
-                    $('#rootwizard form#fileUpload').submit();
+                    var hardwareList = [];
+                    $('#importData tr').each(function (row, tr) {
+                        hardwareList.push({
+                            Group: $(tr).find('td:eq(0)').text().trim(),
+                            Name: $(tr).find('td:eq(1)').text().trim(),
+                            Info: $(tr).find('td:eq(2)').text().trim(),
+                            PrimaryAddress: $(tr).find('td:eq(3)').text().trim(),
+                            SecondaryAddress: $(tr).find('td:eq(4)').text().trim(),
+                            ConnectedModuleInfo: $(tr).find('td:eq(5)').text().trim()
+                        });
+                    });
+
+                    $.ajax({
+                        url: '/Home/ImportData',
+                        type: 'POST',
+                        data: JSON.stringify({ 'hardwareList': hardwareList }),
+                        dataType: 'json',
+                        cache: false,
+                        contentType: 'application/json; charset=utf-8',
+                        processData: false,
+                        success: function (data) {
+                            //$(confirmButton).removeClass('loader active');
+
+                            if (data.Error === true) {
+                                $('#import-finished-message-error').removeAttr('hidden');
+                            }
+                            else {
+                                $('#import-finished-message').removeAttr('hidden');
+                                window.setTimeout(function () {
+                                    window.location.href = '/Home';
+                                }, 4000);
+                            }
+                        },
+                        error: function (xhr, error, status) {
+                            console.log(error, status);
+                            $('#import-finished-message-error').removeAttr('hidden');
+                        }
+                    });
                 }
             },
 
@@ -162,13 +191,12 @@
 
     function onFileSelected() {
         var name = document.getElementById('inputGroupFile04');
-        //console.log('Selected file: ' + name.files.item(0).name);
-
         $(name).next('.custom-file-label').html(name.files.item(0).name);
 
-        //$('input#selectedFile').val(name.files.item(0).name);
-        //$('input#selectedFile').show();
-        // console.log('File size: ' + name.files.item(0).size);
+    }
+
+    function onPageNameSelected() {
+        makeNextActive();
     }
 
     $('#fileUpload').submit(function (e) {
@@ -176,10 +204,10 @@
 
         var formdata = new FormData();
         formdata.append('file', $('input#inputGroupFile04').prop('files')[0]);
-        //formdata.append('DataType', 'Demand');
+        formdata.append('pageName', $('div#pageName').val());
 
-        var uploadButton = $('button#upload');
-        $(uploadButton).addClass('loader active');
+        //var uploadButton = $('button#upload');
+        //$(uploadButton).addClass('loader active');
 
         function makeButtonUnclickable(btn) {
             $(btn).click(function () {
@@ -201,32 +229,28 @@
             dataType: 'json',
             cache: false,
             contentType: false,
-            //contentType: "application/json",
             processData: false,
             success: function (data) {
-                $(uploadButton).removeClass('loader active');
+                //$(uploadButton).removeClass('loader active');
 
-                if (data.uploadResult === "Succeeded") {
-                    $(uploadButton).text('Success');
-                    $(uploadButton).addClass('success animated pulse');
-                    $('div#upload-error').hide();
+                if (data.Error === true) {
+                    //$(uploadButton).text('Error');
+                    //$(uploadButton).addClass('error animated pulse');
+                    $('div#upload-error').removeAttr('hidden');
+                    $('span#upload-finished-message-error').removeAttr('hidden');
                 }
-                else if (data.uploadResult === "PartiallySucceeded") {
-                    $(uploadButton).text('Partial Success');
-                    $(uploadButton).addClass('partial-success animated pulse');
+                else {
+                    //$(uploadButton).text('Success');
+                    //$(uploadButton).addClass('success animated pulse');
                     $('div#upload-error').hide();
-                }
-                else if (data.uploadResult === "Failed") {
-                    $(uploadButton).text('Error');
-                    $(uploadButton).addClass('error animated pulse');
-                    $('div#upload-error').text(data.error);
-                    $('div#upload-error').show();
+
+                    $('span#upload-finished-message').removeAttr('hidden');
+                    $('#importData').html(data.Message);
+                    //$('#hardwarePreview').removeAttr('hidden');
+                    makeNextActive();
                 }
 
-                makeButtonUnclickable(uploadButton);
-                $('span#upload-finished-message').show();
-                //$('#rootwizard .wizard li.next').removeClass('disabled');
-                makeNextActive();
+                //makeButtonUnclickable(uploadButton);
 
                 $('td#session-id').text(data.sessionId);
                 $('td#successfully-uploaded').text(data.succeededLines);
@@ -236,10 +260,10 @@
             },
             error: function (xhr, error, status) {
                 console.log(error, status);
-                $(uploadButton).text('Error');
-                $(uploadButton).addClass('error animated pulse');
-                makeButtonUnclickable(uploadButton);
-                $('span#upload-finished-message-error').show();
+                //$(uploadButton).text('Error');
+                //$(uploadButton).addClass('error animated pulse');
+                //makeButtonUnclickable(uploadButton);
+                $('span#upload-finished-message-error').removeAttr('hidden');
             }
         });
     });

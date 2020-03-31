@@ -83,6 +83,10 @@
     <Compile Include="Migrations\202003291927348_ModelGeneralization.designer.cs">
       <DependentUpon>202003291927348_ModelGeneralization.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202003311515416_DeviceIsActive.cs" />
+    <Compile Include="Migrations\202003311515416_DeviceIsActive.designer.cs">
+      <DependentUpon>202003311515416_DeviceIsActive.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -108,6 +112,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202003291927348_ModelGeneralization.resx">
       <DependentUpon>202003291927348_ModelGeneralization.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202003311515416_DeviceIsActive.resx">
+      <DependentUpon>202003311515416_DeviceIsActive.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

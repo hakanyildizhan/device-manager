@@ -64,12 +64,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstract\IDeviceListService.cs" />
+    <Compile Include="Abstract\IDeviceService.cs" />
     <Compile Include="Abstract\ISessionService.cs" />
     <Compile Include="Abstract\IUserService.cs" />
-    <Compile Include="DeviceListService.cs" />
+    <Compile Include="DeviceService.cs" />
     <Compile Include="Helper\ExtensionMethods.cs" />
+    <Compile Include="Helper\QueryObjects\DeviceSelect.cs" />
     <Compile Include="Model\Device.cs" />
+    <Compile Include="Model\DeviceImport.cs" />
     <Compile Include="Model\Enum\RegisterUserResult.cs" />
     <Compile Include="Model\RegisterResult.cs" />
     <Compile Include="Model\UserInfo.cs" />

@@ -29,5 +29,6 @@ namespace DeviceManager.Entity.Context.Entity
         public string Address2 { get; set; }
 
         public string ConnectedModuleInfo { get; set; }
+        public bool IsActive { get; set; }
     }
 }

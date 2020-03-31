@@ -7,12 +7,19 @@ using System.Threading.Tasks;
 
 namespace DeviceManager.Service
 {
-    public interface IDeviceListService
+    public interface IDeviceService
     {
         /// <summary>
         /// Gets all existing devices.
         /// </summary>
         /// <returns></returns>
         IEnumerable<Device> GetDevices();
+
+        /// <summary>
+        /// Imports given hardware data into the device database.
+        /// </summary>
+        /// <param name="deviceData"></param>
+        /// <returns></returns>
+        Task<bool> Import(IEnumerable<DeviceImport> deviceData);
     }
 }

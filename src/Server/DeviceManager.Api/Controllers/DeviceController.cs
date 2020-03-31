@@ -12,9 +12,9 @@ namespace DeviceManager.Api.Controllers
 {
     public class DeviceController : ApiController
     {
-        private readonly IDeviceListService _deviceListService;
+        private readonly IDeviceService _deviceListService;
 
-        public DeviceController(IDeviceListService deviceListService)
+        public DeviceController(IDeviceService deviceListService)
         {
             _deviceListService = deviceListService;
         }

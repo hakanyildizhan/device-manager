@@ -15,7 +15,7 @@ namespace DeviceManager.Api
         public static void RegisterComponents()
         {
             var container = new UnityContainer();
-            container.RegisterType<IDeviceListService, DeviceListService>(new TransientLifetimeManager());
+            container.RegisterType<IDeviceService, DeviceListService>(new TransientLifetimeManager());
             container.RegisterType<ISessionService, SessionService>(new TransientLifetimeManager());
             container.RegisterType<IUserService, UserService>(new TransientLifetimeManager());
             DependencyResolver.SetResolver(new UnityResolver(container));

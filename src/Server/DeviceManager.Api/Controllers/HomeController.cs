@@ -1,4 +1,5 @@
 ﻿using DeviceManager.Api.Model;
+using DeviceManager.FileParsing;
 using DeviceManager.Service;
 using DeviceManager.Service.Model;
 using System;
@@ -8,18 +9,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using FromBody = System.Web.Http.FromBodyAttribute;
 
 namespace DeviceManager.Api.Controllers
 {
     public class HomeController : Controller
     {
         private readonly IUserService _userService;
-        private readonly IDeviceListService _deviceListService;
+        private readonly IDeviceService _deviceListService;
+        private readonly ISessionService _sessionService;
 
-        public HomeController(IUserService userService, IDeviceListService deviceListService)
+        public HomeController(IUserService userService, IDeviceService deviceListService, ISessionService sessionService)
         {
             _userService = userService;
             _deviceListService = deviceListService;
+            _sessionService = sessionService;
         }
 
         // GET: Home
@@ -44,97 +48,69 @@ namespace DeviceManager.Api.Controllers
 
         // POST: Dashboard/File/UploadFile
         [HttpPost]
-        public async Task<JsonResult> UploadFile(HttpPostedFileBase file)
+        public JsonResult UploadFile(HttpPostedFileBase file)
         {
             // Verify that the user selected a file
-            if (file != null && file.ContentLength > 0)
+            if (file == null || file.ContentLength == 0)
+            {
+                return Json(new
+                {
+                    Error = true,
+                    Message = ""
+                });
+            }
+
+            try
             {
                 // extract only the filename
                 string fileName = Path.GetFileName(file.FileName);
                 string generatedName = fileName.Insert(file.FileName.IndexOf('.'), "_" + DateTime.UtcNow.ToString("yyyyMMdd-HHmmss"));
-                // store the file inside ~/App_Data/uploads folder
-                var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), generatedName);
+                var path = Path.Combine(Server.MapPath("~/App_Data"), generatedName);
                 file.SaveAs(path);
-            }
 
-            if (true)
-            {
+                string pageName = Request.Form["pageName"].ToString();
+                IParser parser = ParserFactory.CreateParser(path, pageName);
+                IList<Hardware> hardwareList = parser.Parse();
 
-            }
-
-            // redirect back to the index action to show the form once again
-            return Json(new
-            {
-                FailedLines = ""
-            });
-
-            /*
-            var file = Request.Form.Files[0];
-            string webRootPath = _hostingEnvironment.WebRootPath;
-            string filePath = Path.Combine(webRootPath, "Temp", file.FileName.Insert(file.FileName.IndexOf('.'), "_" + DateTime.UtcNow.ToString("yyyyMMdd-HHmmss")));
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                file.CopyTo(fileStream);
-            }
-
-            string dataType = Request.Form["DataType"].ToString();
-
-            try
-            {
-                if (dataType == "Offer")
-                {
-                    var parser = new ExcelDataParser<OfferUploadDto>(filePath);
-                    var items = parser.Parse();
-                    var uploadInfo = new UploadInfoDto() { FileName = file.FileName };
-                    var result = await _offerPostService.AddUploads(items, uploadInfo);
-                    return Json(new
-                    {
-                        FailedLines = result.FailedItemCount,
-                        UploadResult = result.UploadResult.ToString(),
-                        Error = result.Error,
-                        SessionId = result.SessionId,
-                        SucceededLines = result.SucceededItemCount
-                    });
-                }
-
-                else //if (dataType == "Demand")
-                {
-                    var parser = new ExcelDataParser<DemandUploadDto>(filePath);
-                    var items = parser.Parse();
-                    var uploadInfo = new UploadInfoDto() { FileName = file.FileName };
-                    var result = await _demandPostService.AddUploads(items, uploadInfo);
-                    return Json(new
-                    {
-                        FailedLines = result.FailedItemCount,
-                        UploadResult = result.UploadResult.ToString(),
-                        Error = result.Error,
-                        SessionId = result.SessionId,
-                        SucceededLines = result.SucceededItemCount
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                string errorMessage = "";
-
-                if (ex is MissingColumnException || ex is ParsingException)
-                {
-                    errorMessage = ex.Message;
-                }
-                else
-                {
-                    errorMessage = "An error occurred. Please try again later.";
-                }
                 return Json(new
                 {
-                    FailedLines = 0,
-                    UploadResult = UploadResult.Failed.ToString(),
-                    Error = errorMessage,
-                    SessionId = "-",
-                    SucceededLines = 0
+                    Error = false,
+                    Message = RenderRazorViewToString("Partial/HardwareListPreview", hardwareList.ToHardwareInfo())
                 });
             }
-            */
+            catch (Exception e)
+            {
+                return Json(new
+                {
+                    Error = true,
+                    Message = ""
+                });
+            }
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ImportData(IEnumerable<HardwareInfo> hardwareList)
+        {
+            bool success = await _sessionService.EndActiveSessionsAsync();
+            success &= await _deviceListService.Import(hardwareList.ToDeviceImport());
+
+            return Json(new
+            {
+                Error = !success
+            });
+        }
+
+        private string RenderRazorViewToString(string viewName, object model)
+        {
+            ViewData.Model = model;
+            using (var sw = new StringWriter())
+            {
+                var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
+                var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
+                viewResult.View.Render(viewContext, sw);
+                viewResult.ViewEngine.ReleaseView(ControllerContext, viewResult.View);
+                return sw.GetStringBuilder().ToString();
+            }
         }
 
         // GET: Settings

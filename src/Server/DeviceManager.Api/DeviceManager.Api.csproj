@@ -155,9 +155,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\BoolActionResult.cs" />
+    <Compile Include="Helper\QueryObjects\HardwareInfoSelect.cs" />
     <Compile Include="IoC\UnityResolver.cs" />
     <Compile Include="Model\SessionRequest.cs" />
     <Compile Include="Model\SetFriendlyNameRequest.cs" />
+    <Compile Include="Model\View\HardwareInfo.cs" />
     <Compile Include="Model\View\StatusPageViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -218,8 +220,13 @@
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\LocalProfile.pubxml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Partial\HardwareListPreview.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DeviceManager.FileParsing\DeviceManager.FileParsing.csproj">
+      <Project>{3e06185e-ef0a-4a72-a014-b6735120aca2}</Project>
+      <Name>DeviceManager.FileParsing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DeviceManager.Service\DeviceManager.Service.csproj">
       <Project>{4d4f496c-62de-4cdf-a2cf-37d6352a20bd}</Project>
       <Name>DeviceManager.Service</Name>
