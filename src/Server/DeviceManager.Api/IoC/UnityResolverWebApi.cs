@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http.Dependencies;
-using System.Web.Mvc;
 using Unity;
 
 namespace DeviceManager.Api.IoC
 {
-    public class UnityResolver : System.Web.Mvc.IDependencyResolver
+    public class UnityResolverWebApi : IDependencyResolver
     {
         protected IUnityContainer container;
 
-        public UnityResolver(IUnityContainer container)
+        public UnityResolverWebApi(IUnityContainer container)
         {
             if (container == null)
             {
@@ -43,6 +42,12 @@ namespace DeviceManager.Api.IoC
             {
                 return new List<object>();
             }
+        }
+
+        public IDependencyScope BeginScope()
+        {
+            var child = container.CreateChildContainer();
+            return new UnityResolverWebApi(child);
         }
 
         public void Dispose()

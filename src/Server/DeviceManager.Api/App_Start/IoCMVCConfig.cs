@@ -10,15 +10,15 @@ using Unity.Lifetime;
 
 namespace DeviceManager.Api
 {
-    public static class IoCConfig
+    public static class IoCMVCConfig
     {
         public static void RegisterComponents()
         {
             var container = new UnityContainer();
-            container.RegisterType<IDeviceService, DeviceListService>(new TransientLifetimeManager());
+            container.RegisterType<IDeviceService, DeviceService>(new TransientLifetimeManager());
             container.RegisterType<ISessionService, SessionService>(new TransientLifetimeManager());
             container.RegisterType<IUserService, UserService>(new TransientLifetimeManager());
-            DependencyResolver.SetResolver(new UnityResolver(container));
+            DependencyResolver.SetResolver(new UnityResolverMVC(container));
         }
     }
 }
