@@ -48,10 +48,11 @@ namespace DeviceManager.Api.Controllers
 
         // POST: Dashboard/File/UploadFile
         [HttpPost]
-        public JsonResult UploadFile(HttpPostedFileBase file)
+        public JsonResult UploadFile(UploadViewModel viewModel)
         {
             // Verify that the user selected a file
-            if (file == null || file.ContentLength == 0)
+            if ((viewModel.File == null || viewModel.File.ContentLength == 0) && 
+                (string.IsNullOrEmpty(viewModel.OneNotePath) || string.IsNullOrEmpty(viewModel.OneNotePageName)))
             {
                 return Json(new
                 {
@@ -62,14 +63,22 @@ namespace DeviceManager.Api.Controllers
 
             try
             {
-                // extract only the filename
-                string fileName = Path.GetFileName(file.FileName);
-                string generatedName = fileName.Insert(file.FileName.IndexOf('.'), "_" + DateTime.UtcNow.ToString("yyyyMMdd-HHmmss"));
-                var path = Path.Combine(Server.MapPath("~/App_Data"), generatedName);
-                file.SaveAs(path);
+                string path = string.Empty;
 
-                string pageName = Request.Form["pageName"].ToString();
-                IParser parser = ParserFactory.CreateParser(path, pageName);
+                if (viewModel.File != null)
+                {
+                    string fileName = Path.GetFileName(viewModel.File.FileName); // extract only the filename
+                    string generatedName = fileName.Insert(viewModel.File.FileName.IndexOf('.'), "_" + DateTime.UtcNow.ToString("yyyyMMdd-HHmmss"));
+                    path = Path.Combine(Server.MapPath("~/App_Data"), generatedName);
+                    viewModel.File.SaveAs(path);
+                }
+                else
+                {
+                    path = viewModel.OneNotePath;
+                }
+
+                //string pageName = Request.Form["pageName"].ToString();
+                IParser parser = ParserFactory.CreateParser(path, viewModel.OneNotePageName);
                 IList<Hardware> hardwareList = parser.Parse();
 
                 return Json(new

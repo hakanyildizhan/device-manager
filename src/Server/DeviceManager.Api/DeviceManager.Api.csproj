@@ -144,7 +144,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\IoCConfig.cs" />
+    <Compile Include="App_Start\IoCMVCConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\DeviceController.cs" />
@@ -156,11 +156,13 @@
     </Compile>
     <Compile Include="Helper\BoolActionResult.cs" />
     <Compile Include="Helper\QueryObjects\HardwareInfoSelect.cs" />
-    <Compile Include="IoC\UnityResolver.cs" />
+    <Compile Include="IoC\UnityResolverMVC.cs" />
+    <Compile Include="IoC\UnityResolverWebApi.cs" />
     <Compile Include="Model\SessionRequest.cs" />
     <Compile Include="Model\SetFriendlyNameRequest.cs" />
     <Compile Include="Model\View\HardwareInfo.cs" />
     <Compile Include="Model\View\StatusPageViewModel.cs" />
+    <Compile Include="Model\View\UploadViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -34,18 +34,46 @@
                 <div class="tab-pane" id="tab1">
                     <div class="tab-content">
                         <p>Excel (*.xls/*.xlsx) and Offline OneNote Section files (*.one) are supported.</p>
-                        <div class="input-group">
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .one" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
-                                <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
-                            </div>
-                            <div id="pageName" hidden="hidden" class="input-group input-group-sm mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">OneNote page name</span>
+                        
+                        <div id="excel-input" class="upload-group">
+                            <div class="form-check">
+                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                            <label class="form-check-label" for="exampleRadios1">
+                                Excel file
+                            </label>
+                        </div>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
+                                    <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
                                 </div>
-                                <input id="inputPageName" type="text" class="form-control" onchange="onPageNameSelected()" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
                             </div>
                         </div>
+                        
+                        <div id="oneNote-input" class="upload-group">
+                            <div class="form-check">
+                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                            <label class="form-check-label" for="exampleRadios2">
+                                OneNote Notebook/Section path
+                            </label>
+                        </div>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">OneNote Section Path</span>
+                                </div>
+                                <input id="inputOneNotePath" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" disabled>
+                            </div>
+                            <div class="input-group">
+                                <div id="pageName" class="input-group input-group-sm mb-3">
+
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">OneNote page name</span>
+                                    </div>
+                                    <input id="inputPageName" type="text" class="form-control" onkeyup="onPageNameSelected()" aria-label="Small" aria-describedby="inputGroup-sizing-sm" disabled>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <div class="tab-pane" id="tab2">
@@ -71,7 +99,7 @@
                 </div>
 
                 <ul class="pager wizard">
-                    <li class="next"><a href="#" data-content="Done">Next</a></li>
+                    <li class="next"><a href="#" class="spinner" data-content="Done">Next</a></li>
                 </ul>
             </div>
         </div>
@@ -109,10 +137,9 @@
                     $('#rootwizard input#inputGroupFile04').change(function () {
                         $(this).next('.custom-file-label').html(this.files.item(0).name);
                         if (this.files.item(0).name.endsWith('one')) {
-                            $('div#pageName').show();
+                            $('div#pageName').removeAttr('hidden');
                         }
                         else {
-                            $('div#pageName').hide();
                             makeNextActive();
                         }
                         //makeNextActive();
@@ -123,11 +150,13 @@
                 // upload file automatically
                 if (current === 2) {
                     $('#rootwizard form#fileUpload').submit();
+                    setSpinner(true);
                 }
 
                 // tab 3
                 //
                 if (current === 3) {
+                    setSpinner(true);
                     var hardwareList = [];
                     $('#importData tr').each(function (row, tr) {
                         hardwareList.push({
@@ -160,10 +189,12 @@
                                     window.location.href = '/Home';
                                 }, 4000);
                             }
+                            setSpinner(false);
                         },
                         error: function (xhr, error, status) {
                             console.log(error, status);
                             $('#import-finished-message-error').removeAttr('hidden');
+                            setSpinner(false);
                         }
                     });
                 }
@@ -196,15 +227,51 @@
     }
 
     function onPageNameSelected() {
-        makeNextActive();
+        if ($('#inputPageName').val()) {
+            $('#rootwizard .wizard li.next').removeClass('disabled');
+            $('#rootwizard .wizard li.next').unbind('click', false);
+            $('#rootwizard .wizard li.next a').unbind('click', false);
+        }
+    }
+
+    $('#oneNote-input input.form-check-input').change(function() {
+        if ($(this).is(":checked")) {
+            $('#inputOneNotePath').removeAttr('disabled');
+            $('#inputPageName').removeAttr('disabled');
+            $('#inputGroupFile04').attr("disabled", 'disabled');
+        }
+    });
+
+    $('#excel-input input.form-check-input').change(function() {
+        if ($(this).is(":checked")) {
+            $('#inputOneNotePath').attr('disabled', 'disabled');
+            $('#inputPageName').attr('disabled', 'disabled');
+            $('#inputGroupFile04').removeAttr('disabled');
+        }      
+    });
+
+    function setSpinner(state) {
+        if (state === true) {
+            $('#rootwizard .wizard li.next a').addClass('loader active');
+        }
+        else {
+            $('#rootwizard .wizard li.next a').removeClass('loader active');
+        }
     }
 
     $('#fileUpload').submit(function (e) {
         e.preventDefault(); // stop the standard form submission
 
-        var formdata = new FormData();
-        formdata.append('file', $('input#inputGroupFile04').prop('files')[0]);
-        formdata.append('pageName', $('div#pageName').val());
+        var formData = new FormData();
+        formData.append('File', $('input#inputGroupFile04').prop('files')[0]);
+        formData.append('OneNotePageName', $('input#inputPageName').val());
+        formData.append('OneNotePath', $('input#inputOneNotePath').val());
+
+        //var viewModel = [];
+        //viewModel.push({
+        //    File: $('input#inputGroupFile04').prop('files')[0],
+        //    PageName: $('input#inputPageName').val()
+        //});
 
         //var uploadButton = $('button#upload');
         //$(uploadButton).addClass('loader active');
@@ -224,10 +291,13 @@
 
         $.ajax({
             url: this.action,
-            type: this.method,
-            data: formdata,
-            dataType: 'json',
+            type: 'POST',
+            //data: JSON.stringify({ 'viewModel': viewModel }),//formdata,
+            data: formData,
+            //dataType: 'json',
             cache: false,
+            //contentType: 'application/json',//'application/json; charset=utf-8',//false,
+            //contentType: "application/x-www-form-urlencoded; charset=UTF-8",
             contentType: false,
             processData: false,
             success: function (data) {
@@ -249,13 +319,8 @@
                     //$('#hardwarePreview').removeAttr('hidden');
                     makeNextActive();
                 }
-
+                setSpinner(false);
                 //makeButtonUnclickable(uploadButton);
-
-                $('td#session-id').text(data.sessionId);
-                $('td#successfully-uploaded').text(data.succeededLines);
-                $('td#failed').text(data.failedLines);
-
                 //console.log('Error: ' + data.error);
             },
             error: function (xhr, error, status) {
@@ -264,6 +329,7 @@
                 //$(uploadButton).addClass('error animated pulse');
                 //makeButtonUnclickable(uploadButton);
                 $('span#upload-finished-message-error').removeAttr('hidden');
+                setSpinner(false);
             }
         });
     });
