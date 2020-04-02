@@ -11,13 +11,25 @@ namespace DeviceManager.Service
 {
     public class DeviceService : IDeviceService
     {
+        private readonly ISettingsService _settingsService;
+
         [Dependency]
         public DeviceManagerContext DbContext { get; set; }
+
+        public DeviceService(ISettingsService settingsService)
+        {
+            _settingsService = settingsService;
+        }
 
         public IEnumerable<Device> GetDevices()
         {
             foreach (var d in DbContext.Devices.Where(d => d.IsActive).AsQueryable())
             {
+                Entity.Context.Entity.Session activeSession =
+                    DbContext.Sessions.Any(s => s.IsActive && s.Device.Id == d.Id) ?
+                       DbContext.Sessions.Where(s => s.IsActive && s.Device.Id == d.Id).FirstOrDefault() :
+                       null;
+
                 yield return new Device
                 {
                     Id = d.Id,
@@ -27,34 +39,46 @@ namespace DeviceManager.Service
                     IsAvailable = !DbContext.Sessions.Any(s => s.IsActive && s.Device.Id == d.Id),
                     Name = d.Name,
                     DeviceGroup = d.Group,
-                    UsedBy = DbContext.Sessions.Any(s => s.IsActive && s.Device.Id == d.Id) ?
-                                DbContext.Sessions.Where(s => s.IsActive && s.Device.Id == d.Id).FirstOrDefault().User.DomainUsername : null
+                    UsedBy = activeSession?.User?.DomainUsername,
+                    UsedByFriendly = activeSession?.User?.FriendlyName
                 };
             }
         }
 
         public async Task<bool> Import(IEnumerable<DeviceImport> deviceData)
         {
-            using (var transaction = DbContext.Database.BeginTransaction())
+            try
             {
-                DbContext.Devices.ToList().ForEach(d => { d.IsActive = false; });
-                await DbContext.SaveChangesAsync();
-                foreach (Entity.Context.Entity.Device item in deviceData.ToDevice())
+                using (var transaction = DbContext.Database.BeginTransaction())
                 {
-                    try
+                    DbContext.Devices.ToList().ForEach(d => { d.IsActive = false; });
+                    await DbContext.SaveChangesAsync();
+                    foreach (Entity.Context.Entity.Device item in deviceData.ToDevice())
                     {
-                        DbContext.Devices.Add(item);
-                        await DbContext.SaveChangesAsync();
+                        try
+                        {
+                            DbContext.Devices.Add(item);
+                            await DbContext.SaveChangesAsync();
+                        }
+                        catch (System.Data.Entity.Validation.DbEntityValidationException)
+                        {
+                            // validation error
+                            DbContext.Devices.Remove(item);
+                        }
                     }
-                    catch (System.Data.Entity.Validation.DbEntityValidationException)
+
+                    bool lastUpdateSaved = await _settingsService.AddOrUpdate(ServiceConstants.Settings.LAST_DEVICE_LIST_UPDATE, DateTime.UtcNow.ToStringTurkish());
+
+                    if (lastUpdateSaved)
                     {
-                        // validation error
-                        DbContext.Devices.Remove(item);
+                        transaction.Commit();
                     }
                 }
-
-                transaction.Commit();
                 return true;
+            }
+            catch (Exception) //TODO: log
+            {
+                return false;
             }
         }
     }

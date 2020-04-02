@@ -57,8 +57,9 @@
   <ItemGroup>
     <Compile Include="Context\Entity\Device.cs" />
     <Compile Include="Context\Entity\Session.cs" />
+    <Compile Include="Context\Entity\Setting.cs" />
     <Compile Include="Context\Entity\User.cs" />
-    <Compile Include="Context\StarterDeviceManagerContext.cs" />
+    <Compile Include="Context\DeviceManagerContext.cs" />
     <Compile Include="Migrations\202003172007444_InitialCreate.cs" />
     <Compile Include="Migrations\202003172007444_InitialCreate.designer.cs">
       <DependentUpon>202003172007444_InitialCreate.cs</DependentUpon>
@@ -86,6 +87,10 @@
     <Compile Include="Migrations\202003311515416_DeviceIsActive.cs" />
     <Compile Include="Migrations\202003311515416_DeviceIsActive.designer.cs">
       <DependentUpon>202003311515416_DeviceIsActive.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004010955138_Settings.cs" />
+    <Compile Include="Migrations\202004010955138_Settings.designer.cs">
+      <DependentUpon>202004010955138_Settings.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -115,6 +120,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202003311515416_DeviceIsActive.resx">
       <DependentUpon>202003311515416_DeviceIsActive.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004010955138_Settings.resx">
+      <DependentUpon>202004010955138_Settings.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

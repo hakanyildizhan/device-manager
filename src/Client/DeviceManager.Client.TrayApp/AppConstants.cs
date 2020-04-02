@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeviceManager.Client.TrayApp.ViewModel
+namespace StarterDeviceManager.Client.TrayApp
 {
-    public enum TimerEvent
+    public static class AppConstants
     {
-        RegisterUser,
-        GetDevices,
-        Refresh
+        public const int FAILED_OPERATION_RETRIES = 3;
     }
 }

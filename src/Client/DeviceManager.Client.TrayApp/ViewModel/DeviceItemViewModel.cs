@@ -17,6 +17,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
 
         private bool _isAvailable;
         private string _usedBy;
+        private string _usedByFriendly;
 
         public bool IsAvailable 
         { 
@@ -42,6 +43,19 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                     UsedByMe = _usedBy == Utility.GetCurrentUserName();
                     OnPropertyChanged(nameof(UsedBy));
                     OnPropertyChanged(nameof(UsedByMe));
+                }
+            }
+        }
+
+        public string UsedByFriendly
+        {
+            get { return _usedByFriendly; }
+            set
+            {
+                if (_usedByFriendly != value)
+                {
+                    _usedByFriendly = value;
+                    OnPropertyChanged(nameof(UsedByFriendly));
                 }
             }
         }

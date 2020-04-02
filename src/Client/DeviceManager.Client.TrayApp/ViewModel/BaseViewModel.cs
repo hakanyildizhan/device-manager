@@ -65,5 +65,12 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 OnPropertyChanged(((updatingFlag.Body as MemberExpression).Member as System.Reflection.PropertyInfo).Name);
             }
         }
+
+        protected async Task<bool> RunDelayedCommandAsync(Expression<Func<int>> delaySeconds, Func<Task<bool>> action)
+        {
+            await Task.Delay(TimeSpan.FromSeconds(delaySeconds.GetPropertyValue()));
+            // Run the passed in action
+            return await action();
+        }
     }
 }

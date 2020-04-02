@@ -149,7 +149,9 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RefreshController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -158,6 +160,7 @@
     <Compile Include="Helper\QueryObjects\HardwareInfoSelect.cs" />
     <Compile Include="IoC\UnityResolverMVC.cs" />
     <Compile Include="IoC\UnityResolverWebApi.cs" />
+    <Compile Include="Model\RefreshData.cs" />
     <Compile Include="Model\SessionRequest.cs" />
     <Compile Include="Model\SetFriendlyNameRequest.cs" />
     <Compile Include="Model\View\HardwareInfo.cs" />

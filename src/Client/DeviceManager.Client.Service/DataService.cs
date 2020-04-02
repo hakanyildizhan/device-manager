@@ -39,7 +39,7 @@ namespace DeviceManager.Client.Service
                     return false;
                 }
             }
-            catch (Exception)
+            catch (Exception) //TODO: log
             {
                 return false;
             }
@@ -66,7 +66,7 @@ namespace DeviceManager.Client.Service
                     return false;
                 }
             }
-            catch (Exception)
+            catch (Exception) //TODO: log
             {
                 return false;
             }
@@ -93,9 +93,30 @@ namespace DeviceManager.Client.Service
                     return false;
                 }
             }
-            catch (Exception)
+            catch (Exception) //TODO: log
             {
                 return false;
+            }
+        }
+
+        public async Task<RefreshData> Refresh()
+        {
+            Uri uri = new Uri(builder.Uri, "refresh");
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(uri);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<RefreshData>();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception) //TODO: log
+            {
+                return null;
             }
         }
 
@@ -114,7 +135,7 @@ namespace DeviceManager.Client.Service
                     return null;
                 }
             }
-            catch (Exception)
+            catch (Exception) //TODO: log
             {
                 return null;
             }
@@ -136,7 +157,7 @@ namespace DeviceManager.Client.Service
                     return null;
                 }
             }
-            catch (Exception)
+            catch (Exception) //TODO: log
             {
                 return null;
             }
@@ -155,9 +176,30 @@ namespace DeviceManager.Client.Service
 
                 return response.IsSuccessStatusCode;
             }
-            catch (Exception)
+            catch (Exception) //TODO: log
             {
                 return false;
+            }
+        }
+
+        public async Task<Dictionary<string, string>> GetSettingsAsync()
+        {
+            Uri uri = new Uri(builder.Uri, "settings");
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(uri);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsAsync<Dictionary<string, string>>();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception) //TODO: log
+            {
+                return null;
             }
         }
     }

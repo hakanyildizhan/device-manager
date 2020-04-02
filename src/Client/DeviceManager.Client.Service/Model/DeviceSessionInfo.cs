@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace DeviceManager.Client.Service.Model
 {
-    public class Device
+    /// <summary>
+    /// A availability status summary for each device, retrieved from server on each refresh.
+    /// </summary>
+    public class DeviceSessionInfo
     {
-        public int Id { get; set; }
-        public string DeviceGroup { get; set; }
-        public string Name { get; set; }
-        public string HardwareInfo { get; set; }
-        public string Address { get; set; }
-        public string ConnectedModuleInfo { get; set; }
+        public int DeviceId { get; set; }
         public bool IsAvailable { get; set; }
         public string UsedBy { get; set; }
         public string UsedByFriendly { get; set; }

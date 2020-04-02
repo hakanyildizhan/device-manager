@@ -48,6 +48,7 @@ namespace DeviceManager.Client.TrayApp.IoC
             var container = new UnityContainer();
             container.RegisterType<IDataService, DataService>();
             container.RegisterType<IFeedbackService, BasicToastFeedbackService>();
+            container.RegisterSingleton<IConfigurationService, JsonConfigService>();
             return container;
         }
     }

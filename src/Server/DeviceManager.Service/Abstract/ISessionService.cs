@@ -37,5 +37,11 @@ namespace DeviceManager.Service
         /// </summary>
         /// <returns></returns>
         Task<bool> EndActiveSessionsAsync();
+
+        /// <summary>
+        /// Gets availability status of all devices.
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<DeviceSessionInfo> GetDeviceSessions();
     }
 }

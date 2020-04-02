@@ -4,6 +4,7 @@
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
+    using System.Globalization;
     using System.Linq;
 
     internal sealed class Configuration : DbMigrationsConfiguration<DeviceManager.Entity.Context.DeviceManagerContext>
@@ -20,6 +21,13 @@
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method
             //  to avoid creating duplicate seed data.
 
+            context.Settings.AddOrUpdate(s => s.Name,
+                new Setting { Name = "serverVersion", Value = "1.0" },
+                new Setting { Name = "refreshInterval", Value = "60", Description = "Refresh interval for clients (seconds)" },
+                new Setting { Name = "lastDeviceListUpdate", Value = DateTime.UtcNow.ToString(CultureInfo.GetCultureInfo("tr-TR")) }
+                );
+
+            /*
             context.Devices.AddOrUpdate(d => d.Name,
             #region Rack 1
                 new Device 
@@ -200,6 +208,7 @@
                 }
                 #endregion
                 );
+            */
         }
     }
 }
