@@ -1,6 +1,5 @@
 ﻿using DeviceManager.Client.Service;
 using DeviceManager.Client.Service.Model;
-using StarterDeviceManager.Client.TrayApp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StarterDeviceManager.Client.TrayApp
+namespace DeviceManager.Client.TrayApp
 {
     public static class AppConstants
     {
