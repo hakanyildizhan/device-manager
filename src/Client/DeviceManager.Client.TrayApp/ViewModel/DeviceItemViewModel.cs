@@ -67,6 +67,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
 
         private IDataService _dataService => (IDataService)ServiceProvider.GetService<IDataService>();
         private IFeedbackService _feedbackService => (IFeedbackService)ServiceProvider.GetService<IFeedbackService>();
+        private ILogService<DeviceItemViewModel> _logService => (ILogService<DeviceItemViewModel>)ServiceProvider.GetService<ILogService<DeviceItemViewModel>>();
 
         public DeviceItemViewModel()
         {
@@ -90,10 +91,12 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                         if (!success)
                         {
                             await _feedbackService.ShowMessageAsync(MessageType.Error, "Operation failed", "Could not check out device. Please try again later.");
+                            _logService.LogError("Check-out failed");
                         }
                         else
                         {
                             await _feedbackService.ShowMessageAsync(MessageType.Information, "Device checked out successfully.");
+                            _logService.LogInformation("Check-out succeeded");
                             IsAvailable = false;
                             UsedBy = Utility.GetCurrentUserName();
                         }
@@ -110,10 +113,12 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                         if (!success)
                         {
                             await _feedbackService.ShowMessageAsync(MessageType.Error, "Operation failed", "Could not release device. Please try again later.");
+                            _logService.LogError("Check-in failed");
                         }
                         else
                         {
                             await _feedbackService.ShowMessageAsync(MessageType.Information, "Device released successfully.");
+                            _logService.LogInformation("Check-in succeeded");
                             IsAvailable = true;
                             UsedBy = null;
                         }

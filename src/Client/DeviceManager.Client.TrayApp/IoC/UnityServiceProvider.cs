@@ -49,6 +49,7 @@ namespace DeviceManager.Client.TrayApp.IoC
             container.RegisterType<IDataService, DataService>();
             container.RegisterType<IFeedbackService, BasicToastFeedbackService>();
             container.RegisterSingleton<IConfigurationService, JsonConfigService>();
+            container.RegisterType(typeof(ILogService<>), typeof(NLogLogger<>));
             return container;
         }
     }

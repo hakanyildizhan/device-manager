@@ -17,6 +17,8 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         private IDataService _dataService => (IDataService)ServiceProvider.GetService<IDataService>();
         private IFeedbackService _feedbackService => (IFeedbackService)ServiceProvider.GetService<IFeedbackService>();
         private IConfigurationService _configService => (IConfigurationService)ServiceProvider.GetService<IConfigurationService>();
+        private ILogService<MainWindowViewModel> _logService => (ILogService<MainWindowViewModel>)ServiceProvider.GetService<ILogService<MainWindowViewModel>>();
+
         private Timer _timer;
         private string _userName;
         private string _friendlyName;
@@ -78,6 +80,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             EnterEditModeCommand = new RelayCommand(() => { EditMode = !EditMode; });
             SetNameCommand = new RelayParameterizedCommand(async (parameter) => await SetName(parameter));
             Task.Run(Initialize);
+            _logService.LogInformation("App initialized");
         }
 
         private async Task Initialize()
@@ -88,6 +91,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             if (!success)
             {
                 await _feedbackService.ShowMessageAsync(MessageType.Error, "Cannot contact the server.");
+                _logService.LogError("Could not initialize");
                 return;
             }
 
@@ -105,6 +109,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                     UserName = user.UserName;
                     FriendlyName = user.FriendlyName;
                     success = true;
+                    _logService.LogInformation("Registered user successfully");
                 }
             });
             return success;
@@ -124,6 +129,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                         devices.MapDeviceToViewModel().ToList().ForEach(d => Devices.Add(d));
                     });
                     success = true;
+                    _logService.LogInformation("Got device list successfully");
                 }
             });
             return success;
@@ -140,6 +146,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 {
                     await SaveSettings(settings);
                     success = true;
+                    _logService.LogInformation("Got settings successfully");
                 }
             });
             return success;
@@ -166,6 +173,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 if (refreshData == null)
                 {
                     Debug.WriteLine($"Refresh failed.");
+                    _logService.LogError("Refresh failed");
                     if (++_consecutiveFailedRefreshCount == AppConstants.FAILED_OPERATION_RETRIES)
                     {
                         await _feedbackService.ShowMessageAsync(MessageType.Error, "Cannot contact the server right now. Please try exiting and reopening the app again.");
@@ -192,6 +200,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                     if (_consecutiveFailedRefreshCount >= AppConstants.FAILED_OPERATION_RETRIES)
                     {
                         await _feedbackService.ShowMessageAsync(MessageType.Information, "Connection to the server has been re-established successfuly.");
+                        _logService.LogInformation("Connection re-established");
                     }
 
                     _consecutiveFailedRefreshCount = 0;
@@ -204,8 +213,9 @@ namespace DeviceManager.Client.TrayApp.ViewModel
 
             if (fullUpdateRequired)
             {
-                // stop the timer, get updated list, then Enable timer again
+                _logService.LogInformation("Initializing full device update");
 
+                // stop the timer, get updated list, then Enable timer again
                 DisableTimer();
                 bool success = await GetDevicesAsync();
                 if (!success)
@@ -223,12 +233,14 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                     if (!success)
                     {
                         await _feedbackService.ShowMessageAsync(MessageType.Error, "Cannot contact the server right now. Please try exiting and reopening the app again.");
+                        _logService.LogError("Could not get devices after several attempts, stopping");
                         return;
                     }
                     else
                     {
                         await _feedbackService.ShowMessageAsync(MessageType.Information, "Device list is updated.");
                         await _configService.LogSuccessfulRefresh();
+                        _logService.LogInformation("Device list is updated after retry");
                         EnableTimer(TimerEvent.Refresh);
                     }
                 }
@@ -236,6 +248,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 {
                     await _feedbackService.ShowMessageAsync(MessageType.Information, "Device list is updated.");
                     await _configService.LogSuccessfulRefresh();
+                    _logService.LogInformation("Device list is updated");
                     EnableTimer(TimerEvent.Refresh);
                 }
             }
@@ -259,10 +272,12 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                     if (result)
                     {
                         FriendlyName = (string)parameter;
+                        _logService.LogInformation("Name set successfully");
                     }
                     else
                     {
                         await _feedbackService.ShowMessageAsync(MessageType.Warning, "Could not update user name.");
+                        _logService.LogError("Could not set name");
                     }
                 }
 
@@ -319,6 +334,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
 
         private void Exit()
         {
+            _logService.LogInformation("Shutting down");
             DisableTimer();
             (System.Windows.Application.Current.MainWindow as MainWindow).trayIcon.Visibility = System.Windows.Visibility.Hidden;
             System.Windows.Application.Current.Shutdown();
