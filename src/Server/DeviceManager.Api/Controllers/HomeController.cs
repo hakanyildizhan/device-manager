@@ -18,12 +18,18 @@ namespace DeviceManager.Api.Controllers
         private readonly IUserService _userService;
         private readonly IDeviceService _deviceListService;
         private readonly ISessionService _sessionService;
+        private readonly ISettingsService _settingsService;
 
-        public HomeController(IUserService userService, IDeviceService deviceListService, ISessionService sessionService)
+        public HomeController(
+            IUserService userService, 
+            IDeviceService deviceListService, 
+            ISessionService sessionService,
+            ISettingsService settingsService)
         {
             _userService = userService;
             _deviceListService = deviceListService;
             _sessionService = sessionService;
+            _settingsService = settingsService;
         }
 
         // GET: Home
@@ -44,6 +50,14 @@ namespace DeviceManager.Api.Controllers
         {
             ViewBag.ActivePage = "Manage";
             return View();
+        }
+
+        // GET: Settings
+        public ActionResult Settings()
+        {
+            ViewBag.ActivePage = "Settings";
+            Dictionary<string, string> settings =_settingsService.Get();
+            return View(settings);
         }
 
         // POST: Dashboard/File/UploadFile
@@ -69,7 +83,9 @@ namespace DeviceManager.Api.Controllers
                 {
                     string fileName = Path.GetFileName(viewModel.File.FileName); // extract only the filename
                     string generatedName = fileName.Insert(viewModel.File.FileName.IndexOf('.'), "_" + DateTime.UtcNow.ToString("yyyyMMdd-HHmmss"));
-                    path = Path.Combine(Server.MapPath("~/App_Data"), generatedName);
+                    string appRoamingFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DeviceManager");
+                    Directory.CreateDirectory(appRoamingFolder);
+                    path = Path.Combine(appRoamingFolder, generatedName);
                     viewModel.File.SaveAs(path);
                 }
                 else
@@ -120,13 +136,6 @@ namespace DeviceManager.Api.Controllers
                 viewResult.ViewEngine.ReleaseView(ControllerContext, viewResult.View);
                 return sw.GetStringBuilder().ToString();
             }
-        }
-
-        // GET: Settings
-        public ActionResult Settings()
-        {
-            ViewBag.ActivePage = "Settings";
-            return View();
         }
     }
 }

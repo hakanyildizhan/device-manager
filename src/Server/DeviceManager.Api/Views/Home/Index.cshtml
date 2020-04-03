@@ -4,53 +4,57 @@
 <div class="row">
     <div class="col-lg-6 content">
         <h2>User List</h2>
-        <p>This is a list of users connected to the server currently.</p>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">User name</th>
-                    <th scope="col">Friendly name</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < Model.UserList.Count; i++)
-                {
+        <div class="content">
+            <p>This is a list of users connected to the server currently.</p>
+            <table class="table table-hover">
+                <thead>
                     <tr>
-                        <th scope="row">@(i+1)</th>
-                        <td>@Model.UserList[i].UserName</td>
-                        <td>@Model.UserList[i].FriendlyName</td>
+                        <th scope="col">#</th>
+                        <th scope="col">User name</th>
+                        <th scope="col">Friendly name</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.UserList.Count; i++)
+                    {
+                        <tr>
+                            <th scope="row">@(i+1)</th>
+                            <td>@Model.UserList[i].UserName</td>
+                            <td>@Model.UserList[i].FriendlyName</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
     <div class="col-lg-10 content">
         <h2>Hardware List</h2>
-        <p>This is a list of hardware uploaded to the server.</p>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Hardware Group</th>
-                    <th scope="col">Hardware Name</th>
-                    <th scope="col">Hardware Address</th>
-                    <th scope="col">Connected Module Info</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < Model.HardwareList.Count; i++)
-                {
+        <div class="content">
+            <p>This is a list of hardware uploaded to the server.</p>
+            <table class="table table-hover">
+                <thead>
                     <tr>
-                        <th scope="row">@(i+1)</th>
-                        <td>@Model.HardwareList[i].DeviceGroup</td>
-                        <td>@Model.HardwareList[i].Name</td>
-                        <td>@Model.HardwareList[i].Address</td>
-                        <td>@Model.HardwareList[i].ConnectedModuleInfo</td>
+                        <th scope="col">#</th>
+                        <th scope="col">Hardware Group</th>
+                        <th scope="col">Hardware Name</th>
+                        <th scope="col">Hardware Address</th>
+                        <th scope="col">Connected Module Info</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.HardwareList.Count; i++)
+                    {
+                        <tr>
+                            <th scope="row">@(i+1)</th>
+                            <td>@Model.HardwareList[i].DeviceGroup</td>
+                            <td>@Model.HardwareList[i].Name</td>
+                            <td>@Model.HardwareList[i].Address</td>
+                            <td>@Model.HardwareList[i].ConnectedModuleInfo</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
