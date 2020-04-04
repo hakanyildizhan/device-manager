@@ -12,65 +12,97 @@ namespace DeviceManager.Client.Service
 {
     public class JsonConfigService : IConfigurationService
     {
-        private string _settingsFilePath;
+        private readonly ILogService _logService;
+
+        private static string _configFile = Path.Combine(Utility.GetAppRoamingFolder(), "appsettings.json");
         static object lockObj = new object();
 
-        public JsonConfigService()
+        public JsonConfigService(ILogService<JsonConfigService> logService)
         {
-            string settingsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DeviceManager");
-            Directory.CreateDirectory(settingsFolder);
-            _settingsFilePath = Path.Combine(settingsFolder, "appsettings.json");
+            _logService = logService;
+            Init();
+        }
 
-            if (!File.Exists(_settingsFilePath))
+        private void Init()
+        {
+            try
             {
-                File.Create(_settingsFilePath);
+                lock (lockObj)
+                {
+                    if (!File.Exists(_configFile))
+                    {
+                        File.WriteAllText(_configFile, string.Empty);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logService.LogException(ex, "Could not create config file");
             }
         }
 
         public string Get(string keyName)
         {
-            string json = File.ReadAllText(_settingsFilePath);
-            if (string.IsNullOrEmpty(json))
+            try
             {
+                lock (lockObj)
+                {
+                    string json = File.ReadAllText(_configFile);
+                    if (string.IsNullOrEmpty(json))
+                    {
+                        return string.Empty;
+                    }
+
+                    dynamic jsonObj = JsonConvert.DeserializeObject(json);
+                    return (string)(jsonObj[keyName]);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logService.LogException(ex, $"Could not get setting {keyName}, returning empty string");
                 return string.Empty;
             }
-
-            dynamic jsonObj = JsonConvert.DeserializeObject(json);
-            return (string)(jsonObj[keyName]);
         }
 
         public async Task SetAsync(string keyName, string value)
         {
-            var block = new ActionBlock<Tuple<string, string>>(tuple =>
+            try
             {
-                var key = tuple.Item1;
-                var val = tuple.Item2;
-
-                lock (lockObj)
+                var block = new ActionBlock<Tuple<string, string>>(tuple =>
                 {
-                    string json = File.ReadAllText(_settingsFilePath);
-                    dynamic jsonObj;
-                    if (!string.IsNullOrEmpty(json))
-                    {
-                        jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
-                        if (jsonObj[key] == val)
-                        {
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        jsonObj = new JObject();
-                    }
-                    jsonObj[key] = val;
-                    string output = JsonConvert.SerializeObject(jsonObj, Formatting.Indented);
-                    File.WriteAllText(_settingsFilePath, output);
-                }
-            });
+                    var key = tuple.Item1;
+                    var val = tuple.Item2;
 
-            block.Post(new Tuple<string, string>(keyName, value));
-            block.Complete();
-            await block.Completion;
+                    lock (lockObj)
+                    {
+                        string json = File.ReadAllText(_configFile);
+                        dynamic jsonObj;
+                        if (!string.IsNullOrEmpty(json))
+                        {
+                            jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
+                            if (jsonObj[key] == val)
+                            {
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            jsonObj = new JObject();
+                        }
+                        jsonObj[key] = val;
+                        string output = JsonConvert.SerializeObject(jsonObj, Formatting.Indented);
+                        File.WriteAllText(_configFile, output);
+                    }
+                });
+
+                block.Post(new Tuple<string, string>(keyName, value));
+                block.Complete();
+                await block.Completion;
+            }
+            catch (Exception ex)
+            {
+                _logService.LogException(ex, $"Could not set setting {keyName}");
+            }
         }
 
         public int GetRefreshInterval()
@@ -87,6 +119,11 @@ namespace DeviceManager.Client.Service
         public async Task LogSuccessfulRefresh()
         {
             await this.SetAsync(ServiceConstants.Settings.LAST_SUCCESSFUL_REFRESH, DateTime.UtcNow.ToStringTurkish());
+        }
+
+        public string GetLastSuccessfulRefreshTime()
+        {
+            return Get(ServiceConstants.Settings.LAST_SUCCESSFUL_REFRESH);
         }
     }
 }

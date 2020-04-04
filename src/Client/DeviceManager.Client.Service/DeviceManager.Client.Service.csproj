@@ -62,12 +62,14 @@
     <Compile Include="Abstract\ILogService.cs" />
     <Compile Include="DataService.cs" />
     <Compile Include="Helper\DateTimeHelpers.cs" />
+    <Compile Include="Helper\Utility.cs" />
     <Compile Include="JsonConfigService.cs" />
+    <Compile Include="Model\Api\RefreshRequest.cs" />
     <Compile Include="Model\Api\SessionRequest.cs" />
     <Compile Include="Model\Api\SetFriendlyNameRequest.cs" />
     <Compile Include="Model\Device.cs" />
     <Compile Include="Model\DeviceSessionInfo.cs" />
-    <Compile Include="Model\RefreshData.cs" />
+    <Compile Include="Model\RefreshResponse.cs" />
     <Compile Include="Model\Settings.cs" />
     <Compile Include="Model\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

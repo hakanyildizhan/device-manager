@@ -12,93 +12,159 @@ namespace DeviceManager.Service
 {
     public class SessionService : ISessionService
     {
+        private readonly ILogService _logService;
+
         [Dependency]
         public DeviceManagerContext DbContext { get; set; }
 
+        public SessionService(ILogService<SessionService> logService)
+        {
+            _logService = logService;
+        }
+
         public async Task<bool> CreateSessionAsync(string userName, int deviceId)
         {
-            Session activeSession = DbContext.Sessions
+            try
+            {
+                Session activeSession = DbContext.Sessions
                 .Where(s => s.Device.Id == deviceId &&
                     s.User.DomainUsername == userName &&
                     s.IsActive).FirstOrDefault();
 
-            if (activeSession != null)
+                if (activeSession != null)
+                {
+                    return false;
+                }
+
+                DbContext.Sessions.Add(new Session
+                {
+                    Device = await DbContext.Devices.FindAsync(deviceId),
+                    User = await DbContext.Users.FindAsync(userName),
+                    StartedAt = DateTime.UtcNow,
+                    IsActive = true
+                });
+                
+                await DbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (System.Data.DataException ex)
             {
+                _logService.LogException(ex, "DataException occured while creating session");
                 return false;
             }
-
-            DbContext.Sessions.Add(new Session
+            catch (Exception ex)
             {
-                Device = await DbContext.Devices.FindAsync(deviceId),
-                User = await DbContext.Users.FindAsync(userName),
-                StartedAt = DateTime.UtcNow,
-                IsActive = true
-            });
-            await DbContext.SaveChangesAsync();
-            return true;
+                _logService.LogException(ex, "Unknown error occured while creating session");
+                throw new ServiceException(ex);
+            }
         }
 
         public async Task<bool> EndActiveSessionsAsync()
         {
-            DbContext.Sessions.Where(s => s.IsActive).ToList().ForEach(s =>
+            try
             {
-                s.IsActive = false;
-                s.FinishedAt = DateTime.UtcNow;
-            });
-            await DbContext.SaveChangesAsync();
-            return true;
+                DbContext.Sessions.Where(s => s.IsActive).ToList().ForEach(s =>
+                {
+                    s.IsActive = false;
+                    s.FinishedAt = DateTime.UtcNow;
+                });
+                await DbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (System.Data.DataException ex)
+            {
+                _logService.LogException(ex, "DataException occured while ending all active sessions");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _logService.LogException(ex, "Unknown error occured while ending all active sessions");
+                throw new ServiceException(ex);
+            }
         }
 
         public async Task<bool> EndSessionAsync(string userName, int deviceId)
         {
-            Session activeSession = DbContext.Sessions
-                .Where(s => s.Device.Id == deviceId && 
+            try
+            {
+                Session activeSession = DbContext.Sessions
+                .Where(s => s.Device.Id == deviceId &&
                     s.User.DomainUsername == userName &&
                     s.IsActive).FirstOrDefault();
 
-            if (activeSession == null)
-                return true;
+                if (activeSession == null)
+                    return true;
 
-            activeSession.FinishedAt = DateTime.UtcNow;
-            activeSession.IsActive = false;
-            await DbContext.SaveChangesAsync();
-            return true;
+                activeSession.FinishedAt = DateTime.UtcNow;
+                activeSession.IsActive = false;
+                await DbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (System.Data.DataException ex)
+            {
+                _logService.LogException(ex, "DataException occured while ending session");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _logService.LogException(ex, "Unknown error occured while ending session");
+                throw new ServiceException(ex);
+            }
         }
 
         public bool IsDeviceAvailable(int deviceId)
         {
-            Entity.Context.Entity.Device device = DbContext.Devices.Find(deviceId);
-
-            if (device == null)
+            try
             {
-                return false;
-            }
+                Entity.Context.Entity.Device device = DbContext.Devices.Find(deviceId);
 
-            return !DbContext.Sessions.Any(s => s.Device.Id == deviceId && s.IsActive);
+                if (device == null)
+                {
+                    return false;
+                }
+
+                return !DbContext.Sessions.Any(s => s.Device.Id == deviceId && s.IsActive);
+            }
+            catch (Exception ex)
+            {
+                _logService.LogException(ex, "Unknown error occured while checking device availability");
+                throw new ServiceException(ex);
+            }
         }
 
         public IEnumerable<DeviceSessionInfo> GetDeviceSessions()
         {
-            foreach (var device in DbContext.Devices.AsQueryable())
+            try
             {
-                bool isBusy = DbContext.Sessions.Any(s => s.IsActive && s.Device.Id == device.Id);
-                string usedBy = string.Empty;
-                string usedByFriendly = string.Empty;
+                IList<DeviceSessionInfo> deviceSessions = new List<DeviceSessionInfo>();
 
-                if (isBusy)
+                foreach (var device in DbContext.Devices.AsQueryable())
                 {
-                    Session session = DbContext.Sessions.Where(s => s.IsActive && s.Device.Id == device.Id).FirstOrDefault();
-                    usedBy = session.User.DomainUsername;
-                    usedByFriendly = session.User.FriendlyName;
+                    bool isBusy = DbContext.Sessions.Any(s => s.IsActive && s.Device.Id == device.Id);
+                    string usedBy = string.Empty;
+                    string usedByFriendly = string.Empty;
+
+                    if (isBusy)
+                    {
+                        Session session = DbContext.Sessions.Where(s => s.IsActive && s.Device.Id == device.Id).FirstOrDefault();
+                        usedBy = session.User.DomainUsername;
+                        usedByFriendly = session.User.FriendlyName;
+                    }
+
+                    deviceSessions.Add(new DeviceSessionInfo
+                    {
+                        DeviceId = device.Id,
+                        IsAvailable = !isBusy,
+                        UsedBy = usedBy,
+                        UsedByFriendly = usedByFriendly
+                    });
                 }
-
-                yield return new DeviceSessionInfo
-                {
-                    DeviceId = device.Id,
-                    IsAvailable = !isBusy,
-                    UsedBy = usedBy,
-                    UsedByFriendly = usedByFriendly
-                };
+                return deviceSessions;
+            }
+            catch (Exception ex)
+            {
+                _logService.LogException(ex, "Unknown error occured while getting active sessions");
+                throw new ServiceException(ex);
             }
         }
     }

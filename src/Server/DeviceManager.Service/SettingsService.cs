@@ -13,35 +13,29 @@ namespace DeviceManager.Service
 {
     public class SettingsService : ISettingsService
     {
+        private readonly ILogService _logService;
+
         [Dependency]
         public DeviceManagerContext DbContext { get; set; }
 
+        public SettingsService(ILogService<SettingsService> logService)
+        {
+            _logService = logService;
+        }
+
         public Dictionary<string, string> Get()
         {
-            //Settings settings = new Settings();
-            Dictionary<string, string> settings = new Dictionary<string, string>();
-
-            DbContext.Settings.ToList().ForEach(s => settings.Add(s.Name, s.Value));
-
-            //Setting refreshIntervalSetting = DbContext.Settings.Where(s => s.Name == "refreshInterval").FirstOrDefault();
-            //if (refreshIntervalSetting != null)
-            //{
-            //    settings.RefreshInterval = int.Parse(refreshIntervalSetting.Value);
-            //}
-
-            //Setting serverVersionSetting = DbContext.Settings.Where(s => s.Name == "serverVersion").FirstOrDefault();
-            //if (serverVersionSetting != null)
-            //{
-            //    settings.ServerVersion = serverVersionSetting.Value;
-            //}
-
-            //Setting lastDeviceListUpdateSetting = DbContext.Settings.Where(s => s.Name == "lastDeviceListUpdate").FirstOrDefault();
-            //if (lastDeviceListUpdateSetting != null)
-            //{
-            //    settings.LastDeviceListUpdate = DateTimeHelpers.Parse(lastDeviceListUpdateSetting.Value);
-            //}
-
-            return settings;
+            try
+            {
+                Dictionary<string, string> settings = new Dictionary<string, string>();
+                DbContext.Settings.ToList().ForEach(s => settings.Add(s.Name, s.Value));
+                return settings;
+            }
+            catch (Exception ex)
+            {
+                _logService.LogException(ex, "Unknown error occured while getting settings");
+                throw new ServiceException(ex);
+            }
         }
 
         public async Task<bool> AddOrUpdate(string name, string value)
@@ -60,16 +54,29 @@ namespace DeviceManager.Service
                 await DbContext.SaveChangesAsync();
                 return true;
             }
-            catch (Exception) //TODO: log
+            catch (System.Data.DataException ex)
             {
+                _logService.LogException(ex, $"DataException occured while adding/updating setting {name}");
                 return false;
             }
-            
+            catch (Exception ex)
+            {
+                _logService.LogException(ex, $"Unknown error occured while adding/updating setting {name}");
+                throw new ServiceException(ex);
+            }
         }
 
         public string Get(string keyName)
         {
-            return DbContext.Settings.FirstOrDefault(s => s.Name == keyName)?.Value;
+            try
+            {
+                return DbContext.Settings.FirstOrDefault(s => s.Name == keyName)?.Value;
+            }
+            catch (Exception ex)
+            {
+                _logService.LogException(ex, $"Unknown error occured while getting setting {keyName}");
+                throw new ServiceException(ex);
+            }
         }
     }
 }

@@ -3,7 +3,9 @@ using DeviceManager.Client.Service.Model.Api;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,10 +14,12 @@ namespace DeviceManager.Client.Service
     public class DataService : IDataService
     {
         static HttpClient client = new HttpClient();
-        UriBuilder builder;
+        private readonly UriBuilder builder;
+        private readonly ILogService _logService;
 
-        public DataService()
+        public DataService(ILogService<DataService> logService)
         {
+            _logService = logService;
 #if DEBUG
             builder = new UriBuilder("http://localhost:8060/api/");
 #else
@@ -39,10 +43,16 @@ namespace DeviceManager.Client.Service
                     return false;
                 }
             }
-            catch (Exception) //TODO: log
+            catch (HttpRequestException ex)
             {
-                return false;
+                _logService.LogException(ex, "Cannot contact server. Could not check device availability");
             }
+            catch (Exception ex)
+            {
+                _logService.LogException(ex, "Unknown error occured while checking device availability");
+            }
+
+            return false;
         }
 
         public async Task<bool> CheckinDeviceAsync(string userName, int deviceId)
@@ -50,10 +60,10 @@ namespace DeviceManager.Client.Service
             Uri uri = new Uri(builder.Uri, "session/end");
             try
             {
-                HttpResponseMessage response = await client.PostAsJsonAsync(uri, new SessionRequest 
-                { 
-                    UserName = userName, 
-                    DeviceId = deviceId 
+                HttpResponseMessage response = await client.PostAsJsonAsync(uri, new SessionRequest
+                {
+                    UserName = userName,
+                    DeviceId = deviceId
                 });
 
                 if (response.IsSuccessStatusCode)
@@ -66,10 +76,16 @@ namespace DeviceManager.Client.Service
                     return false;
                 }
             }
-            catch (Exception) //TODO: log
+            catch (HttpRequestException ex)
             {
-                return false;
+                _logService.LogException(ex, "Cannot contact server. Check in failed");
             }
+            catch (Exception ex)
+            {
+                _logService.LogException(ex, "Unknown error occured while checking in");
+            }
+
+            return false;
         }
 
         public async Task<bool> CheckoutDeviceAsync(string userName, int deviceId)
@@ -93,31 +109,47 @@ namespace DeviceManager.Client.Service
                     return false;
                 }
             }
-            catch (Exception) //TODO: log
+            catch (HttpRequestException ex)
             {
-                return false;
+                _logService.LogException(ex, "Cannot contact server. Check out failed");
             }
+            catch (Exception ex)
+            {
+                _logService.LogException(ex, "Unknown error occured while checking out");
+            }
+
+            return false;
         }
 
-        public async Task<RefreshData> Refresh()
+        public async Task<RefreshResponse> Refresh(string lastSuccessfulRefreshTime)
         {
             Uri uri = new Uri(builder.Uri, "refresh");
             try
             {
-                HttpResponseMessage response = await client.GetAsync(uri);
+                HttpResponseMessage response = await client.PostAsJsonAsync(uri, new RefreshRequest
+                {
+                    LastSuccessfulRefresh = lastSuccessfulRefreshTime
+                });
+
                 if (response.IsSuccessStatusCode)
                 {
-                    return await response.Content.ReadAsAsync<RefreshData>();
+                    return await response.Content.ReadAsAsync<RefreshResponse>();
                 }
                 else
                 {
                     return null;
                 }
             }
-            catch (Exception) //TODO: log
+            catch (HttpRequestException ex)
             {
-                return null;
+                _logService.LogException(ex, "Cannot contact server. Refresh failed");
             }
+            catch (Exception ex)
+            {
+                _logService.LogException(ex, "Unknown error occured while refreshing");
+            }
+
+            return null;
         }
 
         public async Task<IEnumerable<Device>> GetDevicesAsync()
@@ -135,10 +167,16 @@ namespace DeviceManager.Client.Service
                     return null;
                 }
             }
-            catch (Exception) //TODO: log
+            catch (HttpRequestException ex)
             {
-                return null;
+                _logService.LogException(ex, "Cannot contact server. Could not get devices");
             }
+            catch (Exception ex)
+            {
+                _logService.LogException(ex, "Unknown error occured while getting devices");
+            }
+
+            return null;
         }
 
         public async Task<UserInfo> RegisterUserAsync(string domainUserName)
@@ -157,10 +195,16 @@ namespace DeviceManager.Client.Service
                     return null;
                 }
             }
-            catch (Exception) //TODO: log
+            catch (HttpRequestException ex)
             {
-                return null;
+                _logService.LogException(ex, "Cannot contact server. Could not register user");
             }
+            catch (Exception ex)
+            {
+                _logService.LogException(ex, "Unknown error occured while registering user");
+            }
+
+            return null;
         }
 
         public async Task<bool> SetUsernameAsync(string domainUserName, string friendlyName)
@@ -169,17 +213,23 @@ namespace DeviceManager.Client.Service
             try
             {
                 HttpResponseMessage response = await client.PostAsJsonAsync(uri, new SetFriendlyNameRequest
-                { 
-                    DomainUserName = domainUserName, 
-                    FriendlyName = friendlyName 
+                {
+                    DomainUserName = domainUserName,
+                    FriendlyName = friendlyName
                 });
 
                 return response.IsSuccessStatusCode;
             }
-            catch (Exception) //TODO: log
+            catch (HttpRequestException ex)
             {
-                return false;
+                _logService.LogException(ex, "Cannot contact server. Could not set user name");
             }
+            catch (Exception ex)
+            {
+                _logService.LogException(ex, "Unknown error occured while setting user name");
+            }
+
+            return false;
         }
 
         public async Task<Dictionary<string, string>> GetSettingsAsync()
@@ -197,10 +247,16 @@ namespace DeviceManager.Client.Service
                     return null;
                 }
             }
-            catch (Exception) //TODO: log
+            catch (HttpRequestException ex)
             {
-                return null;
+                _logService.LogException(ex, "Cannot contact server. Could not get settings");
             }
+            catch (Exception ex)
+            {
+                _logService.LogException(ex, "Unknown error occured while getting settings");
+            }
+
+            return null;
         }
     }
 }

@@ -1,14 +1,16 @@
-﻿using DeviceManager.Service.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace DeviceManager.Api.Model
+namespace DeviceManager.Client.Service.Model
 {
-    public class RefreshData
+    /// <summary>
+    /// Data retrieved from server on each refresh.
+    /// </summary>
+    public class RefreshResponse
     {
-        //public Settings Settings { get; set; }
         public Dictionary<string,string> Settings { get; set; }
 
         /// <summary>

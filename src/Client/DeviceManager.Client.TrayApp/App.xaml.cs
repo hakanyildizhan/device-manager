@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using DeviceManager.Client.Service;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -28,12 +29,12 @@ namespace DeviceManager.Client.TrayApp
         private void SetupApplication()
         {
             // Set up Nlog config
-            string appRoamingFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DeviceManager");
-            Directory.CreateDirectory(appRoamingFolder);
-            string logFile = Path.Combine(appRoamingFolder, "log.txt");
+            string logFile = Path.Combine(Utility.GetAppRoamingFolder(), "client.log");
             var config = new NLog.Config.LoggingConfiguration();
             var logfile = new NLog.Targets.FileTarget("logfile") { FileName = logFile };
+            var debugger = new NLog.Targets.DebuggerTarget("debugger");
             config.AddRule(LogLevel.Info, LogLevel.Fatal, logfile);
+            config.AddRule(LogLevel.Info, LogLevel.Fatal, debugger);
             NLog.LogManager.Configuration = config;
         }
     }

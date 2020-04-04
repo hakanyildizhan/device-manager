@@ -15,10 +15,12 @@ namespace DeviceManager.Api.Controllers
     public class UserController : ApiController
     {
         private readonly IUserService _userService;
+        private readonly ILogService _logService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, ILogService<UserController> logService)
         {
             _userService = userService;
+            _logService = logService;
         }
 
         // POST api/user/register
@@ -29,24 +31,18 @@ namespace DeviceManager.Api.Controllers
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Null or empty parameter.");
             }
-            try
+
+            HttpStatusCode statusCode = HttpStatusCode.OK;
+            RegisterResult result = await _userService.RegisterUserAsync(domainUserName);
+            if (result.Result == RegisterUserResult.AlreadyExists)
             {
-                HttpStatusCode statusCode = HttpStatusCode.OK;
-                RegisterResult result = await _userService.RegisterUserAsync(domainUserName);
-                if (result.Result == RegisterUserResult.AlreadyExists)
-                {
-                    statusCode = HttpStatusCode.OK;
-                }
-                else if (result.Result == RegisterUserResult.Created)
-                {
-                    statusCode = HttpStatusCode.Created;
-                }
-                return Request.CreateResponse(statusCode, result.User);
+                statusCode = HttpStatusCode.OK;
             }
-            catch (Exception)
+            else if (result.Result == RegisterUserResult.Created)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error");
+                statusCode = HttpStatusCode.Created;
             }
+            return Request.CreateResponse(statusCode, result.User);
         }
 
         // POST api/user/setfriendlyname
@@ -57,21 +53,16 @@ namespace DeviceManager.Api.Controllers
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Null or empty parameter.");
             }
-            try
+
+            bool result = await _userService.SetFriendlyNameAsync(request.DomainUserName, request.FriendlyName);
+            if (result)
             {
-                bool result = await _userService.SetFriendlyNameAsync(request.DomainUserName, request.FriendlyName);
-                if (result)
-                {
-                    return Request.CreateResponse(HttpStatusCode.OK);
-                }
-                else
-                {
-                    return Request.CreateResponse(HttpStatusCode.NotFound);
-                }
+                _logService.LogInformation($"Set friendly name {request.FriendlyName} for {request.DomainUserName}");
+                return Request.CreateResponse(HttpStatusCode.OK);
             }
-            catch (Exception)
+            else
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error");
+                return Request.CreateResponse(HttpStatusCode.NotFound);
             }
         }
     }

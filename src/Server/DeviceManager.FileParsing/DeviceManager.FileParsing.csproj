@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{3E06185E-EF0A-4A72-A014-B6735120ACA2}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DeviceManager.FileParsing</RootNamespace>
     <AssemblyName>DeviceManager.FileParsing</AssemblyName>
@@ -67,7 +67,6 @@
     <Compile Include="OneNoteXmlManager.cs" />
     <Compile Include="ParserFactory.cs" />
     <Compile Include="ParsingExceptions.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

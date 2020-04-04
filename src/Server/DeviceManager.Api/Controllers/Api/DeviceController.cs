@@ -23,15 +23,8 @@ namespace DeviceManager.Api.Controllers
         [HttpGet]
         public HttpResponseMessage Get()
         {
-            try
-            {
-                IEnumerable<Device> deviceList = _deviceListService.GetDevices();
-                return Request.CreateResponse(HttpStatusCode.OK, deviceList);
-            }
-            catch (Exception)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error");
-            }
+            IEnumerable<Device> deviceList = _deviceListService.GetDevices();
+            return Request.CreateResponse(HttpStatusCode.OK, deviceList);
         }
     }
 }

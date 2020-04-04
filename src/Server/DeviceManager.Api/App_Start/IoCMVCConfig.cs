@@ -19,6 +19,7 @@ namespace DeviceManager.Api
             container.RegisterType<ISessionService, SessionService>(new TransientLifetimeManager());
             container.RegisterType<IUserService, UserService>(new TransientLifetimeManager());
             container.RegisterType<ISettingsService, SettingsService>(new TransientLifetimeManager());
+            container.RegisterType(typeof(ILogService<>), typeof(NLogLogger<>));
             DependencyResolver.SetResolver(new UnityResolverMVC(container));
         }
     }

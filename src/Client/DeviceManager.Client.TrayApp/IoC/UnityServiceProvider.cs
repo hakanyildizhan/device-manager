@@ -46,10 +46,10 @@ namespace DeviceManager.Client.TrayApp.IoC
         private IUnityContainer BuildUnityContainer()
         {
             var container = new UnityContainer();
+            container.RegisterType(typeof(ILogService<>), typeof(NLogLogger<>));
+            container.RegisterSingleton<IConfigurationService, JsonConfigService>();
             container.RegisterType<IDataService, DataService>();
             container.RegisterType<IFeedbackService, BasicToastFeedbackService>();
-            container.RegisterSingleton<IConfigurationService, JsonConfigService>();
-            container.RegisterType(typeof(ILogService<>), typeof(NLogLogger<>));
             return container;
         }
     }

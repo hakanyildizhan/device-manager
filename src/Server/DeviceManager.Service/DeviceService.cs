@@ -12,36 +12,54 @@ namespace DeviceManager.Service
     public class DeviceService : IDeviceService
     {
         private readonly ISettingsService _settingsService;
+        private readonly ILogService _logService;
 
         [Dependency]
         public DeviceManagerContext DbContext { get; set; }
 
-        public DeviceService(ISettingsService settingsService)
+        public DeviceService(ISettingsService settingsService, ILogService<DeviceService> logService)
         {
             _settingsService = settingsService;
+            _logService = logService;
         }
 
         public IEnumerable<Device> GetDevices()
         {
-            foreach (var d in DbContext.Devices.Where(d => d.IsActive).AsQueryable())
+            try
             {
-                Entity.Context.Entity.Session activeSession =
-                    DbContext.Sessions.Any(s => s.IsActive && s.Device.Id == d.Id) ?
-                       DbContext.Sessions.Where(s => s.IsActive && s.Device.Id == d.Id).FirstOrDefault() :
-                       null;
+                IList<Device> devices = new List<Device>();
 
-                yield return new Device
+                foreach (var d in DbContext.Devices.Where(d => d.IsActive).AsQueryable())
                 {
-                    Id = d.Id,
-                    HardwareInfo = d.HardwareInfo,
-                    Address = $"{d.Address}{(string.IsNullOrEmpty(d.Address2) ? "" : $", {d.Address2}")}",
-                    ConnectedModuleInfo = d.ConnectedModuleInfo,
-                    IsAvailable = !DbContext.Sessions.Any(s => s.IsActive && s.Device.Id == d.Id),
-                    Name = d.Name,
-                    DeviceGroup = d.Group,
-                    UsedBy = activeSession?.User?.DomainUsername,
-                    UsedByFriendly = activeSession?.User?.FriendlyName
-                };
+                    Entity.Context.Entity.Session activeSession =
+                        DbContext.Sessions.Any(s => s.IsActive && s.Device.Id == d.Id) ?
+                           DbContext.Sessions.Where(s => s.IsActive && s.Device.Id == d.Id).FirstOrDefault() :
+                           null;
+
+                    devices.Add(new Device
+                    {
+                        Id = d.Id,
+                        HardwareInfo = d.HardwareInfo,
+                        Address = $"{d.Address}{(string.IsNullOrEmpty(d.Address2) ? "" : $", {d.Address2}")}",
+                        ConnectedModuleInfo = d.ConnectedModuleInfo,
+                        IsAvailable = !DbContext.Sessions.Any(s => s.IsActive && s.Device.Id == d.Id),
+                        Name = d.Name,
+                        DeviceGroup = d.Group,
+                        UsedBy = activeSession?.User?.DomainUsername,
+                        UsedByFriendly = activeSession?.User?.FriendlyName
+                    });
+                }
+                return devices;
+            }
+            catch (System.Data.DataException ex)
+            {
+                _logService.LogException(ex, "DataException occured while getting devices");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logService.LogException(ex, "Unknown error occured while getting devices");
+                throw new ServiceException(ex);
             }
         }
 
@@ -62,7 +80,8 @@ namespace DeviceManager.Service
                         }
                         catch (System.Data.Entity.Validation.DbEntityValidationException)
                         {
-                            // validation error
+                            // validation error, i.e. a required property is empty
+                            // discard entire item
                             DbContext.Devices.Remove(item);
                         }
                     }
@@ -76,9 +95,15 @@ namespace DeviceManager.Service
                 }
                 return true;
             }
-            catch (Exception) //TODO: log
+            catch (System.Data.DataException ex)
             {
+                _logService.LogException(ex, "DataException occured during hardware import");
                 return false;
+            }
+            catch (Exception ex)
+            {
+                _logService.LogException(ex, "Unknown error occured during hardware import");
+                throw new ServiceException(ex);
             }
         }
     }

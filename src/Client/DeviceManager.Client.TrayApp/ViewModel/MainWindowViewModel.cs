@@ -126,6 +126,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 {
                     App.Current.Dispatcher.Invoke((Action)delegate
                     {
+                        Devices.Clear();
                         devices.MapDeviceToViewModel().ToList().ForEach(d => Devices.Add(d));
                     });
                     success = true;
@@ -161,18 +162,16 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         /// <returns></returns>
         private async Task RefreshAsync()
         {
-            Debug.WriteLine($"Refresh on {DateTime.Now.ToString()}");
             await _configService.LogRefresh();
-
             bool fullUpdateRequired = false;
 
             await RunCommandAsync(() => this.ExecutingCommand, async () =>
             {
-                RefreshData refreshData = await _dataService.Refresh();
+                string lastSuccessfulRefreshTime = _configService.GetLastSuccessfulRefreshTime();
+                RefreshResponse refreshData = await _dataService.Refresh(lastSuccessfulRefreshTime);
 
                 if (refreshData == null)
                 {
-                    Debug.WriteLine($"Refresh failed.");
                     _logService.LogError("Refresh failed");
                     if (++_consecutiveFailedRefreshCount == AppConstants.FAILED_OPERATION_RETRIES)
                     {
@@ -293,7 +292,6 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             _timer.Interval = TimeSpan.FromSeconds(this.RefreshInterval).TotalMilliseconds;
             _timer.Enabled = true;
             _timer.Start();
-            Debug.WriteLine("Timer started.");
         }
 
         private async void OnTimedEvent(object sender, ElapsedEventArgs e, TimerEvent timerEvent)

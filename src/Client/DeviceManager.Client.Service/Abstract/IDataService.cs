@@ -16,6 +16,6 @@ namespace DeviceManager.Client.Service
         Task<bool> CheckDeviceAvailabilityAsync(int deviceId);
         Task<bool> CheckoutDeviceAsync(string userName, int deviceId);
         Task<bool> CheckinDeviceAsync(string userName, int deviceId);
-        Task<RefreshData> Refresh();
+        Task<RefreshResponse> Refresh(string lastSuccessfulRefreshTime);
     }
 }

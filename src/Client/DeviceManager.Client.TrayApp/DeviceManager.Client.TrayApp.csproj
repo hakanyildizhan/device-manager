@@ -96,7 +96,6 @@
     <Compile Include="Helper\ExpressionHelpers.cs" />
     <Compile Include="Helper\RelayCommand.cs" />
     <Compile Include="Helper\RelayParameterizedCommand.cs" />
-    <Compile Include="Helper\Utility.cs" />
     <Compile Include="IoC\IAppServiceProvider.cs" />
     <Compile Include="IoC\UnityServiceProvider.cs" />
     <Compile Include="Service\NLogLogger.cs" />

@@ -19,17 +19,20 @@ namespace DeviceManager.Api.Controllers
         private readonly IDeviceService _deviceListService;
         private readonly ISessionService _sessionService;
         private readonly ISettingsService _settingsService;
+        private readonly ILogService _logService;
 
         public HomeController(
             IUserService userService, 
             IDeviceService deviceListService, 
             ISessionService sessionService,
-            ISettingsService settingsService)
+            ISettingsService settingsService,
+            ILogService<HomeController> logService)
         {
             _userService = userService;
             _deviceListService = deviceListService;
             _sessionService = sessionService;
             _settingsService = settingsService;
+            _logService = logService;
         }
 
         // GET: Home
@@ -64,7 +67,7 @@ namespace DeviceManager.Api.Controllers
         [HttpPost]
         public JsonResult UploadFile(UploadViewModel viewModel)
         {
-            // Verify that the user selected a file
+            // Validate inputs
             if ((viewModel.File == null || viewModel.File.ContentLength == 0) && 
                 (string.IsNullOrEmpty(viewModel.OneNotePath) || string.IsNullOrEmpty(viewModel.OneNotePageName)))
             {
@@ -83,9 +86,7 @@ namespace DeviceManager.Api.Controllers
                 {
                     string fileName = Path.GetFileName(viewModel.File.FileName); // extract only the filename
                     string generatedName = fileName.Insert(viewModel.File.FileName.IndexOf('.'), "_" + DateTime.UtcNow.ToString("yyyyMMdd-HHmmss"));
-                    string appRoamingFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DeviceManager");
-                    Directory.CreateDirectory(appRoamingFolder);
-                    path = Path.Combine(appRoamingFolder, generatedName);
+                    path = Path.Combine(Utility.GetAppRoamingFolder(), generatedName);
                     viewModel.File.SaveAs(path);
                 }
                 else
@@ -93,7 +94,6 @@ namespace DeviceManager.Api.Controllers
                     path = viewModel.OneNotePath;
                 }
 
-                //string pageName = Request.Form["pageName"].ToString();
                 IParser parser = ParserFactory.CreateParser(path, viewModel.OneNotePageName);
                 IList<Hardware> hardwareList = parser.Parse();
 
@@ -103,8 +103,10 @@ namespace DeviceManager.Api.Controllers
                     Message = RenderRazorViewToString("Partial/HardwareListPreview", hardwareList.ToHardwareInfo())
                 });
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
+                _logService.LogException(ex, "Error occured during file upload/processing");
+
                 return Json(new
                 {
                     Error = true,

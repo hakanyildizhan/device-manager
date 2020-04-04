@@ -22,14 +22,7 @@ namespace DeviceManager.Api.Controllers
         [HttpGet]
         public HttpResponseMessage Get()
         {
-            try
-            {
-                return Request.CreateResponse(HttpStatusCode.OK, _settingsService.Get());
-            }
-            catch (Exception) //TODO: log
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error");
-            }
+            return Request.CreateResponse(HttpStatusCode.OK, _settingsService.Get());
         }
     }
 }

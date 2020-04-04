@@ -11,9 +11,10 @@ namespace DeviceManager.FileParsing
     /// </summary>
     public class MissingColumnException : Exception
     {
-        public MissingColumnException() : base("An error occurred while parsing the file. Please make sure there is no missing column on your file.")
-        {
-        }
+        static string exceptionMessage = "Possible missing column in the file";
+
+        public MissingColumnException() : base(exceptionMessage) { }
+        public MissingColumnException(Exception innerException) : base(exceptionMessage, innerException) { }
     }
 
     /// <summary>
@@ -21,8 +22,9 @@ namespace DeviceManager.FileParsing
     /// </summary>
     public class ParsingException : Exception
     {
-        public ParsingException() : base("An error occurred while parsing the file. Please make sure your file is compatible with the template.")
-        {
-        }
+        static string exceptionMessage = "Unknown parsing error. File might not be compatible with template";
+
+        public ParsingException() : base(exceptionMessage) { }
+        public ParsingException(Exception innerException) : base(exceptionMessage, innerException) { }
     }
 }

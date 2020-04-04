@@ -79,15 +79,13 @@ namespace DeviceManager.FileParsing
                     }
                 }
             }
-            catch (IndexOutOfRangeException)
+            catch (IndexOutOfRangeException ex)
             {
-                // TODO: log this
-                throw new MissingColumnException();
+                throw new MissingColumnException(ex);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO: log this
-                throw new ParsingException();
+                throw new ParsingException(ex);
             }
         }
     }

@@ -1,12 +1,11 @@
-﻿using DeviceManager.Client.Service;
-using NLog;
+﻿using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeviceManager.Client.TrayApp.Service
+namespace DeviceManager.Service
 {
     public class NLogLogger<T> : ILogService<T>
     {
@@ -15,6 +14,7 @@ namespace DeviceManager.Client.TrayApp.Service
         {
             _logger = LogManager.GetLogger(typeof(T).FullName);
         }
+
         public void LogException(Exception exception)
         {
             _logger.Log(LogLevel.Error, exception);
@@ -24,7 +24,6 @@ namespace DeviceManager.Client.TrayApp.Service
         {
             _logger.Log(LogLevel.Error, exception, message);
         }
-
 
         public void LogInformation(string message)
         {

@@ -40,5 +40,11 @@ namespace DeviceManager.Client.Service
         /// </summary>
         /// <returns></returns>
         Task LogSuccessfulRefresh();
+
+        /// <summary>
+        /// Gets the time of the last successful refresh from the configuration file.
+        /// </summary>
+        /// <returns></returns>
+        string GetLastSuccessfulRefreshTime();
     }
 }
