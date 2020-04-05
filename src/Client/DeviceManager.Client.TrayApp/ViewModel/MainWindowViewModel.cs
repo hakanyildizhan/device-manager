@@ -213,43 +213,55 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             if (fullUpdateRequired)
             {
                 _logService.LogInformation("Initializing full device update");
+                await InitiateFullHardwareListUpdate();
+            }
+        }
 
-                // stop the timer, get updated list, then Enable timer again
-                DisableTimer();
-                bool success = await GetDevicesAsync();
-                if (!success)
+        /// <summary>
+        /// Starts a full hardware list update, as reported from the <see cref="RefreshResponse"/>, following these steps:
+        /// <para></para>
+        /// 1. Stop any active refresh timer
+        /// <para></para>
+        /// 2. Get updated hardware list. If initial attempt fails, retry for the amount specified by <see cref="AppConstants.FAILED_OPERATION_RETRIES"/>.
+        /// <para></para>
+        /// 3. Re-enable the refresh timer
+        /// </summary>
+        /// <returns></returns>
+        private async Task InitiateFullHardwareListUpdate()
+        {
+            // stop timer
+            DisableTimer();
+
+            // get updated list
+            bool success = await GetDevicesAsync();
+
+            if (!success) // retry in case of failure
+            {
+                for (int i = 0; i < AppConstants.FAILED_OPERATION_RETRIES; i++)
                 {
-                    // retry action
-                    for (int i = 0; i < AppConstants.FAILED_OPERATION_RETRIES; i++)
-                    {
-                        success = await RunDelayedCommandAsync(() => this.RefreshInterval, async () =>
+                    success = await RunDelayedCommandAsync(
+                        () => this.ExecutingCommand,
+                        () => this.RefreshInterval,
+                        async () =>
                         {
                             return await GetDevicesAsync();
                         });
 
-                        if (success) break;
-                    }
-                    if (!success)
-                    {
-                        await _feedbackService.ShowMessageAsync(MessageType.Error, "Cannot contact the server right now. Please try exiting and reopening the app again.");
-                        _logService.LogError("Could not get devices after several attempts, stopping");
-                        return;
-                    }
-                    else
-                    {
-                        await _feedbackService.ShowMessageAsync(MessageType.Information, "Device list is updated.");
-                        await _configService.LogSuccessfulRefresh();
-                        _logService.LogInformation("Device list is updated after retry");
-                        EnableTimer(TimerEvent.Refresh);
-                    }
+                    if (success) break;
                 }
-                else
-                {
-                    await _feedbackService.ShowMessageAsync(MessageType.Information, "Device list is updated.");
-                    await _configService.LogSuccessfulRefresh();
-                    _logService.LogInformation("Device list is updated");
-                    EnableTimer(TimerEvent.Refresh);
-                }
+            }
+
+            if (!success)
+            {
+                await _feedbackService.ShowMessageAsync(MessageType.Error, "Cannot contact the server right now. Please try exiting and reopening the app again.");
+                _logService.LogError("Could not get devices after several attempts");
+            }
+            else
+            {
+                await _feedbackService.ShowMessageAsync(MessageType.Information, "Device list is updated.");
+                await _configService.LogSuccessfulRefresh();
+                _logService.LogInformation("Device list is updated");
+                EnableTimer(TimerEvent.Refresh);
             }
         }
 
