@@ -46,5 +46,11 @@ namespace DeviceManager.Client.Service
         /// </summary>
         /// <returns></returns>
         string GetLastSuccessfulRefreshTime();
+
+        /// <summary>
+        /// Gets the interval in seconds at which users will be prompted whether they are still using a device. 0 indicates that users will not be prompted.
+        /// </summary>
+        /// <returns></returns>
+        int GetUsagePromptInterval();
     }
 }

@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
@@ -12,13 +14,21 @@ namespace DeviceManager.Client.TrayApp.ViewModel
 {
     public class DeviceItemViewModel : BaseViewModel
     {
+        private IDataService _dataService => (IDataService)ServiceProvider.GetService<IDataService>();
+        private IFeedbackService _feedbackService => (IFeedbackService)ServiceProvider.GetService<IFeedbackService>();
+        private ILogService<DeviceItemViewModel> _logService => (ILogService<DeviceItemViewModel>)ServiceProvider.GetService<ILogService<DeviceItemViewModel>>();
+        private IConfigurationService _configService => (IConfigurationService)ServiceProvider.GetService<IConfigurationService>();
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string Tooltip { get; set; }
+        public int UsagePromptInterval => _configService.GetUsagePromptInterval();
 
         private bool _isAvailable;
         private string _usedBy;
         private string _usedByFriendly;
+        private Timer _usageTimer;
+        private bool _promptActive = false;
 
         public bool IsAvailable 
         { 
@@ -66,10 +76,6 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         public bool ExecutingCommand { get; set; }
         public ICommand CheckoutOrReleaseCommand { get; set; }
 
-        private IDataService _dataService => (IDataService)ServiceProvider.GetService<IDataService>();
-        private IFeedbackService _feedbackService => (IFeedbackService)ServiceProvider.GetService<IFeedbackService>();
-        private ILogService<DeviceItemViewModel> _logService => (ILogService<DeviceItemViewModel>)ServiceProvider.GetService<ILogService<DeviceItemViewModel>>();
-
         public DeviceItemViewModel()
         {
             CheckoutOrReleaseCommand = new RelayCommand(async () => await CheckoutOrReleaseAsync());
@@ -101,6 +107,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                         _logService.LogInformation("Check-out successful");
                         IsAvailable = false;
                         UsedBy = Utility.GetCurrentUserName();
+                        EnableTimer();
                     }
                     else if (result == ApiCallResult.NotReachable)
                     {
@@ -140,6 +147,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                         _logService.LogInformation("Check-in succeeded");
                         IsAvailable = true;
                         UsedBy = null;
+                        DisableTimer();
                     }
                     else if (result == ApiCallResult.NotReachable)
                     {
@@ -153,6 +161,45 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                     }
                 }
             });
+        }
+
+        private void EnableTimer()
+        {
+            DisableTimer();
+            _usageTimer = new Timer();
+            _usageTimer.Elapsed += UsageTimer_Elapsed;
+            _usageTimer.Interval = TimeSpan.FromSeconds(this.UsagePromptInterval).TotalMilliseconds;
+            _usageTimer.Enabled = true;
+            _usageTimer.Start();
+        }
+
+        private async void UsageTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if (!_promptActive)
+            {
+                _promptActive = true;
+                MessageBoxResult result = MessageBox.Show($"Click \"Yes\" to keep using\r\n\r\n{this.Name},\r\n\r\nor \"No\" to release it.", "Device Manager", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                switch (result)
+                {
+                    case MessageBoxResult.Yes:
+                        // do nothing
+                        _promptActive = false;
+                        break;
+                    case MessageBoxResult.No:
+                        _promptActive = false;
+                        await CheckinAsync();
+                        break;
+                }
+            }
+        }
+
+        private void DisableTimer()
+        {
+            if (_usageTimer != null)
+            {
+                _usageTimer.Stop();
+                _usageTimer.Dispose();
+            }
         }
     }
 }

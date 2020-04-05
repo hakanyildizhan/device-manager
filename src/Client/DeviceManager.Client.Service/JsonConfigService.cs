@@ -125,5 +125,11 @@ namespace DeviceManager.Client.Service
         {
             return Get(ServiceConstants.Settings.LAST_SUCCESSFUL_REFRESH);
         }
+
+        public int GetUsagePromptInterval()
+        {
+            string value = Get(ServiceConstants.Settings.USAGE_PROMPT_INTERVAL);
+            return !string.IsNullOrEmpty(value) ? int.Parse(value) : ServiceConstants.Settings.USAGE_PROMPT_INTERVAL_DEFAULT;
+        }
     }
 }

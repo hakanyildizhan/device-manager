@@ -24,6 +24,7 @@
             context.Settings.AddOrUpdate(s => s.Name,
                 new Setting { Name = "serverVersion", Value = "1.0" },
                 new Setting { Name = "refreshInterval", Value = "60", Description = "Refresh interval for clients (seconds)" },
+                new Setting { Name = "usagePromptInterval", Value = "3600", Description = "Interval (seconds) at which clients will be prompted to check devices back in" },
                 new Setting { Name = "lastDeviceListUpdate", Value = DateTime.UtcNow.ToString(CultureInfo.GetCultureInfo("tr-TR")) }
                 );
 
