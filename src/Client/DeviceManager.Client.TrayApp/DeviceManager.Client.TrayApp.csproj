@@ -212,5 +212,19 @@
   <ItemGroup>
     <Resource Include="Resources\Images\edit.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Animation\starter_loading_1.ico" />
+    <Resource Include="Icons\Animation\starter_loading_10.ico" />
+    <Resource Include="Icons\Animation\starter_loading_11.ico" />
+    <Resource Include="Icons\Animation\starter_loading_12.ico" />
+    <Resource Include="Icons\Animation\starter_loading_2.ico" />
+    <Resource Include="Icons\Animation\starter_loading_3.ico" />
+    <Resource Include="Icons\Animation\starter_loading_4.ico" />
+    <Resource Include="Icons\Animation\starter_loading_5.ico" />
+    <Resource Include="Icons\Animation\starter_loading_6.ico" />
+    <Resource Include="Icons\Animation\starter_loading_7.ico" />
+    <Resource Include="Icons\Animation\starter_loading_8.ico" />
+    <Resource Include="Icons\Animation\starter_loading_9.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
