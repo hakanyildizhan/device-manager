@@ -27,7 +27,7 @@ namespace DeviceManager.Client.Service
 #endif
         }
 
-        public async Task<bool> CheckDeviceAvailabilityAsync(int deviceId)
+        public async Task<ApiCallResult> CheckDeviceAvailabilityAsync(int deviceId)
         {
             Uri uri = new Uri(builder.Uri, "session/isdeviceavailable");
             try
@@ -36,26 +36,26 @@ namespace DeviceManager.Client.Service
                 if (response.IsSuccessStatusCode)
                 {
                     bool result = await response.Content.ReadAsAsync<bool>();
-                    return result;
+                    return result ? ApiCallResult.Success : ApiCallResult.Failure;
                 }
                 else
                 {
-                    return false;
+                    return ApiCallResult.Failure;
                 }
             }
             catch (HttpRequestException ex)
             {
                 _logService.LogException(ex, "Cannot contact server. Could not check device availability");
+                return ApiCallResult.NotReachable;
             }
             catch (Exception ex)
             {
                 _logService.LogException(ex, "Unknown error occured while checking device availability");
+                return ApiCallResult.Unknown;
             }
-
-            return false;
         }
 
-        public async Task<bool> CheckinDeviceAsync(string userName, int deviceId)
+        public async Task<ApiCallResult> CheckinDeviceAsync(string userName, int deviceId)
         {
             Uri uri = new Uri(builder.Uri, "session/end");
             try
@@ -69,26 +69,26 @@ namespace DeviceManager.Client.Service
                 if (response.IsSuccessStatusCode)
                 {
                     bool result = await response.Content.ReadAsAsync<bool>();
-                    return result;
+                    return result ? ApiCallResult.Success : ApiCallResult.Failure;
                 }
                 else
                 {
-                    return false;
+                    return ApiCallResult.Failure;
                 }
             }
             catch (HttpRequestException ex)
             {
                 _logService.LogException(ex, "Cannot contact server. Check in failed");
+                return ApiCallResult.NotReachable;
             }
             catch (Exception ex)
             {
                 _logService.LogException(ex, "Unknown error occured while checking in");
+                return ApiCallResult.Unknown;
             }
-
-            return false;
         }
 
-        public async Task<bool> CheckoutDeviceAsync(string userName, int deviceId)
+        public async Task<ApiCallResult> CheckoutDeviceAsync(string userName, int deviceId)
         {
             Uri uri = new Uri(builder.Uri, "session/create");
             try
@@ -102,23 +102,23 @@ namespace DeviceManager.Client.Service
                 if (response.IsSuccessStatusCode)
                 {
                     bool result = await response.Content.ReadAsAsync<bool>();
-                    return result;
+                    return result ? ApiCallResult.Success : ApiCallResult.Failure;
                 }
                 else
                 {
-                    return false;
+                    return ApiCallResult.Failure;
                 }
             }
             catch (HttpRequestException ex)
             {
                 _logService.LogException(ex, "Cannot contact server. Check out failed");
+                return ApiCallResult.NotReachable;
             }
             catch (Exception ex)
             {
                 _logService.LogException(ex, "Unknown error occured while checking out");
+                return ApiCallResult.Unknown;
             }
-
-            return false;
         }
 
         public async Task<RefreshResponse> Refresh(string lastSuccessfulRefreshTime)
@@ -207,7 +207,7 @@ namespace DeviceManager.Client.Service
             return null;
         }
 
-        public async Task<bool> SetUsernameAsync(string domainUserName, string friendlyName)
+        public async Task<ApiCallResult> SetUsernameAsync(string domainUserName, string friendlyName)
         {
             Uri uri = new Uri(builder.Uri, "user/setfriendlyname");
             try
@@ -218,18 +218,18 @@ namespace DeviceManager.Client.Service
                     FriendlyName = friendlyName
                 });
 
-                return response.IsSuccessStatusCode;
+                return response.IsSuccessStatusCode ? ApiCallResult.Success : ApiCallResult.Failure;
             }
             catch (HttpRequestException ex)
             {
                 _logService.LogException(ex, "Cannot contact server. Could not set user name");
+                return ApiCallResult.NotReachable;
             }
             catch (Exception ex)
             {
                 _logService.LogException(ex, "Unknown error occured while setting user name");
+                return ApiCallResult.Unknown;
             }
-
-            return false;
         }
 
         public async Task<Dictionary<string, string>> GetSettingsAsync()

@@ -279,11 +279,16 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             {
                 if ((parameter is string) && !string.IsNullOrEmpty((string)parameter))
                 {
-                    bool result = await _dataService.SetUsernameAsync(this.UserName, (string)parameter);
-                    if (result)
+                    var result = await _dataService.SetUsernameAsync(this.UserName, (string)parameter);
+                    if (result == ApiCallResult.Success)
                     {
                         FriendlyName = (string)parameter;
                         _logService.LogInformation("Name set successfully");
+                    }
+                    else if (result == ApiCallResult.NotReachable)
+                    {
+                        await _feedbackService.ShowMessageAsync(MessageType.Warning, "Server unreachable, could not update user name.");
+                        _logService.LogError("Could not set name. Server unreachable");
                     }
                     else
                     {

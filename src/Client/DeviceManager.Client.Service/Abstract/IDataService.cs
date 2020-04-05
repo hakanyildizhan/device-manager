@@ -12,10 +12,10 @@ namespace DeviceManager.Client.Service
         Task<IEnumerable<Device>> GetDevicesAsync();
         Task<Dictionary<string,string>> GetSettingsAsync();
         Task<UserInfo> RegisterUserAsync(string domainUserName);
-        Task<bool> SetUsernameAsync(string domainUserName, string friendlyName);
-        Task<bool> CheckDeviceAvailabilityAsync(int deviceId);
-        Task<bool> CheckoutDeviceAsync(string userName, int deviceId);
-        Task<bool> CheckinDeviceAsync(string userName, int deviceId);
+        Task<ApiCallResult> SetUsernameAsync(string domainUserName, string friendlyName);
+        Task<ApiCallResult> CheckDeviceAvailabilityAsync(int deviceId);
+        Task<ApiCallResult> CheckoutDeviceAsync(string userName, int deviceId);
+        Task<ApiCallResult> CheckinDeviceAsync(string userName, int deviceId);
         Task<RefreshResponse> Refresh(string lastSuccessfulRefreshTime);
     }
 }

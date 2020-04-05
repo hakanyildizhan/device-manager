@@ -64,6 +64,7 @@
     <Compile Include="Helper\DateTimeHelpers.cs" />
     <Compile Include="Helper\Utility.cs" />
     <Compile Include="JsonConfigService.cs" />
+    <Compile Include="Model\Enum\ApiCallResult.cs" />
     <Compile Include="Model\Api\RefreshRequest.cs" />
     <Compile Include="Model\Api\SessionRequest.cs" />
     <Compile Include="Model\Api\SetFriendlyNameRequest.cs" />

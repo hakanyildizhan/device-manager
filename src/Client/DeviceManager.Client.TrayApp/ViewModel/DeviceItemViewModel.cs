@@ -1,4 +1,5 @@
 ﻿using DeviceManager.Client.Service;
+using DeviceManager.Client.Service.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,53 +79,80 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         {
             if (IsAvailable)
             {
-                await RunCommandAsync(() => this.ExecutingCommand, async () =>
-                {
-                    bool currentlyAvailable = await _dataService.CheckDeviceAvailabilityAsync(this.Id);
-                    if (!currentlyAvailable)
-                    {
-                        await _feedbackService.ShowMessageAsync(MessageType.Warning, "Device unavailable", "This device is currently unavialable. Device list will be shortly updated to include latest changes.");
-                    }
-                    else
-                    {
-                        bool success = await _dataService.CheckoutDeviceAsync(Utility.GetCurrentUserName(), this.Id);
-                        if (!success)
-                        {
-                            await _feedbackService.ShowMessageAsync(MessageType.Error, "Operation failed", "Could not check out device. Please try again later.");
-                            _logService.LogError("Check-out failed");
-                        }
-                        else
-                        {
-                            await _feedbackService.ShowMessageAsync(MessageType.Information, "Device checked out successfully.");
-                            _logService.LogInformation("Check-out succeeded");
-                            IsAvailable = false;
-                            UsedBy = Utility.GetCurrentUserName();
-                        }
-                    }
-                });
+                await CheckoutAsync();
             }
             else
             {
-                await RunCommandAsync(() => this.ExecutingCommand, async () =>
-                {
-                    if (UsedByMe)
-                    {
-                        bool success = await _dataService.CheckinDeviceAsync(Utility.GetCurrentUserName(), this.Id);
-                        if (!success)
-                        {
-                            await _feedbackService.ShowMessageAsync(MessageType.Error, "Operation failed", "Could not release device. Please try again later.");
-                            _logService.LogError("Check-in failed");
-                        }
-                        else
-                        {
-                            await _feedbackService.ShowMessageAsync(MessageType.Information, "Device released successfully.");
-                            _logService.LogInformation("Check-in succeeded");
-                            IsAvailable = true;
-                            UsedBy = null;
-                        }
-                    }
-                });
+                await CheckinAsync();
             }
+        }
+
+        private async Task CheckoutAsync()
+        {
+            await RunCommandAsync(() => this.ExecutingCommand, async () =>
+            {
+                var result = await _dataService.CheckDeviceAvailabilityAsync(this.Id);
+                if (result == ApiCallResult.Success)
+                {
+                    result = await _dataService.CheckoutDeviceAsync(Utility.GetCurrentUserName(), this.Id);
+                    if (result == ApiCallResult.Success)
+                    {
+                        await _feedbackService.ShowMessageAsync(MessageType.Information, "Device checked out successfully.");
+                        _logService.LogInformation("Check-out successful");
+                        IsAvailable = false;
+                        UsedBy = Utility.GetCurrentUserName();
+                    }
+                    else if (result == ApiCallResult.NotReachable)
+                    {
+                        await _feedbackService.ShowMessageAsync(MessageType.Error, "Server unreachable", "Cannot reach the server right now. Please try again later.");
+                        _logService.LogError("Check-out failed");
+                    }
+                    else
+                    {
+                        await _feedbackService.ShowMessageAsync(MessageType.Error, "Operation failed", "Could not check out device. Please try again later.");
+                        _logService.LogError("Check-out failed");
+                    }
+                }
+                else if (result == ApiCallResult.NotReachable)
+                {
+                    await _feedbackService.ShowMessageAsync(MessageType.Error, "Server unreachable", "Cannot reach the server right now. Please try again later.");
+                    _logService.LogError("Could not check device availability. Server unreachable");
+                }
+                else
+                {
+                    await _feedbackService.ShowMessageAsync(MessageType.Warning, "Device unavailable", "This device is currently unavailable. Device status will be updated shortly.");
+                    _logService.LogError("Could not check device availability");
+                    // TODO: get latest status for this specific device
+                }
+            });
+        }
+
+        private async Task CheckinAsync()
+        {
+            await RunCommandAsync(() => this.ExecutingCommand, async () =>
+            {
+                if (UsedByMe)
+                {
+                    var result = await _dataService.CheckinDeviceAsync(Utility.GetCurrentUserName(), this.Id);
+                    if (result == ApiCallResult.Success)
+                    {
+                        await _feedbackService.ShowMessageAsync(MessageType.Information, "Device is released successfully.");
+                        _logService.LogInformation("Check-in succeeded");
+                        IsAvailable = true;
+                        UsedBy = null;
+                    }
+                    else if (result == ApiCallResult.NotReachable)
+                    {
+                        await _feedbackService.ShowMessageAsync(MessageType.Error, "Server unreachable", "Cannot reach the server right now. Please try again later.");
+                        _logService.LogError("Check-in failed. Server unreachable");
+                    }
+                    else
+                    {
+                        await _feedbackService.ShowMessageAsync(MessageType.Error, "Operation failed", "Could not release device. Please try again later.");
+                        _logService.LogError("Check-in failed");
+                    }
+                }
+            });
         }
     }
 }
