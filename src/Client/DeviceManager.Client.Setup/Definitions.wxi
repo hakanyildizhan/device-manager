@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Include>
-	<!-- TODO: Put your code here. -->
-  <?define BuildConfiguration="Debug" ?>
-  <?define SourceFilePath="D:\PersonalTFS\WebProjects\DeviceManager\src\Client\DeviceManager.Client.TrayApp\bin\$(var.BuildConfiguration)" ?>
   <?define AppName="Device Manager" ?>
 </Include>

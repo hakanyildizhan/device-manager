@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?include Definitions.wxi ?>
+
+  <Fragment>
+    <!-- Product Components -->
+    <ComponentGroup Id="ProductComponents">
+
+      <!-- Shortcut -->
+      <ComponentRef Id="MainAppShortcut" />
+      <ComponentRef Id="MainAppShortcut2" />
+
+    </ComponentGroup>
+
+    <!-- Installed files -->
+    <DirectoryRef Id="INSTALLFOLDER" FileSource="..\DeviceManager.Client.TrayApp\bin\$(var.Configuration)\">
+
+      <Directory Id="ProgramMenuFolder">
+
+        <!-- Shortcut to main application -->
+        <Component Id="MainAppShortcut" Guid="{0995664D-AE63-4DD6-B894-708A99611370}">
+
+          <Shortcut Id="MainAppShortcut"
+                    Name="$(var.AppName)"
+                    Target="[INSTALLFOLDER]DeviceManager.Client.TrayApp.exe"
+            
+                    WorkingDirectory="INSTALLFOLDER"
+                    Icon="icon.exe"
+                  />
+
+          <!-- Our unique key for this component/shortcut -->
+          <RegistryValue Id="RegShortcutKey" Root="HKCU" Key="SOFTWARE\$(var.AppName)" Name="Shortcut" Value="1" Type="integer" KeyPath="yes" />
+
+          <!--Remove start menu items -->
+          <RemoveFolder Id="RemoveStartMenu" Directory="ProgramMenuFolder" On="uninstall" />
+
+
+        </Component>
+      </Directory>
+
+
+      <Directory Id="DesktopFolder" Name="DesktopFolder">
+
+        <!-- Shortcut 2 to main application -->
+        <Component Id="MainAppShortcut2" Guid="{0995664D-AE63-4DD6-B894-708A99611371}">
+
+          <Shortcut Id="DesktopShortcut"
+                    Name="$(var.AppName)"
+                    Target="[INSTALLFOLDER]DeviceManager.Client.TrayApp.exe"
+       
+                    WorkingDirectory="INSTALLFOLDER"
+                    Icon='icon.exe'
+                  />
+          <RemoveFolder Id="DesktopFolder" On="uninstall"/>
+          <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.AppName)" Name="Shortcut2" Value="1" Type="integer" KeyPath="yes"/>
+        </Component>
+      </Directory>
+
+    </DirectoryRef>
+
+  </Fragment>
+</Wix>

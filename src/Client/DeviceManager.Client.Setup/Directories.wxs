@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?include Definitions.wxi ?>
+  
+	<Fragment>
+    
+    <Directory Id="TARGETDIR" Name="SourceDir">
+
+      <!-- Start Menu --><!--
+      <Directory Id="ProgramMenuFolder" Name="Programs">
+        <Directory Id="InstallProgramMenuFolder" Name="$(var.AppName)" />
+      </Directory>
+
+      --><!-- Desktop --><!--
+      <Directory Id="DesktopFolder" Name="Desktop">
+        <Directory Id="InstallDesktopFolder" Name="$(var.AppName)" />
+      </Directory>-->
+
+      <!-- Program Files folder -->
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="$(var.AppName)" />
+      </Directory>
+
+    </Directory>
+    
+	</Fragment>
+</Wix>
