@@ -6,7 +6,6 @@ using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -17,24 +16,14 @@ namespace DeviceManager.Client.TrayApp
     /// </summary>
     public partial class App : Application
     {
-        static Mutex mutex = new Mutex(true, "{D945067F-CF69-4850-8E06-3DDA6625BA76}");
-
         protected override void OnStartup(StartupEventArgs e)
         {
-            if (mutex.WaitOne(TimeSpan.Zero, true))
-            {
-                base.OnStartup(e);
-                SetupApplication();
+            base.OnStartup(e);
+            SetupApplication();
 
-                MainWindow mainWindow = new MainWindow();
-                mainWindow.Visibility = Visibility.Hidden;
-                mainWindow.Show();
-                mutex.ReleaseMutex();
-            }
-            else
-            {
-                MessageBox.Show("The application is already running.");
-            }
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Visibility = Visibility.Hidden;
+            mainWindow.Show();
         }
 
         private void SetupApplication()
