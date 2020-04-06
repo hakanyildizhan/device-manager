@@ -7,56 +7,46 @@
     <ComponentGroup Id="ProductComponents">
 
       <!-- Shortcut -->
-      <ComponentRef Id="MainAppShortcut" />
-      <ComponentRef Id="MainAppShortcut2" />
+      <ComponentRef Id="ProgramMenuShortcut" />
+      <ComponentRef Id="DesktopShortcut" />
 
     </ComponentGroup>
 
-    <!-- Installed files -->
-    <DirectoryRef Id="INSTALLFOLDER" FileSource="..\DeviceManager.Client.TrayApp\bin\$(var.Configuration)\">
+        <!-- Start menu shortcut -->
+        <Component Id="ProgramMenuShortcut" 
+                   Guid="{0995664D-AE63-4DD6-B894-708A99611370}" 
+                   Directory="InstallProgramMenuFolder">
 
-      <Directory Id="ProgramMenuFolder">
-
-        <!-- Shortcut to main application -->
-        <Component Id="MainAppShortcut" Guid="{0995664D-AE63-4DD6-B894-708A99611370}">
-
-          <Shortcut Id="MainAppShortcut"
+          <Shortcut Id="ProgramMenuShortcut"
                     Name="$(var.AppName)"
                     Target="[INSTALLFOLDER]DeviceManager.Client.TrayApp.exe"
-            
                     WorkingDirectory="INSTALLFOLDER"
-                    Icon="icon.exe"
-                  />
+                    Icon="icon.exe"/>
 
-          <!-- Our unique key for this component/shortcut -->
-          <RegistryValue Id="RegShortcutKey" Root="HKCU" Key="SOFTWARE\$(var.AppName)" Name="Shortcut" Value="1" Type="integer" KeyPath="yes" />
+          <!-- Unique key for this component/shortcut -->
+          <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.AppName)" Name="Shortcut" Value="1" Type="integer" KeyPath="yes" />
 
           <!--Remove start menu items -->
-          <RemoveFolder Id="RemoveStartMenu" Directory="ProgramMenuFolder" On="uninstall" />
-
+          <RemoveFolder Id="RemoveStartMenu" On="uninstall" />
 
         </Component>
-      </Directory>
 
-
-      <Directory Id="DesktopFolder" Name="DesktopFolder">
-
-        <!-- Shortcut 2 to main application -->
-        <Component Id="MainAppShortcut2" Guid="{0995664D-AE63-4DD6-B894-708A99611371}">
+        <!-- Desktop shortcut -->
+        <Component Id="DesktopShortcut" Guid="{0995664D-AE63-4DD6-B894-708A99611371}" Directory="DesktopFolder">
 
           <Shortcut Id="DesktopShortcut"
                     Name="$(var.AppName)"
                     Target="[INSTALLFOLDER]DeviceManager.Client.TrayApp.exe"
-       
                     WorkingDirectory="INSTALLFOLDER"
-                    Icon='icon.exe'
-                  />
-          <RemoveFolder Id="DesktopFolder" On="uninstall"/>
+                    Icon='icon.exe' />
+          
+          <!-- Unique key for this component/shortcut -->
           <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.AppName)" Name="Shortcut2" Value="1" Type="integer" KeyPath="yes"/>
-        </Component>
-      </Directory>
 
-    </DirectoryRef>
+          <!--Remove desktop shortcut -->
+          <RemoveFolder Id='RemoveDesktop' On="uninstall"/>
+          
+        </Component>
 
   </Fragment>
 </Wix>
