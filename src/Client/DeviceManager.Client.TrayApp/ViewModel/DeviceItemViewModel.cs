@@ -21,9 +21,9 @@ namespace DeviceManager.Client.TrayApp.ViewModel
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Tooltip { get; set; }
         public int UsagePromptInterval => _configService.GetUsagePromptInterval();
 
+        private string _tooltip;
         private bool _isAvailable;
         private string _usedBy;
         private string _usedByFriendly;
@@ -72,6 +72,19 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         }
 
         public bool UsedByMe { get; set; }
+
+        public string Tooltip
+        {
+            get { return _tooltip; }
+            set
+            {
+                if (_tooltip != value)
+                {
+                    _tooltip = value;
+                    OnPropertyChanged(nameof(Tooltip));
+                }
+            }
+        }
 
         public bool ExecutingCommand { get; set; }
         public ICommand CheckoutOrReleaseCommand { get; set; }
