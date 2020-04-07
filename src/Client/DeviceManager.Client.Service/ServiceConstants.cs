@@ -16,6 +16,7 @@ namespace DeviceManager.Client.Service
             public const string LAST_SUCCESSFUL_REFRESH = "lastSuccessfulRefresh";
             public const string USAGE_PROMPT_INTERVAL = "usagePromptInterval";
             public const int USAGE_PROMPT_INTERVAL_DEFAULT = 3600;
+            public const string SERVER_ADDRESS = "serverAddress";
         }
     }
 }

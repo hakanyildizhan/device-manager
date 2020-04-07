@@ -1,5 +1,6 @@
 ﻿using DeviceManager.Client.Service.Model;
 using DeviceManager.Client.Service.Model.Api;
+using Flurl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,22 +15,22 @@ namespace DeviceManager.Client.Service
     public class DataService : IDataService
     {
         static HttpClient client = new HttpClient();
-        private readonly UriBuilder builder;
+        private readonly string _baseApiAddress;
         private readonly ILogService _logService;
+        private readonly IConfigurationService _configService;
 
-        public DataService(ILogService<DataService> logService)
+        public DataService(ILogService<DataService> logService, IConfigurationService configService)
         {
             _logService = logService;
-#if DEBUG
-            builder = new UriBuilder("http://localhost:8060/api/");
-#else
-            builder = new UriBuilder("http://EVT01152SNZ:8060/api/");
-#endif
+            _configService = configService;
+
+            string serverAddress = _configService.GetServerAddress();
+            _baseApiAddress = Url.Combine(serverAddress, "api");
         }
 
         public async Task<ApiCallResult> CheckDeviceAvailabilityAsync(int deviceId)
         {
-            Uri uri = new Uri(builder.Uri, "session/isdeviceavailable");
+            string uri = Url.Combine(_baseApiAddress, "session/isdeviceavailable");
             try
             {
                 HttpResponseMessage response = await client.PostAsJsonAsync(uri, deviceId);
@@ -57,7 +58,7 @@ namespace DeviceManager.Client.Service
 
         public async Task<ApiCallResult> CheckinDeviceAsync(string userName, int deviceId)
         {
-            Uri uri = new Uri(builder.Uri, "session/end");
+            string uri = Url.Combine(_baseApiAddress, "session/end");
             try
             {
                 HttpResponseMessage response = await client.PostAsJsonAsync(uri, new SessionRequest
@@ -90,7 +91,7 @@ namespace DeviceManager.Client.Service
 
         public async Task<ApiCallResult> CheckoutDeviceAsync(string userName, int deviceId)
         {
-            Uri uri = new Uri(builder.Uri, "session/create");
+            string uri = Url.Combine(_baseApiAddress, "session/create");
             try
             {
                 HttpResponseMessage response = await client.PostAsJsonAsync(uri, new SessionRequest
@@ -123,7 +124,7 @@ namespace DeviceManager.Client.Service
 
         public async Task<RefreshResponse> Refresh(string lastSuccessfulRefreshTime)
         {
-            Uri uri = new Uri(builder.Uri, "refresh");
+            string uri = Url.Combine(_baseApiAddress, "refresh");
             try
             {
                 HttpResponseMessage response = await client.PostAsJsonAsync(uri, new RefreshRequest
@@ -154,7 +155,7 @@ namespace DeviceManager.Client.Service
 
         public async Task<IEnumerable<Device>> GetDevicesAsync()
         {
-            Uri uri = new Uri(builder.Uri, "device");
+            string uri = Url.Combine(_baseApiAddress, "device");
             try
             {
                 HttpResponseMessage response = await client.GetAsync(uri);
@@ -181,7 +182,7 @@ namespace DeviceManager.Client.Service
 
         public async Task<UserInfo> RegisterUserAsync(string domainUserName)
         {
-            Uri uri = new Uri(builder.Uri, "user/register");
+            string uri = Url.Combine(_baseApiAddress, "user/register");
             try
             {
                 HttpResponseMessage response = await client.PostAsJsonAsync(uri, domainUserName);
@@ -209,7 +210,7 @@ namespace DeviceManager.Client.Service
 
         public async Task<ApiCallResult> SetUsernameAsync(string domainUserName, string friendlyName)
         {
-            Uri uri = new Uri(builder.Uri, "user/setfriendlyname");
+            string uri = Url.Combine(_baseApiAddress, "user/setfriendlyname");
             try
             {
                 HttpResponseMessage response = await client.PostAsJsonAsync(uri, new SetFriendlyNameRequest
@@ -234,7 +235,7 @@ namespace DeviceManager.Client.Service
 
         public async Task<Dictionary<string, string>> GetSettingsAsync()
         {
-            Uri uri = new Uri(builder.Uri, "settings");
+            string uri = Url.Combine(_baseApiAddress, "settings");
             try
             {
                 HttpResponseMessage response = await client.GetAsync(uri);

@@ -52,5 +52,11 @@ namespace DeviceManager.Client.Service
         /// </summary>
         /// <returns></returns>
         int GetUsagePromptInterval();
+
+        /// <summary>
+        /// Gets the server address which the API calls will be based on. This configuration is set during setup process.
+        /// </summary>
+        /// <returns></returns>
+        string GetServerAddress();
     }
 }
