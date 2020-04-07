@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" InitialTargets="EnsureWixToolsetInstalled" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>3.10</ProductVersion>
+    <ProjectGuid>{6588960f-c551-4104-ba01-6b3981a6951d}</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>DeviceManager.Setup.Base</OutputName>
+    <OutputType>Library</OutputType>
+    <Name>DeviceManager.Setup.Base</Name>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Common.wxs" />
+    <Compile Include="Common_x86.wxs" />
+    <Compile Include="Dialog\BrowseDlg.wxs" />
+    <Compile Include="Dialog\CancelDlg.wxs" />
+    <Compile Include="Dialog\CustomizeDlg.wxs" />
+    <Compile Include="Dialog\DiskCostDlg.wxs" />
+    <Compile Include="Dialog\ErrorDlg.wxs" />
+    <Compile Include="Dialog\ExitDialog.wxs" />
+    <Compile Include="Dialog\LicenseAgreementDlg.wxs" />
+    <Compile Include="Dialog\MaintenanceTypeDlg.wxs" />
+    <Compile Include="Dialog\MaintenanceWelcomeDlg.wxs" />
+    <Compile Include="Dialog\OutOfDiskDlg.wxs" />
+    <Compile Include="Dialog\OutOfRbDiskDlg.wxs" />
+    <Compile Include="Dialog\PrepareDlg.wxs" />
+    <Compile Include="Dialog\ProgressDlg.wxs" />
+    <Compile Include="Dialog\ResumeDlg.wxs" />
+    <Compile Include="Dialog\ServerTestDlg.wxs" />
+    <Compile Include="Dialog\SetupTypeDlg.wxs" />
+    <Compile Include="Dialog\VerifyReadyDlg.wxs" />
+    <Compile Include="Dialog\WaitForCostingDlg.wxs" />
+    <Compile Include="Dialog\WelcomeDlg.wxs" />
+    <Compile Include="FatalError.wxs" />
+    <Compile Include="FilesInUse.wxs" />
+    <Compile Include="MsiRMFilesInUse.wxs" />
+    <Compile Include="UserExit.wxs" />
+    <Compile Include="WixUI_Mondo.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Bitmaps\bannrbmp.bmp" />
+    <Content Include="Bitmaps\dlgbmp.bmp" />
+    <Content Include="Bitmaps\exclamic.ico" />
+    <Content Include="Bitmaps\info.ico" />
+    <Content Include="Bitmaps\New.ico" />
+    <Content Include="Bitmaps\Up.ico" />
+    <Content Include="caSuffix.h" />
+    <Content Include="caSuffix.wxi" />
+    <Content Include="Common_Platform.wxi" />
+    <Content Include="License.rtf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="loc" />
+    <Folder Include="Bitmaps" />
+    <Folder Include="Dialog" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="loc\WixExt_de-de.wxl" />
+    <EmbeddedResource Include="loc\WixUI_ar-SA.wxl" />
+    <EmbeddedResource Include="loc\WixUI_bg-BG.wxl" />
+    <EmbeddedResource Include="loc\WixUI_ca-ES.wxl" />
+    <EmbeddedResource Include="loc\WixUI_cs-CZ.wxl" />
+    <EmbeddedResource Include="loc\WixUI_da-DK.wxl" />
+    <EmbeddedResource Include="loc\WixUI_de-de.wxl" />
+    <EmbeddedResource Include="loc\WixUI_el-GR.wxl" />
+    <EmbeddedResource Include="loc\WixUI_en-us.wxl" />
+    <EmbeddedResource Include="loc\WixUI_es-es.wxl" />
+    <EmbeddedResource Include="loc\WixUI_et-EE.wxl" />
+    <EmbeddedResource Include="loc\WixUI_fi-FI.wxl" />
+    <EmbeddedResource Include="loc\WixUI_fr-fr.wxl" />
+    <EmbeddedResource Include="loc\WixUI_he-IL.wxl" />
+    <EmbeddedResource Include="loc\WixUI_hi-IN.wxl" />
+    <EmbeddedResource Include="loc\WixUI_hr-HR.wxl" />
+    <EmbeddedResource Include="loc\WixUI_hu-HU.wxl" />
+    <EmbeddedResource Include="loc\WixUI_it-it.wxl" />
+    <EmbeddedResource Include="loc\WixUI_ja-jp.wxl" />
+    <EmbeddedResource Include="loc\WixUI_kk-KZ.wxl" />
+    <EmbeddedResource Include="loc\WixUI_ko-KR.wxl" />
+    <EmbeddedResource Include="loc\WixUI_lt-LT.wxl" />
+    <EmbeddedResource Include="loc\WixUI_lv-LV.wxl" />
+    <EmbeddedResource Include="loc\WixUI_nb-NO.wxl" />
+    <EmbeddedResource Include="loc\WixUI_nl-NL.wxl" />
+    <EmbeddedResource Include="loc\WixUI_pl-pl.wxl" />
+    <EmbeddedResource Include="loc\WixUI_pt-BR.wxl" />
+    <EmbeddedResource Include="loc\WixUI_pt-PT.wxl" />
+    <EmbeddedResource Include="loc\WixUI_ro-RO.wxl" />
+    <EmbeddedResource Include="loc\WixUI_ru-ru.wxl" />
+    <EmbeddedResource Include="loc\WixUI_sk-SK.wxl" />
+    <EmbeddedResource Include="loc\WixUI_sl-SI.wxl" />
+    <EmbeddedResource Include="loc\WixUI_sq-AL.wxl" />
+    <EmbeddedResource Include="loc\WixUI_sr-Latn-CS.wxl" />
+    <EmbeddedResource Include="loc\WixUI_sv-SE.wxl" />
+    <EmbeddedResource Include="loc\WixUI_th-TH.wxl" />
+    <EmbeddedResource Include="loc\WixUI_tr-TR.wxl" />
+    <EmbeddedResource Include="loc\WixUI_uk-UA.wxl" />
+    <EmbeddedResource Include="loc\WixUI_zh-CN.wxl" />
+    <EmbeddedResource Include="loc\WixUI_zh-HK.wxl" />
+    <EmbeddedResource Include="loc\WixUI_zh-TW.wxl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CustomActions\DeviceManager.Setup.CustomActions.csproj">
+      <Name>DeviceManager.Setup.CustomActions</Name>
+      <Project>{fd6f8944-230e-4b9c-bd7c-d683a8cfe4f9}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
+  <Target Name="EnsureWixToolsetInstalled" Condition=" '$(WixTargetsImported)' != 'true' ">
+    <Error Text="The WiX Toolset v3.11 (or newer) build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
+  </Target>
+  <PropertyGroup>
+    <DefineConstants>
+      $(DefineConstants);
+      bannerBmp=$(MSBuildProjectDirectory)\Bitmaps\bannrbmp.bmp;
+      dialogBmp=$(MSBuildProjectDirectory)\Bitmaps\dlgbmp.bmp;
+      exclamationIco=$(MSBuildProjectDirectory)\Bitmaps\exclamic.ico;
+      infoIco=$(MSBuildProjectDirectory)\Bitmaps\info.ico;
+      licenseRtf=$(MSBuildProjectDirectory)\license.rtf;
+      newIco=$(MSBuildProjectDirectory)\Bitmaps\new.ico;
+      upIco=$(MSBuildProjectDirectory)\Bitmaps\up.ico;
+    </DefineConstants>
+  </PropertyGroup>
+  <!--
+	To modify your build process, add your task inside one of the targets below and uncomment it.
+	Other similar extension points exist, see Wix.targets.
+	<Target Name="BeforeBuild">
+	</Target>
+	<Target Name="AfterBuild">
+	</Target>
+	-->
+</Project>

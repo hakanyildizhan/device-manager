@@ -44,7 +44,7 @@
     
     <!-- Installer UI -->
     <UIRef Id="WixUI_Mondo" />
-    <UIRef Id="WixUI_ErrorProgressText" />
+    <!--<UIRef Id="WixUI_ErrorProgressText" />-->
 	</Product>
 
 </Wix>

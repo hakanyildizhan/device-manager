@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+	<Fragment>
+    <Property Id="TESTRESULT" />
+    <Property Id="SERVERADDRESS"/>
+    
+    <CustomAction Id='CustomAction_TestServer' 
+                  BinaryKey='DeviceManager.Setup.CustomActions.CA.dll' 
+                  DllEntry='TestServer' 
+                  Execute='immediate'
+                  Return='check'/>
+    
+    <UI>
+      <Dialog Id="ServerTestDlg" Width="370" Height="270" Title="!(loc.ServerTestDlg_Title)" NoMinimize="yes">
+        <Control Id="Text" Type="Text" X="25" Y="80" Width="320" Height="10" TabSkip="no" Text="Enter server address and click Test."/>
+        <Control Id="ServerAddressText" Type="Edit" X="25" Y="93" Width="320" Height="18" Property="SERVERADDRESS" Text="Address:" />
+
+        <Control Id="TestServer" Type="PushButton" X="289" Y="119" Width="56" Height="17" Text="Test server">
+          <Publish Event="DoAction" Value="CustomAction_TestServer" Order="1"><![CDATA[SERVERADDRESS <> ""]]></Publish>
+          <Publish Property="TESTRESULT" Value="[TESTRESULT]" Order="2">1</Publish>
+        </Control>
+
+        <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)"/>
+        <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)">
+          <Condition Action="disable"><![CDATA[TESTRESULT <> "1"]]></Condition>
+          <Condition Action="enable">TESTRESULT = "1"</Condition>
+        </Control>
+        <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+          <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+        </Control>
+        <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="374" Height="44" TabSkip="no" Text="!(loc.LicenseAgreementDlgBannerBitmap)" />
+        <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="374" Height="0" />
+        <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="374" Height="0" />
+        <Control Id="Description" Type="Text" X="25" Y="20" Width="280" Height="20" Transparent="yes" NoPrefix="yes" Text="Please specify a network location"/>
+        <Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.ServerTestDlgTitle)"/>
+      </Dialog>
+    </UI>
+	</Fragment>
+</Wix>
