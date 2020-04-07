@@ -2,8 +2,8 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <?include Definitions.wxi ?>
 
-  <Product Id="F42034CA-66F1-4598-A087-B5747D84D3C1"
-           UpgradeCode="9da84f1d-597c-4cf7-871a-6d1d9317635b"
+  <Product Id="*"
+           UpgradeCode="F2CADBA5-7ED4-468E-94CC-310AA8A4C3E6"
            Name="$(var.AppName)" 
            Language="1033"
            Version="1.0.0" 
