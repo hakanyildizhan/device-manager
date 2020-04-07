@@ -38,7 +38,7 @@ namespace DeviceManager.Setup.CustomActions
             UriBuilder builder = new UriBuilder($"{address}api/");
             Uri uri = new Uri(builder.Uri, "user/register");
             string success = "0";
-             
+
             try
             {
                 string domainUserName = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
@@ -47,14 +47,11 @@ namespace DeviceManager.Setup.CustomActions
                 {
                     success = "1";
 
-                    lock(_lockObject)
+                    lock (_lockObject)
                     {
                         string configFile = Path.Combine(GetAppRoamingFolder(), _configFileName);
-                        if (!File.Exists(configFile))
-                        {
-                            File.WriteAllText(configFile, $"{{ serverAddress: \"{address}\" }}");
-                            session.Log("server address written to config file");
-                        }
+                        File.WriteAllText(configFile, $"{{ serverAddress: \"{address}\" }}");
+                        session.Log("server address written to config file");
                     }
                 }
             }

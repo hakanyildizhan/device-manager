@@ -40,7 +40,6 @@
     <Compile Include="Dialog\PrepareDlg.wxs" />
     <Compile Include="Dialog\ProgressDlg.wxs" />
     <Compile Include="Dialog\ResumeDlg.wxs" />
-    <Compile Include="Dialog\ServerTestDlg.wxs" />
     <Compile Include="Dialog\SetupTypeDlg.wxs" />
     <Compile Include="Dialog\VerifyReadyDlg.wxs" />
     <Compile Include="Dialog\WaitForCostingDlg.wxs" />
@@ -49,7 +48,6 @@
     <Compile Include="FilesInUse.wxs" />
     <Compile Include="MsiRMFilesInUse.wxs" />
     <Compile Include="UserExit.wxs" />
-    <Compile Include="WixUI_Mondo.wxs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Bitmaps\bannrbmp.bmp" />
@@ -110,16 +108,6 @@
     <EmbeddedResource Include="loc\WixUI_zh-CN.wxl" />
     <EmbeddedResource Include="loc\WixUI_zh-HK.wxl" />
     <EmbeddedResource Include="loc\WixUI_zh-TW.wxl" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CustomActions\DeviceManager.Setup.CustomActions.csproj">
-      <Name>DeviceManager.Setup.CustomActions</Name>
-      <Project>{fd6f8944-230e-4b9c-bd7c-d683a8cfe4f9}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>True</DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
-      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
