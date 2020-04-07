@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <String Id="ServerTestDlg_Title" Overridable="yes">
+    <!-- _locID_text="ServerTestDlg_Title" _locComment="ServerTestDlg_Title" -->[ProductName] Setup
+  </String>
+  <String Id="ServerTestDlgTitle" Overridable="yes">
+    <!-- _locID_text="ServerTestDlgTitle" _locComment="ServerTestDlgTitle" -->[ProductName] Setup
+  </String>
+</WixLocalization>

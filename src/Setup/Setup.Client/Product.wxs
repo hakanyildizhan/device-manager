@@ -43,7 +43,7 @@
     <WixVariable Id="WixUILicenseRtf" Value="license.rtf"/>
     
     <!-- Installer UI -->
-    <UIRef Id="WixUI_Mondo" />
+    <UIRef Id="WixUI_DeviceManager_Client_UI" />
     <!--<UIRef Id="WixUI_ErrorProgressText" />-->
 	</Product>
 
