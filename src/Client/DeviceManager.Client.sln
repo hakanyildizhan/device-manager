@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceManager.Setup.CustomA
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "DeviceManager.Client.Setup", "..\Setup\Setup.Client\DeviceManager.Client.Setup.wixproj", "{33BCBA45-6467-44EF-8071-CC4E70D6AB0B}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "DeviceManager.Setup.Base.Client", "DeviceManager.Setup.Base.Client\DeviceManager.Setup.Base.Client.wixproj", "{78066026-9595-4C67-BF7B-03CC00A6EB13}"
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "DeviceManager.Setup.Base.Client", "..\Setup\Base.Client\DeviceManager.Setup.Base.Client.wixproj", "{78066026-9595-4C67-BF7B-03CC00A6EB13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -101,9 +101,9 @@ Global
 		SccProjectTopLevelParentUniqueName5 = DeviceManager.Client.sln
 		SccProjectName5 = ../Setup/Setup.Client
 		SccLocalPath5 = ..\\Setup\\Setup.Client
-		SccProjectUniqueName6 = DeviceManager.Setup.Base.Client\\DeviceManager.Setup.Base.Client.wixproj
+		SccProjectUniqueName6 = ..\\Setup\\Base.Client\\DeviceManager.Setup.Base.Client.wixproj
 		SccProjectTopLevelParentUniqueName6 = DeviceManager.Client.sln
-		SccProjectName6 = DeviceManager.Setup.Base.Client
-		SccLocalPath6 = DeviceManager.Setup.Base.Client
+		SccProjectName6 = ../Setup/Base.Client
+		SccLocalPath6 = ..\\Setup\\Base.Client
 	EndGlobalSection
 EndGlobal

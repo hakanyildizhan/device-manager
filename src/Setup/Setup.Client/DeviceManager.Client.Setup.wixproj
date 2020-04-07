@@ -44,7 +44,7 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\..\Client\DeviceManager.Setup.Base.Client\DeviceManager.Setup.Base.Client.wixproj">
+    <ProjectReference Include="..\Base.Client\DeviceManager.Setup.Base.Client.wixproj">
       <Name>DeviceManager.Setup.Base.Client</Name>
       <Project>{78066026-9595-4c67-bf7b-03cc00a6eb13}</Project>
       <Private>True</Private>
