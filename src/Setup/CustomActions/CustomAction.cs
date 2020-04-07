@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,13 +10,15 @@ namespace DeviceManager.Setup.CustomActions
 {
     public class CustomActions
     {
-        static HttpClient client = new HttpClient();
+        static HttpClient _client = new HttpClient();
+        static object _lockObject = new object();
+        static string _configFileName = "appsettings.json";
 
         [CustomAction]
         public static ActionResult TestServer(Session session)
         {
             //System.Diagnostics.Debugger.Launch();
-            //session.Log("Begin CustomAction");
+            session.Log("TestServer CustomAction started");
 
             string address = session["SERVERADDRESS"];
 
@@ -39,19 +42,40 @@ namespace DeviceManager.Setup.CustomActions
             try
             {
                 string domainUserName = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-                HttpResponseMessage response = Task.Run(async () => await client.PostAsJsonAsync(uri, domainUserName)).Result;
+                HttpResponseMessage response = Task.Run(async () => await _client.PostAsJsonAsync(uri, domainUserName)).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     success = "1";
+
+                    lock(_lockObject)
+                    {
+                        string configFile = Path.Combine(GetAppRoamingFolder(), _configFileName);
+                        if (!File.Exists(configFile))
+                        {
+                            File.WriteAllText(configFile, $"{{ serverAddress: \"{address}\" }}");
+                            session.Log("server address written to config file");
+                        }
+                    }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                
+                session.Log($"Error occured while writing server address to config file. Error type {ex.GetType().Name}, message: {ex.Message}");
             }
 
             session["TESTRESULT"] = success;
             return ActionResult.Success;
+        }
+
+        /// <summary>
+        /// Gets the full path of the app folder under AppData\Roaming that belongs to the current user. If the directory does not exist, it is created.
+        /// </summary>
+        /// <returns></returns>
+        static string GetAppRoamingFolder()
+        {
+            string appRoamingFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DeviceManager");
+            Directory.CreateDirectory(appRoamingFolder);
+            return appRoamingFolder;
         }
     }
 }
