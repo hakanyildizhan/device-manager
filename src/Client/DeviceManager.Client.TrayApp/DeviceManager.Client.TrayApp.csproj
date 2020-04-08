@@ -90,6 +90,7 @@
     <Compile Include="AppConstants.cs" />
     <Compile Include="AttachedProperties\BaseAttachedProperty.cs" />
     <Compile Include="AttachedProperties\IsBusyProperty.cs" />
+    <Compile Include="AttachedProperties\IsVisibleProperty.cs" />
     <Compile Include="Controls\DeviceTypeControl.xaml.cs">
       <DependentUpon>DeviceTypeControl.xaml</DependentUpon>
     </Compile>

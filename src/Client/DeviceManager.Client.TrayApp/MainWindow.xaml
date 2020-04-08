@@ -118,7 +118,9 @@
 
                         <Separator />
 
-                        <local:SetNameControl ToolTip="{Binding UserName}">
+                        <local:SetNameControl ToolTip="{Binding UserName}"
+                                              local:IsVisibleProperty.Value="{Binding Initialized}"
+                                              Visibility="{TemplateBinding local:IsVisibleProperty.Value, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=True}">
 
                             <local:SetNameControl.Header>
                                 <MultiBinding Converter="{local:UserNameOrFriendlyNameConverter}">
