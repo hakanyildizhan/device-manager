@@ -24,6 +24,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         private string _friendlyName;
         private bool _editMode;
         private int _consecutiveFailedRefreshCount = 0;
+        private int _consecutiveFailedInitializeCount = 0;
 
         public bool ExecutingCommand { get; set; }
         public ObservableCollection<DeviceListViewModel> Devices { get; set; }
@@ -79,23 +80,39 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             ExitCommand = new RelayCommand(() => Exit());
             EnterEditModeCommand = new RelayCommand(() => { EditMode = !EditMode; });
             SetNameCommand = new RelayParameterizedCommand(async (parameter) => await SetName(parameter));
-            Task.Run(Initialize);
+            Task.Run(InitializeAsync);
             _logService.LogInformation("App initialized");
         }
 
-        private async Task Initialize()
+        /// <summary>
+        /// Executes initialization tasks including registering the user, getting full device list, and settings. After successfully executing these tasks, periodic refresh will be scheduled.
+        /// In case of failure, the operation will be retried until it succeeds.
+        /// </summary>
+        /// <returns></returns>
+        private async Task InitializeAsync()
         {
             bool success = await Task.Run(RegisterUser);
             success = success && await Task.Run(GetDevicesAsync);
             success = success && await Task.Run(GetSettingsAsync);
             if (!success)
             {
-                await _feedbackService.ShowMessageAsync(MessageType.Error, "Cannot contact the server.");
-                _logService.LogError("Could not initialize");
-                return;
+                if (++_consecutiveFailedInitializeCount == AppConstants.FAILED_OPERATION_RETRIES)
+                {
+                    await _feedbackService.ShowMessageAsync(MessageType.Error, "Cannot contact the server right now.");
+                }
+                
+                _logService.LogError("Could not initialize, will retry");
+                EnableTimer(TimerEvent.Initialize);
             }
-
-            EnableTimer(TimerEvent.Refresh);
+            else
+            {
+                if (++_consecutiveFailedInitializeCount >= AppConstants.FAILED_OPERATION_RETRIES)
+                {
+                    await _feedbackService.ShowMessageAsync(MessageType.Information, "Connection to the server has been established successfuly.");
+                }
+                _consecutiveFailedInitializeCount = 0;
+                EnableTimer(TimerEvent.Refresh);
+            }
         }
 
         private async Task<bool> RegisterUser()
@@ -175,7 +192,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                     _logService.LogError("Refresh failed");
                     if (++_consecutiveFailedRefreshCount == AppConstants.FAILED_OPERATION_RETRIES)
                     {
-                        await _feedbackService.ShowMessageAsync(MessageType.Error, "Cannot contact the server right now. Please try exiting and reopening the app again.");
+                        await _feedbackService.ShowMessageAsync(MessageType.Error, "Cannot contact the server right now.");
                     }
                 }
                 else if (!refreshData.FullUpdateRequired)
@@ -198,7 +215,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                     // has the connection been re-established?
                     if (_consecutiveFailedRefreshCount >= AppConstants.FAILED_OPERATION_RETRIES)
                     {
-                        await _feedbackService.ShowMessageAsync(MessageType.Information, "Connection to the server has been re-established successfuly.");
+                        await _feedbackService.ShowMessageAsync(MessageType.Information, "Connection to the server has been established successfuly.");
                         _logService.LogInformation("Connection re-established");
                     }
 
@@ -222,7 +239,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         /// <para></para>
         /// 1. Stop any active refresh timer
         /// <para></para>
-        /// 2. Get updated hardware list. If initial attempt fails, retry for the amount specified by <see cref="AppConstants.FAILED_OPERATION_RETRIES"/>.
+        /// 2. Get updated hardware list. If initial attempt fails, retry for the amount specified by <see cref="AppConstants.FAILED_OPERATION_RETRIES"/>. The operation will not be retried further, since clients must have an updated list of devices to continue using the app.
         /// <para></para>
         /// 3. Re-enable the refresh timer
         /// </summary>
@@ -301,6 +318,10 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             });
         }
 
+        /// <summary>
+        /// Schedules given task to run periodically. Disables any schedules that were already running.
+        /// </summary>
+        /// <param name="timerEvent"></param>
         private void EnableTimer(TimerEvent timerEvent)
         {
             DisableTimer();
@@ -330,6 +351,9 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                     break;
                 case TimerEvent.Refresh:
                     await RefreshAsync();
+                    break;
+                case TimerEvent.Initialize:
+                    await InitializeAsync();
                     break;
                 default:
                     // Not implemented

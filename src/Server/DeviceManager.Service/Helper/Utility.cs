@@ -15,7 +15,17 @@ namespace DeviceManager.Service
         /// <returns></returns>
         public static string GetAppRoamingFolder()
         {
-            string appRoamingFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DeviceManager");
+            string roamingFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+            // SpecialFolder.ApplicationData can be empty if the user profile environment is not set
+            // it should be set in applicationHost.config, i.e. setProfileEnvironment="true"
+            // TODO: should be tested more extensively
+            if (string.IsNullOrEmpty(roamingFolder))
+            {
+                roamingFolder = Path.Combine(Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile), "AppData", "Roaming");
+            }
+
+            string appRoamingFolder = Path.Combine(roamingFolder, "DeviceManager");
             Directory.CreateDirectory(appRoamingFolder);
             return appRoamingFolder;
         }

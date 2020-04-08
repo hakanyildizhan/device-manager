@@ -24,7 +24,11 @@ namespace DeviceManager.Client.Service
             _logService = logService;
             _configService = configService;
 
+//#if DEBUG
+//            string serverAddress = "http://localhost:8060/";
+//#else
             string serverAddress = _configService.GetServerAddress();
+//#endif
             _baseApiAddress = Url.Combine(serverAddress, "api");
         }
 

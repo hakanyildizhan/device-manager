@@ -26,62 +26,62 @@
                                     <ObjectAnimationUsingKeyFrames 
                                         Storyboard.TargetProperty="IconSource">
 
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.03">
+                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.1">
                                             <DiscreteObjectKeyFrame.Value>
                                                 <BitmapImage UriSource="/Icons/Animation/starter_loading_1.ico" />
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.06">
+                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.2">
                                             <DiscreteObjectKeyFrame.Value>
                                                 <BitmapImage UriSource="/Icons/Animation/starter_loading_2.ico" />
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.09">
+                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.3">
                                             <DiscreteObjectKeyFrame.Value>
                                                 <BitmapImage UriSource="/Icons/Animation/starter_loading_3.ico" />
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.12">
+                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.4">
                                             <DiscreteObjectKeyFrame.Value>
                                                 <BitmapImage UriSource="/Icons/Animation/starter_loading_4.ico" />
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.15">
+                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.5">
                                             <DiscreteObjectKeyFrame.Value>
                                                 <BitmapImage UriSource="/Icons/Animation/starter_loading_5.ico" />
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.18">
+                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.6">
                                             <DiscreteObjectKeyFrame.Value>
                                                 <BitmapImage UriSource="/Icons/Animation/starter_loading_6.ico" />
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.21">
+                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.7">
                                             <DiscreteObjectKeyFrame.Value>
                                                 <BitmapImage UriSource="/Icons/Animation/starter_loading_7.ico" />
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.24">
+                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.8">
                                             <DiscreteObjectKeyFrame.Value>
                                                 <BitmapImage UriSource="/Icons/Animation/starter_loading_8.ico" />
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.27">
+                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.9">
                                             <DiscreteObjectKeyFrame.Value>
                                                 <BitmapImage UriSource="/Icons/Animation/starter_loading_9.ico" />
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.3">
+                                        <DiscreteObjectKeyFrame KeyTime="0:0:1">
                                             <DiscreteObjectKeyFrame.Value>
                                                 <BitmapImage UriSource="/Icons/Animation/starter_loading_10.ico" />
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.33">
+                                        <DiscreteObjectKeyFrame KeyTime="0:0:1.1">
                                             <DiscreteObjectKeyFrame.Value>
                                                 <BitmapImage UriSource="/Icons/Animation/starter_loading_11.ico" />
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.36">
+                                        <DiscreteObjectKeyFrame KeyTime="0:0:1.2">
                                             <DiscreteObjectKeyFrame.Value>
                                                 <BitmapImage UriSource="/Icons/Animation/starter_loading_12.ico" />
                                             </DiscreteObjectKeyFrame.Value>

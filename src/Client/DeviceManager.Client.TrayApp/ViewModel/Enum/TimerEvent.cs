@@ -10,6 +10,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
     {
         RegisterUser,
         GetDevices,
-        Refresh
+        Refresh,
+        Initialize
     }
 }
