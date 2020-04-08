@@ -25,6 +25,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
 
         private bool _isAvailable;
         private string _usedBy;
+        private bool _usedByMe;
         private string _usedByFriendly;
         private string _connectedModuleInfo;
         private Timer _usageTimer;
@@ -86,7 +87,25 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             }
         }
 
-        public bool UsedByMe { get; set; }
+        public bool UsedByMe 
+        {
+            get { return _usedByMe; }
+            set
+            {
+                if (_usedByMe != value)
+                {
+                    _usedByMe = value;
+                    if (_usedByMe)
+                    {
+                        EnableTimer();
+                    }
+                    else
+                    {
+                        DisableTimer();
+                    }
+                }
+            }
+        }
         public string Tooltip { get { return this.GenerateTooltip(); } }
 
         public bool ExecutingCommand { get; set; }
@@ -123,7 +142,6 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                         _logService.LogInformation("Check-out successful");
                         IsAvailable = false;
                         UsedBy = Utility.GetCurrentUserName();
-                        EnableTimer();
                     }
                     else if (result == ApiCallResult.NotReachable)
                     {
@@ -163,7 +181,6 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                         _logService.LogInformation("Check-in succeeded");
                         IsAvailable = true;
                         UsedBy = null;
-                        DisableTimer();
                     }
                     else if (result == ApiCallResult.NotReachable)
                     {
@@ -241,7 +258,11 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 sbTooltip.AppendLine();
                 sbTooltip.Append("Checked out by: ");
 
-                if (!string.IsNullOrEmpty(this.UsedByFriendly))
+                if (this.UsedBy == Utility.GetCurrentUserName())
+                {
+                    sbTooltip.Append("Me");
+                }
+                else if (!string.IsNullOrEmpty(this.UsedByFriendly))
                 {
                     sbTooltip.Append(this.UsedByFriendly);
                 }
