@@ -23,24 +23,24 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         public string Name { get; set; }
         public int UsagePromptInterval => _configService.GetUsagePromptInterval();
 
-        private string _tooltip;
         private bool _isAvailable;
         private string _usedBy;
         private string _usedByFriendly;
+        private string _connectedModuleInfo;
         private Timer _usageTimer;
         private bool _promptActive = false;
 
-        public bool IsAvailable 
-        { 
-            get { return _isAvailable; } 
-            set 
+        public bool IsAvailable
+        {
+            get { return _isAvailable; }
+            set
             {
                 if (_isAvailable != value)
                 {
                     _isAvailable = value;
                     OnPropertyChanged(nameof(IsAvailable));
                 }
-            } 
+            }
         }
 
         public string UsedBy
@@ -54,6 +54,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                     UsedByMe = _usedBy == Utility.GetCurrentUserName();
                     OnPropertyChanged(nameof(UsedBy));
                     OnPropertyChanged(nameof(UsedByMe));
+                    OnPropertyChanged(nameof(Tooltip));
                 }
             }
         }
@@ -71,20 +72,22 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             }
         }
 
-        public bool UsedByMe { get; set; }
-
-        public string Tooltip
+        public string ConnectedModuleInfo
         {
-            get { return _tooltip; }
+            get { return _connectedModuleInfo; }
             set
             {
-                if (_tooltip != value)
+                if (_connectedModuleInfo != value)
                 {
-                    _tooltip = value;
+                    _connectedModuleInfo = value;
+                    OnPropertyChanged(nameof(ConnectedModuleInfo));
                     OnPropertyChanged(nameof(Tooltip));
                 }
             }
         }
+
+        public bool UsedByMe { get; set; }
+        public string Tooltip { get { return this.GenerateTooltip(); } }
 
         public bool ExecutingCommand { get; set; }
         public ICommand CheckoutOrReleaseCommand { get; set; }
@@ -213,6 +216,42 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 _usageTimer.Stop();
                 _usageTimer.Dispose();
             }
+        }
+
+        /// <summary>
+        /// Generates a tooltip for this <see cref="DeviceItemViewModel"/>, i.e.
+        /// <para></para>
+        /// Connected modules: [Im] [FWver], [HMI] [FWver]
+        /// <para></para>
+        /// Checked out by: [user]
+        /// </summary>
+        /// <param name="device"></param>
+        /// <returns></returns>
+        private string GenerateTooltip()
+        {
+            StringBuilder sbTooltip = new StringBuilder();
+            if (!string.IsNullOrEmpty(this.ConnectedModuleInfo))
+            {
+                sbTooltip.Append("Connected modules: ");
+                sbTooltip.Append(this.ConnectedModuleInfo);
+            }
+
+            if (!this.IsAvailable)
+            {
+                sbTooltip.AppendLine();
+                sbTooltip.Append("Checked out by: ");
+
+                if (!string.IsNullOrEmpty(this.UsedByFriendly))
+                {
+                    sbTooltip.Append(this.UsedByFriendly);
+                }
+                else
+                {
+                    sbTooltip.Append(this.UsedBy);
+                }
+            }
+
+            return sbTooltip.ToString();
         }
     }
 }
