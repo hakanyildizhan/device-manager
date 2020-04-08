@@ -27,8 +27,6 @@ Patch dialog sequence:
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Fragment>
 
-    <Binary Id='DeviceManager.Setup.CustomActions.CA.dll' SourceFile='..\CustomActions\bin\Debug\DeviceManager.Setup.CustomActions.CA.dll'/>
-
     <UI Id="WixUI_DeviceManager_Client_UI">
       <TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />
       <TextStyle Id="WixUI_Font_Bigger" FaceName="Tahoma" Size="12" />

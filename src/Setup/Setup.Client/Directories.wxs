@@ -19,6 +19,9 @@
         <Directory Id="INSTALLFOLDER" Name="$(var.AppName)" />
       </Directory>
 
+      <!-- Shortcut folder -->
+      <Directory Id="StartupFolder" />
+
     </Directory>
 
     <!-- Installed files -->

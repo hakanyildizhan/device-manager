@@ -6,7 +6,7 @@
            UpgradeCode="F2CADBA5-7ED4-468E-94CC-310AA8A4C3E6"
            Name="$(var.AppName)" 
            Language="1033"
-           Version="1.0.0" 
+           Version="$(var.BuildVersion)" 
            Manufacturer="Hakan Yildizhan">
     
 		<Package Id="*"
