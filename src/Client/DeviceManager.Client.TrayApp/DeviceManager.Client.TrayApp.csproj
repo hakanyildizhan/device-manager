@@ -39,7 +39,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Icons\starter.ico</ApplicationIcon>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Hardcodet.Wpf.TaskbarNotification, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
@@ -186,9 +186,6 @@
     <Resource Include="Resources\Images\starter.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Icons\starter.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\lock.png" />
     <Resource Include="Resources\Images\unlock.png" />
   </ItemGroup>
@@ -217,18 +214,26 @@
     <Resource Include="Resources\Images\edit.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Icons\Animation\starter_loading_1.ico" />
-    <Resource Include="Icons\Animation\starter_loading_10.ico" />
-    <Resource Include="Icons\Animation\starter_loading_11.ico" />
-    <Resource Include="Icons\Animation\starter_loading_12.ico" />
-    <Resource Include="Icons\Animation\starter_loading_2.ico" />
-    <Resource Include="Icons\Animation\starter_loading_3.ico" />
-    <Resource Include="Icons\Animation\starter_loading_4.ico" />
-    <Resource Include="Icons\Animation\starter_loading_5.ico" />
-    <Resource Include="Icons\Animation\starter_loading_6.ico" />
-    <Resource Include="Icons\Animation\starter_loading_7.ico" />
-    <Resource Include="Icons\Animation\starter_loading_8.ico" />
-    <Resource Include="Icons\Animation\starter_loading_9.ico" />
+    <Resource Include="Icons\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Animation\icon_loading_12.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Animation\icon_loading_1.ico" />
+    <Resource Include="Icons\Animation\icon_loading_10.ico" />
+    <Resource Include="Icons\Animation\icon_loading_11.ico" />
+    <Resource Include="Icons\Animation\icon_loading_2.ico" />
+    <Resource Include="Icons\Animation\icon_loading_3.ico" />
+    <Resource Include="Icons\Animation\icon_loading_4.ico" />
+    <Resource Include="Icons\Animation\icon_loading_5.ico" />
+    <Resource Include="Icons\Animation\icon_loading_6.ico" />
+    <Resource Include="Icons\Animation\icon_loading_7.ico" />
+    <Resource Include="Icons\Animation\icon_loading_8.ico" />
+    <Resource Include="Icons\Animation\icon_loading_9.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
