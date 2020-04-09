@@ -103,7 +103,6 @@
     <Compile Include="IoC\IAppServiceProvider.cs" />
     <Compile Include="IoC\UnityServiceProvider.cs" />
     <Compile Include="Service\NLogLogger.cs" />
-    <Compile Include="ValueConverters\EditModeToIconConverter.cs" />
     <Compile Include="ValueConverters\BaseMultiValueConverter.cs" />
     <Compile Include="ValueConverters\BooleanOrBooleanConverter.cs" />
     <Compile Include="ValueConverters\UserNameOrFriendlyNameConverter.cs" />
@@ -183,29 +182,16 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\starter.png" />
+    <Resource Include="Resources\Images\locked.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\lock.png" />
-    <Resource Include="Resources\Images\unlock.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\unlock2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\lock2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\unlock3.png" />
+    <Resource Include="Resources\Images\unlocked.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DeviceManager.Client.Service\DeviceManager.Client.Service.csproj">
       <Project>{2627477b-01e1-4c37-bc13-3f8354d0c318}</Project>
       <Name>DeviceManager.Client.Service</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\dots.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\tick.png" />
