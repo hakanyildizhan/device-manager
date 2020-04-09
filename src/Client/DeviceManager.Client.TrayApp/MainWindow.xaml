@@ -11,7 +11,7 @@
         ShowInTaskbar="True" Visibility="Hidden">
 
     <tb:TaskbarIcon x:Name="trayIcon"
-        IconSource="/Icons/starter.ico"
+        IconSource="/Icons/icon.ico"
         ToolTipText="Device Manager"
         local:IsBusyProperty.Value="{Binding ExecutingCommand}"
         >
@@ -28,62 +28,62 @@
 
                                         <DiscreteObjectKeyFrame KeyTime="0:0:0.1">
                                             <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/starter_loading_1.ico" />
+                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_1.ico" />
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
                                         <DiscreteObjectKeyFrame KeyTime="0:0:0.2">
                                             <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/starter_loading_2.ico" />
+                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_2.ico" />
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
                                         <DiscreteObjectKeyFrame KeyTime="0:0:0.3">
                                             <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/starter_loading_3.ico" />
+                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_3.ico" />
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
                                         <DiscreteObjectKeyFrame KeyTime="0:0:0.4">
                                             <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/starter_loading_4.ico" />
+                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_4.ico" />
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
                                         <DiscreteObjectKeyFrame KeyTime="0:0:0.5">
                                             <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/starter_loading_5.ico" />
+                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_5.ico" />
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
                                         <DiscreteObjectKeyFrame KeyTime="0:0:0.6">
                                             <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/starter_loading_6.ico" />
+                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_6.ico" />
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
                                         <DiscreteObjectKeyFrame KeyTime="0:0:0.7">
                                             <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/starter_loading_7.ico" />
+                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_7.ico" />
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
                                         <DiscreteObjectKeyFrame KeyTime="0:0:0.8">
                                             <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/starter_loading_8.ico" />
+                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_8.ico" />
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
                                         <DiscreteObjectKeyFrame KeyTime="0:0:0.9">
                                             <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/starter_loading_9.ico" />
+                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_9.ico" />
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
                                         <DiscreteObjectKeyFrame KeyTime="0:0:1">
                                             <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/starter_loading_10.ico" />
+                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_10.ico" />
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
                                         <DiscreteObjectKeyFrame KeyTime="0:0:1.1">
                                             <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/starter_loading_11.ico" />
+                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_11.ico" />
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
                                         <DiscreteObjectKeyFrame KeyTime="0:0:1.2">
                                             <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/starter_loading_12.ico" />
+                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_12.ico" />
                                             </DiscreteObjectKeyFrame.Value>
                                         </DiscreteObjectKeyFrame>
                                     </ObjectAnimationUsingKeyFrames>
@@ -118,7 +118,9 @@
 
                         <Separator />
 
-                        <local:SetNameControl ToolTip="{Binding UserName}">
+                        <local:SetNameControl ToolTip="{Binding UserName}"
+                                              local:IsVisibleProperty.Value="{Binding Initialized}"
+                                              Visibility="{TemplateBinding local:IsVisibleProperty.Value, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=True}">
 
                             <local:SetNameControl.Header>
                                 <MultiBinding Converter="{local:UserNameOrFriendlyNameConverter}">

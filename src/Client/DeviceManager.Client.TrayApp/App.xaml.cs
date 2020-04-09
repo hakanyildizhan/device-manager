@@ -31,7 +31,11 @@ namespace DeviceManager.Client.TrayApp
             // Set up Nlog config
             string logFile = Path.Combine(Utility.GetAppRoamingFolder(), "client.log");
             var config = new NLog.Config.LoggingConfiguration();
-            var logfile = new NLog.Targets.FileTarget("logfile") { FileName = logFile };
+            var logfile = new NLog.Targets.FileTarget("logfile") 
+            { 
+                FileName = logFile,
+                Layout = "${longdate}|${level:uppercase=true}|${logger}|${message}${onexception:inner=${newline}${exception:format=tostring}}"
+            };
             var debugger = new NLog.Targets.DebuggerTarget("debugger");
             config.AddRule(LogLevel.Info, LogLevel.Fatal, logfile);
             config.AddRule(LogLevel.Info, LogLevel.Fatal, debugger);

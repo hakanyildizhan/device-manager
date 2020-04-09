@@ -82,7 +82,6 @@
 
         <Style x:Key="MenuItemControlTemplate2" TargetType="{x:Type MenuItem}">
             <Setter Property="StaysOpenOnClick" Value="True"/>
-
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type MenuItem}">
@@ -104,50 +103,55 @@
                                     <ColumnDefinition Width="20"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Button x:Name="Icon"
-                                    Style="{StaticResource ButtonStyle2}"
-                                    Command="{Binding EnterEditModeCommand}"
-                                    Height="20"
-                                    Width="20"
-                                    BorderThickness="0"
-                                    Background="Transparent"
-                                    HorizontalAlignment="Center" 
-                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
-                                    VerticalAlignment="Center"
+                                <!-- Edit/set name buttons -->
+                                <Grid Grid.Column="0"
+                                      Visibility="{TemplateBinding local:IsVisibleProperty.Value, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=True}">
                                     
-                                    ToolTip="Edit my name"
-                                    Visibility="{Binding EditMode, Converter={local:BooleanToVisibilityConverter}}">
+                                    <!-- Edit button -->
+                                    <Button x:Name="Icon"
+                                        Style="{StaticResource ButtonStyle2}"
+                                        Command="{Binding EnterEditModeCommand}"
+                                        Height="20"
+                                        Width="20"
+                                        BorderThickness="0"
+                                        Background="Transparent"
+                                        HorizontalAlignment="Center" 
+                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                        VerticalAlignment="Center"
+                                        ToolTip="Edit my name"
+                                        Visibility="{Binding EditMode, Converter={local:BooleanToVisibilityConverter}}">
 
-                                    <StackPanel HorizontalAlignment="Center">
-                                        <Image 
+                                        <StackPanel HorizontalAlignment="Center">
+                                            <Image 
                                             Source="pack://application:,,,/Resources/Images/edit.png"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button>
+                                        </StackPanel>
+                                    </Button>
 
-                                <Button x:Name="Icon2"
-                                    Style="{StaticResource ButtonStyle2}"
-                                    Command="{Binding SetNameCommand}"
-                                    CommandParameter="{Binding Text, ElementName=txtFriendlyName}"
-                                    Height="20"
-                                    Width="20"
-                                    BorderThickness="0"
-                                    Background="Transparent"
-                                    HorizontalAlignment="Center" 
-                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
-                                    VerticalAlignment="Center"
-                                    
-                                    ToolTip="Set name"
-                                    Visibility="{Binding EditMode, Converter={local:BooleanToVisibilityConverter},ConverterParameter=True}">
+                                    <!-- Set name button -->
+                                    <Button x:Name="Icon2"
+                                        Style="{StaticResource ButtonStyle2}"
+                                        Command="{Binding SetNameCommand}"
+                                        CommandParameter="{Binding Text, ElementName=txtFriendlyName}"
+                                        Height="20"
+                                        Width="20"
+                                        BorderThickness="0"
+                                        Background="Transparent"
+                                        HorizontalAlignment="Center" 
+                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                        VerticalAlignment="Center"
+                                        ToolTip="Set name"
+                                        Visibility="{Binding EditMode, Converter={local:BooleanToVisibilityConverter},ConverterParameter=True}">
 
-                                    <StackPanel HorizontalAlignment="Center">
-                                        <Image 
+                                        <StackPanel HorizontalAlignment="Center">
+                                            <Image 
                                             Source="pack://application:,,,/Resources/Images/tick.png"
                                             HorizontalAlignment="Center" 
                                             VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
 
                                 <Border 
                                     x:Name="GlyphPanel" 
@@ -171,6 +175,7 @@
                                         Width="10"/>
                                 </Border>
 
+                                <!-- User name -->
                                 <ContentPresenter 
                                     x:Name="menuHeaderContainer" 
                                     ContentTemplate="{TemplateBinding HeaderTemplate}" 
@@ -185,6 +190,7 @@
                                     TextBlock.Foreground="{StaticResource Button.Disabled.Foreground}"
                                     Visibility="{Binding EditMode, Converter={local:BooleanToVisibilityConverter}}"/>
 
+                                <!-- User name edit textbox -->
                                 <TextBox x:Name="txtFriendlyName"
                                     Width="100"
                                     Grid.Column="2" 
@@ -194,6 +200,20 @@
                                     BorderThickness="0"
                                     Tag="UserName"
                                     Visibility="{Binding EditMode, Converter={local:BooleanToVisibilityConverter},ConverterParameter=True}"/>
+
+                                <!-- Text shown until app initializes -->
+                                <Grid Grid.Column="2"
+                                      Visibility="{TemplateBinding local:IsVisibleProperty.Value, Converter={local:BooleanToVisibilityConverter}}">
+                                    <ContentPresenter 
+                                        Content="Initializing"
+                                        ContentStringFormat="{TemplateBinding HeaderStringFormat}" 
+                                        ContentSource="Header"
+                                        HorizontalAlignment="Left" 
+                                        Margin="{TemplateBinding Padding}"
+                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                        VerticalAlignment="Center"
+                                        TextBlock.Foreground="{StaticResource Button.Disabled.Foreground}"/>
+                                </Grid>
 
                                 <TextBlock 
                                     x:Name="menuGestureText" 

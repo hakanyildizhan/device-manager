@@ -25,6 +25,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         private bool _editMode;
         private int _consecutiveFailedRefreshCount = 0;
         private int _consecutiveFailedInitializeCount = 0;
+        private bool _initialized;
 
         public bool ExecutingCommand { get; set; }
         public ObservableCollection<DeviceListViewModel> Devices { get; set; }
@@ -65,6 +66,22 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 {
                     _editMode = value;
                     OnPropertyChanged(nameof(EditMode));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Indicates whether the application has finished executing initialization tasks successfully.
+        /// </summary>
+        public bool Initialized
+        {
+            get { return _initialized; }
+            set
+            {
+                if (_initialized != value)
+                {
+                    _initialized = value;
+                    OnPropertyChanged(nameof(Initialized));
                 }
             }
         }
@@ -111,6 +128,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                     await _feedbackService.ShowMessageAsync(MessageType.Information, "Connection to the server has been established successfuly.");
                 }
                 _consecutiveFailedInitializeCount = 0;
+                Initialized = true;
                 EnableTimer(TimerEvent.Refresh);
             }
         }
