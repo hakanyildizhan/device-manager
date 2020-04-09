@@ -46,16 +46,17 @@ Patch dialog sequence:
 
       <Publish Dialog="ExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999">1</Publish>
 
-      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="LicenseAgreementDlg">NOT Installed AND NOT PATCH</Publish>
+      <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="LicenseAgreementDlg_DeviceManager">NOT Installed AND NOT PATCH</Publish>
       <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">Installed AND PATCH</Publish>
 
-      <Publish Dialog="LicenseAgreementDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg">1</Publish>
+      <Publish Dialog="LicenseAgreementDlg_DeviceManager" Control="Back" Event="NewDialog" Value="WelcomeDlg">1</Publish>
 
 
 
       <!-- manually added-->
-      <Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="ServerTestDlg" Order="2">LicenseAccepted = "1"</Publish>
-      <Publish Dialog="ServerTestDlg" Control="Back" Event="NewDialog" Value="LicenseAgreementDlg" Order="1">1</Publish>
+      <Publish Dialog="LicenseAgreementDlg_DeviceManager" Control="Next" Event="NewDialog" Value="ServerTestDlg" Order="2">LicenseAccepted = "1"</Publish>
+      
+      <Publish Dialog="ServerTestDlg" Control="Back" Event="NewDialog" Value="LicenseAgreementDlg_DeviceManager" Order="1">1</Publish>
 
       <!-- changed -->
       <Publish Dialog="ServerTestDlg" Control="Next" Event="NewDialog" Value="SetupTypeDlg" Order="2">1</Publish>

@@ -15,21 +15,28 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             return devices.GroupBy(d => d.DeviceGroup).Select(d => new DeviceListViewModel
             {
                 Type = d.Key,
-                DeviceList = new ObservableCollection<DeviceItemViewModel>(d.AsEnumerable().Select(i => new DeviceItemViewModel 
+                DeviceList = new ObservableCollection<DeviceItemViewModel>(d.AsEnumerable().Select(i => new DeviceItemViewModel
                 {
                     Id = i.Id,
-                    
-                    Name = $"{i.Name}\t{i.HardwareInfo}\t[{i.Address}]", 
-                    // (<Mlfb> <FWver> [<Addr1>]/[<Addr2>]
-                    
-                    Tooltip = $"Modules: {i.ConnectedModuleInfo}\r\nChecked out by: {(!string.IsNullOrEmpty(i.UsedByFriendly) ? i.UsedByFriendly : i.UsedBy)}", 
-                    // Modules: <Im> <FWver>, <HMI> <FWver> \r\nConnect via: <Im>, <Hmi> (only for starters) \r\nUsed by: <userfriendlyname>
-                    
+                    Name = i.GenerateName(),
+                    ConnectedModuleInfo = i.ConnectedModuleInfo,
                     IsAvailable = i.IsAvailable,
                     UsedBy = i.UsedBy,
                     UsedByFriendly = i.UsedByFriendly
                 }))
             });
+        }
+
+        /// <summary>
+        /// Generates a name for <see cref="DeviceItemViewModel"/> from this <see cref="Device"/>, i.e.
+        /// <para></para>
+        /// [Name] [Mlfb] [Address]
+        /// </summary>
+        /// <param name="device"></param>
+        /// <returns></returns>
+        public static string GenerateName(this Device device)
+        {
+            return $"{device.Name}\t{device.HardwareInfo}\t[{device.Address}]";
         }
     }
 }

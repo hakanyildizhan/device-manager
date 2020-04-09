@@ -45,6 +45,30 @@
     <!-- Installer UI -->
     <UIRef Id="WixUI_DeviceManager_Client_UI" />
     <!--<UIRef Id="WixUI_ErrorProgressText" />-->
+    
+    <!-- Binary definition for custom actions -->
+    <Binary Id='DeviceManager.Setup.CustomActions.CA.dll' SourceFile='..\CustomActions\bin\$(var.Configuration)\DeviceManager.Setup.CustomActions.CA.dll'/>
+
+    <!-- Checks if the given URL is a valid server address  -->
+    <!-- If it is valid, sets TESTRESULT to "1"  -->
+    <CustomAction Id='CustomAction_TestServer' 
+                  BinaryKey='DeviceManager.Setup.CustomActions.CA.dll' 
+                  DllEntry='TestServer' 
+                  Execute='immediate'
+                  Return='check'/>
+
+    <!-- Checks if the user already has a config file that contains a valid server URL -->
+    <!-- If so, sets TESTRESULT to "1" and sets the SERVERADDRESS property -->
+    <CustomAction Id='CustomAction_CheckServerConfig'
+                  BinaryKey='DeviceManager.Setup.CustomActions.CA.dll'
+                  DllEntry='CheckServerConfig'
+                  Execute='immediate'
+                  Return='check'/>
+
+    <!-- Call CustomAction_CheckServerConfig as soon as this dialog is displayed -->
+    <!--<InstallExecuteSequence>
+      <Custom Action='CustomAction_CheckServerConfig' After='CostFinalize' />
+    </InstallExecuteSequence>-->
 	</Product>
 
 </Wix>
