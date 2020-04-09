@@ -4,14 +4,8 @@
 	<Fragment>
     <Property Id="TESTRESULT" />
     <Property Id="SERVERADDRESS"/>
-    
-    <CustomAction Id='CustomAction_TestServer' 
-                  BinaryKey='DeviceManager.Setup.CustomActions.CA.dll' 
-                  DllEntry='TestServer' 
-                  Execute='immediate'
-                  Return='check'/>
 
-    <Binary Id='DeviceManager.Setup.CustomActions.CA.dll' SourceFile='..\CustomActions\bin\$(var.Configuration)\DeviceManager.Setup.CustomActions.CA.dll'/>
+    
 
     <UI>
       <Dialog Id="ServerTestDlg" Width="370" Height="270" Title="!(loc.ServerTestDlg_Title)" NoMinimize="yes">
