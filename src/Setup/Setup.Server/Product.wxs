@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+	<Product Id="*"
+           UpgradeCode="4AD49979-E74E-4BEE-9930-1389557CF69C"
+           Name="Device Manager Server" 
+           Language="1033" 
+           Version="1.0.0.0" 
+           Manufacturer="Hakan Yildizhan" >
+    
+		<Package Id="*"
+             Description="Server Installer for Device Manager"
+             Keywords="Installer"
+             Manufacturer="Hakan Yildizhan"
+             Platform="x64"
+             InstallerVersion="200" 
+             Compressed="yes" 
+             InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed. Setup will now exit." />
+
+    <!-- Include .cab file into .msi file -->
+    <MediaTemplate EmbedCab="yes" />
+
+    <Feature Id="ProductFeature" 
+             Title="DeviceManager.Setup.Server"
+             Display='expand'
+             Level='1'
+             ConfigurableDirectory='INSTALLFOLDER' AllowAdvertise='no' Absent='disallow' >
+
+      <!--<ComponentGroupRef Id="ProductComponents" />-->
+      <ComponentGroupRef Id="PublishedComponents" />
+
+    </Feature>
+
+    <!-- Define main app icon -->
+    <Icon Id="icon.ico" SourceFile="$(var.PublishPath)\Content\Images\icon.ico" />
+    <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+
+    <!-- App license -->
+    <WixVariable Id="WixUILicenseRtf" Value="license.rtf"/>
+
+    <!--<UIRef Id="WixUI_InstallDir_DeviceManager_Server" />-->
+    <UIRef Id="WixUI_Mondo" />
+    
+    <!--<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />-->
+
+    <!-- Check if .Net Framework 4.6.1 is installed -->
+    <PropertyRef Id="WIX_IS_NETFRAMEWORK_461_OR_LATER_INSTALLED" />
+    <Condition Message="[ProductName] requires .NET Framework 4.6.1 or higher.">
+      <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_461_OR_LATER_INSTALLED]]>
+    </Condition>
+
+    <!-- Check to see if IIS is installed. It it's not, error out. -->
+    <Property Id="IIS_MAJOR_VERSION">
+      <RegistrySearch Id="CheckIISVersion"
+                      Root="HKLM"
+                      Key="SOFTWARE\Microsoft\InetStp"
+                      Name="MajorVersion"
+                      Type="raw" />
+    </Property>
+
+    <Condition Message="IIS must be installed">
+      Installed OR IIS_MAJOR_VERSION
+    </Condition>
+    
+    <!-- Go find the IIS root directory from the registry. On most machines
+         that defaults to C:\inetpub\wwwroot. This will be the directory we
+         install into. -->
+    <Property Id="IISROOT">
+      <RegistrySearch Id="IISROOT"
+                                 Type="directory"
+                                 Root="HKLM"
+                                 Key="Software\Microsoft\InetStp"
+                                 Name="PathWWWRoot" />
+    </Property>
+    
+    <Condition Message="IIS does not appear to be installed correctly, the root directory is not set.">
+      Installed OR IISROOT
+    </Condition>
+    
+	</Product>
+
+  
+
+</Wix>

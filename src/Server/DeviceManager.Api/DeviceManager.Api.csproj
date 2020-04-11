@@ -190,6 +190,7 @@
     <Content Include="ClientLibraries\twitter-bootstrap\js\bootstrap.bundle.min.js" />
     <Content Include="ClientLibraries\twitter-bootstrap\js\bootstrap.js" />
     <Content Include="ClientLibraries\twitter-bootstrap\js\bootstrap.min.js" />
+    <Content Include="Content\Images\icon.ico" />
     <Content Include="Content\Styles\loading-button.css" />
     <Content Include="Content\Styles\site.css" />
     <Content Include="Global.asax" />
@@ -225,11 +226,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
-    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\LocalProfile.pubxml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Partial\HardwareListPreview.cshtml" />
+    <None Include="Properties\PublishProfiles\SetupProfile.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DeviceManager.FileParsing\DeviceManager.FileParsing.csproj">
