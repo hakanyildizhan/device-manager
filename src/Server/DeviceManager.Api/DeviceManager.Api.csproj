@@ -229,7 +229,6 @@
     <None Include="Properties\PublishProfiles\LocalProfile.pubxml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Partial\HardwareListPreview.cshtml" />
-    <None Include="Properties\PublishProfiles\SetupProfile.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DeviceManager.FileParsing\DeviceManager.FileParsing.csproj">

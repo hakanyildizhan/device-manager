@@ -52,26 +52,41 @@
   <PropertyGroup>
     <WebProjectName>DeviceManager.Api</WebProjectName>
     <WebProjectPath>..\..\Server\$(WebProjectName)</WebProjectPath>
-    <PublishPath>$(WebProjectPath)\bin\Release\Publish</PublishPath>
+    <PublishPath>$(WebProjectPath)\bin\$(Configuration)\Publish</PublishPath>
     <PublishBinPath>$(PublishPath)\bin</PublishBinPath>
   </PropertyGroup>
   <Target Name="BeforeBuild">
-    <!-- Publish using publish profile -->
-    <!--<MSBuild Projects="$(WebProjectPath)\$(WebProjectName).csproj"
-             Properties="DeployOnBuild=true;
-                         PublishProfile=$(WebProjectPath)\Properties\PublishProfiles\SetupProfile.pubxml;"
-             ContinueOnError="false" />-->
+    <!-- Build all necessary projects -->
+    <MSBuild Projects="..\..\Server\DeviceManager.Entity\DeviceManager.Entity.csproj;
+                       ..\..\Server\DeviceManager.FileParsing\DeviceManager.FileParsing.csproj;
+                       ..\..\Server\DeviceManager.Service\DeviceManager.Service.csproj;
+                       $(WebProjectPath)\$(WebProjectName).csproj"
+             Properties="Configuration=$(Configuration);Platform=AnyCPU;"
+             Targets="Clean;Build"
+             ContinueOnError="false"/>
+    
+    <!-- Publish main project -->
+    <MSBuild Projects="$(WebProjectPath)\$(WebProjectName).csproj"
+             Properties="Configuration=$(Configuration);Platform=AnyCPU;
+                         WebPublishMethod=FileSystem;
+                         DeleteExistingFiles=True;
+                         publishUrl=$(PublishPath);"
+             Targets="WebPublish"
+             ContinueOnError="false" />
+
     <!-- Get assembly version -->
     <GetAssemblyIdentity AssemblyFiles="$(PublishBinPath)\DeviceManager.Api.dll">
       <Output TaskParameter="Assemblies" ItemName="AssemblyVersion" />
     </GetAssemblyIdentity>
+    
     <!-- Constants -->
     <PropertyGroup>
       <DefineConstants>
         BuildVersion=%(AssemblyVersion.Version);
-        PublishPath=..\..\Server\DeviceManager.Api\bin\Release\Publish;
+        PublishPath=..\..\Server\DeviceManager.Api\bin\$(Configuration)\Publish;
       </DefineConstants>
     </PropertyGroup>
+    
     <!-- Harvest file components from bin\$(Configuration) folder -->
     <HeatDirectory OutputFile="GeneratedComponents.wxs" DirectoryRefId="INSTALLFOLDER" ComponentGroupName="PublishedComponents" SuppressCom="true" Directory="$(PublishPath)" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" AutoGenerateGuids="false" GenerateGuidsNow="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.PublishPath" />
   </Target>
