@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setup", "Setup", "{28113966
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "DeviceManager.Setup.Server", "..\Setup\Setup.Server\DeviceManager.Setup.Server.wixproj", "{E7AE6893-D08C-4E7A-8EF1-5946F1E5C028}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceManager.Setup.Server.CustomActions", "..\Setup\Setup.Server.CustomActions\DeviceManager.Setup.Server.CustomActions.csproj", "{70559861-3FC9-4CFE-A72C-60D0E842E619}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,12 +63,20 @@ Global
 		{E7AE6893-D08C-4E7A-8EF1-5946F1E5C028}.Release|Any CPU.ActiveCfg = Release|x86
 		{E7AE6893-D08C-4E7A-8EF1-5946F1E5C028}.Release|x86.ActiveCfg = Release|x86
 		{E7AE6893-D08C-4E7A-8EF1-5946F1E5C028}.Release|x86.Build.0 = Release|x86
+		{70559861-3FC9-4CFE-A72C-60D0E842E619}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{70559861-3FC9-4CFE-A72C-60D0E842E619}.Debug|Any CPU.Build.0 = Debug|x86
+		{70559861-3FC9-4CFE-A72C-60D0E842E619}.Debug|x86.ActiveCfg = Debug|x86
+		{70559861-3FC9-4CFE-A72C-60D0E842E619}.Debug|x86.Build.0 = Debug|x86
+		{70559861-3FC9-4CFE-A72C-60D0E842E619}.Release|Any CPU.ActiveCfg = Release|x86
+		{70559861-3FC9-4CFE-A72C-60D0E842E619}.Release|x86.ActiveCfg = Release|x86
+		{70559861-3FC9-4CFE-A72C-60D0E842E619}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E7AE6893-D08C-4E7A-8EF1-5946F1E5C028} = {28113966-4A43-4C8E-905A-AF25053FB9DC}
+		{70559861-3FC9-4CFE-A72C-60D0E842E619} = {28113966-4A43-4C8E-905A-AF25053FB9DC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5BB9DDE8-610F-4369-9D0A-E79F982C7063}

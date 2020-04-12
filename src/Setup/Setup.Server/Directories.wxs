@@ -29,11 +29,6 @@
 
     <!-- Installed files -->
     <DirectoryRef Id="INSTALLFOLDER" FileSource="..\..\Server\DeviceManager.Api\bin\Release\Publish\"/>
-    <DirectoryRef Id="bin" FileSource="..\..\Server\DeviceManager.Api\bin\Release\Publish\bin\"/>
-    <DirectoryRef Id="roslyn" FileSource="..\..\Server\DeviceManager.Api\bin\Release\Publish\bin\roslyn\"/>
-    <DirectoryRef Id="ClientLibraries" FileSource="..\..\Server\DeviceManager.Api\bin\Release\Publish\ClientLibraries\"/>
-    <DirectoryRef Id="Content" FileSource="..\..\Server\DeviceManager.Api\bin\Release\Publish\Content\"/>
-    <DirectoryRef Id="Views" FileSource="..\..\Server\DeviceManager.Api\bin\Release\Publish\Views\"/>
 
   </Fragment>
 </Wix>

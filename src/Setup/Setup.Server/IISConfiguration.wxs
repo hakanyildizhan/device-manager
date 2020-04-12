@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension">
+	<Fragment>
+    
+    <ComponentGroup Id="DeviceManagerIISConfiguration">
+      <ComponentRef Id="InstallWebsiteAsVirtualDirectory" />
+      <ComponentRef Id="InstallWebsiteAsNewSite" />
+      <ComponentRef Id="DeviceManagerAppPoolComponent" />
+    </ComponentGroup>
+
+    <!-- Locator for "Default Web Site" -->
+    <iis:WebSite Id="DefaultWebSite"
+                 Description="Default Web Site"
+                 Directory="INSTALLFOLDER">
+      
+      <!-- This element has to be here or WiX does not compile. It’s ignored in this case. -->
+      <iis:WebAddress Id="AllUnassigned" Port="80" />
+    </iis:WebSite>
+
+    <!-- Locator for Web Application definition -->
+    <!-- Turns the Virtual Directory into a web application -->
+    <iis:WebApplication Id="DeviceManagerWebApplication"
+                        Name="DeviceManager"
+                        WebAppPool="DeviceManagerAppPool"/>
+
+    <!-- Default: C:\inetpub\wwwroot\DeviceManager-->
+    <DirectoryRef Id="INSTALLFOLDER">
+      
+      <!-- App Pool for the IIS site -->
+      <Component Id="DeviceManagerAppPoolComponent" KeyPath="yes" Guid="{5ABCF20F-42BA-480E-B139-2948C2C440EF}">
+        
+        <iis:WebAppPool Id="DeviceManagerAppPool"
+                        Name="DeviceManager"
+                        Identity="applicationPoolIdentity"
+                        ManagedPipelineMode="Integrated"
+                        ManagedRuntimeVersion="v4.0" />
+      </Component>
+
+      <!-- Site installed as a virtual directory under Default Web Site -->
+      <Component Id="InstallWebsiteAsVirtualDirectory" KeyPath="yes" Guid="{1EC62477-78F4-4121-8CA7-7D496EBAEC5F}">
+        <Condition><![CDATA[IIS_SITE = "0"]]></Condition>
+
+        <!-- The Alias attribute is the name that will be put into IIS -->
+        
+        <!-- The Directory attribute is the "Physical Path" property in
+                  IIS and needs to tie to an ID specified in the setup -->
+
+        <!-- The WebSite attribute ties to the "Default Web Site" defined
+             outside any component, in order to find it only -->
+
+        <iis:WebVirtualDir Id="DeviceManagerVirtualDirectory"
+                           Alias="DeviceManager"
+                           Directory="INSTALLFOLDER"
+                           WebSite="DefaultWebSite"
+                           WebApplication="DeviceManagerWebApplication"/>
+        
+        <!-- If CreateFolder isn’t there WebVirtualDir won’t get created 
+              as there’s no files in this component. -->
+
+        <!--<CreateFolder/>-->
+      </Component>
+
+        <!-- IIS site -->
+      <Component Id="InstallWebsiteAsNewSite" KeyPath="yes" Guid="{93BBCD76-C979-4BE6-87DC-5D3C97D0F92F}">
+        <Condition><![CDATA[IIS_SITE = "1"]]></Condition>
+
+        <!-- Install to new web site -->
+        <iis:WebSite Id="DeviceManagerWebsite"
+                     Description="DeviceManager" 
+                     Directory="INSTALLFOLDER" 
+                     WebApplication="DeviceManagerWebApplication"
+                     AutoStart="yes" 
+                     StartOnInstall="yes">
+
+          <!-- TODO: Check if port is being used! -->
+          <iis:WebAddress Id="WebsiteAllUnassigned"
+                          Port="[IIS_PORT]" 
+                          IP="*"  /> 
+          
+        </iis:WebSite>
+        
+      </Component>
+      
+    </DirectoryRef>
+    
+	</Fragment>
+</Wix>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <Property Id="IIS_SITE" Value="0" />
+    <Property Id="IIS_PORT" />
+    <Property Id="IIS_PORT_AVAILABLE" Value="0" />
+    <UI>
+      <Dialog Id="IISSettingsDlg" Width="370" Height="270" Title="[ProductName] Setup" NoMinimize="yes">
+        <Control Type="Text" Id="IISConfigDesc" Width="298" Height="24" X="38" Y="38" Text="Choose how the server application will be set up on Internet Information Services (IIS):" />
+        
+        <Control Type="RadioButtonGroup" Property="IIS_SITE" Id="WebsitePort" Width="82" Height="37" X="49" Y="159">
+          <RadioButtonGroup Property="IIS_SITE">
+            <RadioButton Text="Default Web Site" Height="17" Value="0" Width="140" X="0" Y="0" />
+            <RadioButton Text="Separate Site" Height="17" Value="1" Width="90" X="0" Y="20" />
+          </RadioButtonGroup>
+        </Control>
+        
+        <Control Type="Text" Id="DefaultWebSiteDesc" Width="283" Height="22" X="45" Y="64" Text="• Default Web Site: Installs the server on a virtual directory under Default Web Site. By default, the site will be accessible via:" />
+        <Control Type="Text" Id="DefaultWebSiteLink" Width="250" Height="15" X="64" Y="90" Text="http://&lt;HOSTNAME&gt;/DeviceManager" />
+        
+        <Control Type="Text" Id="SeparateSiteDesc" Width="282" Height="26" X="45" Y="109" Text="• Separate Site: Installs the server as a new site accessible via specified port. The site will be accessible via:" />
+        <Control Type="Text" Id="SeparateSiteLink" Width="200" Height="17" X="64" Y="135" Text="http://&lt;HOSTNAME&gt;:&lt;PORT&gt;" />
+        
+        <Control Type="Text" Id="PortDesc" Width="36" Height="10" X="139" Y="182" Text="Port:" />
+        <Control Type="Edit" Id="PortEdit" Width="50" Height="15" X="176" Y="180" Property="IIS_PORT">
+          <Condition Action="disable"><![CDATA[IIS_SITE <> "1"]]></Condition>
+          <Condition Action="enable">IIS_SITE = "1"</Condition>
+        </Control>
+        
+        <Control Type="PushButton" Id="TestPort" Width="56" Height="17" X="248" Y="179" Text="Test Port">
+          <Condition Action="disable"><![CDATA[NOT(IIS_SITE = "1")]]></Condition>
+          <Condition Action="enable"><![CDATA[IIS_SITE = "1"]]></Condition>
+          <Publish Event="DoAction" Value="CustomAction_TestPort" Order="1"><![CDATA[IIS_PORT <> ""]]></Publish>
+          <Publish Property="IIS_PORT_AVAILABLE" Value="[IIS_PORT_AVAILABLE]" Order="2">1</Publish>
+        </Control>
+        
+        <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="Back">
+        </Control>
+        <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="Next">
+          <Condition Action="disable"><![CDATA[NOT(IIS_SITE = "0" OR (IIS_SITE = "1" AND IIS_PORT_AVAILABLE = "1"))]]></Condition>
+          <Condition Action="enable"><![CDATA[IIS_SITE = "0" OR (IIS_SITE = "1" AND IIS_PORT_AVAILABLE = "1")]]></Condition>
+        </Control>
+        <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+          <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+        </Control>
+      </Dialog>
+    </UI>
+  </Fragment>
+</Wix>

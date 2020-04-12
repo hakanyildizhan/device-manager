@@ -22,15 +22,34 @@
     <!-- Include .cab file into .msi file -->
     <MediaTemplate EmbedCab="yes" />
 
-    <Feature Id="ProductFeature" 
-             Title="DeviceManager.Setup.Server"
+    <!-- Feature for application files -->
+    <Feature Id="ApplicationFilesFeature" 
+             Title="Server application files"
+             Description="Installs required files for the application."
              Display='expand'
-             Level='1'
              ConfigurableDirectory='INSTALLFOLDER' AllowAdvertise='no' Absent='disallow' >
 
       <!--<ComponentGroupRef Id="ProductComponents" />-->
       <ComponentGroupRef Id="PublishedComponents" />
+    </Feature>
 
+    <!-- Feature for IIS configuration -->
+    <Feature Id="IISConfigurationFeature"
+             Title="Server IIS configuration"
+             Description="Configures the web site on Internet Information Services (IIS)."
+             Display='expand'>
+
+      <ComponentGroupRef Id="DeviceManagerIISConfiguration" />
+    </Feature>
+
+    <!-- Feature for database configuration -->
+    <Feature Id="DatabaseConfigurationFeature"
+             Title="Database configuration"
+             Description="Configures the database."
+             Display='expand'
+             Absent='disallow' >
+
+      <ComponentGroupRef Id="DeviceManagerDatabaseConfiguration" />
     </Feature>
 
     <!-- Define main app icon -->
@@ -40,10 +59,27 @@
     <!-- App license -->
     <WixVariable Id="WixUILicenseRtf" Value="license.rtf"/>
 
-    <!--<UIRef Id="WixUI_InstallDir_DeviceManager_Server" />-->
-    <UIRef Id="WixUI_Mondo" />
-    
-    <!--<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />-->
+    <!-- Setup UI -->
+    <UIRef Id="WixUI_DeviceManager_Server" />
+
+    <!-- Binary definition for custom actions -->
+    <Binary Id='DeviceManager.Setup.Server.CustomActions.CA.dll' SourceFile='..\Setup.Server.CustomActions\bin\$(var.Configuration)\DeviceManager.Setup.Server.CustomActions.CA.dll'/>
+
+    <!-- Checks if the given port is available -->
+    <!-- If it is valid, sets IIS_PORT_AVAILABLE to "1"  -->
+    <CustomAction Id='CustomAction_TestPort'
+                  BinaryKey='DeviceManager.Setup.Server.CustomActions.CA.dll'
+                  DllEntry='TestPort'
+                  Execute='immediate'
+                  Return='check'/>
+
+    <!-- Checks the database connection -->
+    <!-- If it is valid, sets DB_SERVER_OK to "1"  -->
+    <CustomAction Id='CustomAction_TestConnection'
+                  BinaryKey='DeviceManager.Setup.Server.CustomActions.CA.dll'
+                  DllEntry='TestConnection'
+                  Execute='immediate'
+                  Return='check'/>
 
     <!-- Check if .Net Framework 4.6.1 is installed -->
     <PropertyRef Id="WIX_IS_NETFRAMEWORK_461_OR_LATER_INSTALLED" />
@@ -80,7 +116,5 @@
     </Condition>
     
 	</Product>
-
-  
 
 </Wix>
