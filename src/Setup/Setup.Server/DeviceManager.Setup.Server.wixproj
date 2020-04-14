@@ -57,13 +57,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="license.rtf" />
-    <Content Include="Scripts\Script_v1.0.0.0_Uninstall.sql" />
-    <Content Include="Scripts\Script_v1.0.0.0_Data.sql" />
-    <Content Include="Scripts\Script_v1.0.0.0_Tables.sql" />
-    <Content Include="Scripts\Script_v1.0.0.0_User.sql" />
+    <Content Include="Scripts\OnInstall\Data_v1.0.0.0.sql" />
+    <Content Include="Scripts\OnInstall\Tables_v1.0.0.0.sql" />
+    <Content Include="Scripts\OnUninstall\DropDatabase.sql" />
+    <Content Include="Scripts\OnUninstall\DropLogin.sql" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Scripts" />
+    <Folder Include="Scripts\OnInstall" />
+    <Folder Include="Scripts\OnUninstall" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Setup.Server.CustomActions\DeviceManager.Setup.Server.CustomActions.csproj">

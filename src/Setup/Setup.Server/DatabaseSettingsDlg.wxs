@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Fragment>
-    <Property Secure="yes" Id="DB_USER"  />
-    <Property Secure="yes" Id="DB_PASSWORD"  />
-    <Property Secure="yes" Id="DB_SERVER"  />
-    <Property Secure="yes" Id="DB_AUTHENTICATIONMODE" Value="0" />
-    <Property Id="DB_SERVER_OK" Value="0" />
-
     <UI>
       <Dialog Id="DatabaseSettingsDlg" Width="370" Height="270" Title="[ProductName] Setup" NoMinimize="yes">
         

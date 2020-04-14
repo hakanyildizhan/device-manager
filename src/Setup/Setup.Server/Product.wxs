@@ -29,7 +29,6 @@
              Display='expand'
              ConfigurableDirectory='INSTALLFOLDER' AllowAdvertise='no' Absent='disallow' >
 
-      <!--<ComponentGroupRef Id="ProductComponents" />-->
       <ComponentGroupRef Id="PublishedComponents" />
     </Feature>
 
@@ -46,18 +45,8 @@
     <Feature Id="DatabaseConfigurationFeature"
              Title="Database configuration"
              Description="Configures the database."
-             Display='expand'
-              >
-
-      <ComponentGroupRef Id="DeviceManagerDatabaseConfiguration" />
-    </Feature>
-
-    <Feature Id="IISConfigurationAndDatabaseFeature"
-             Title="Server IIS and Database configuration"
-             Description="Configures the web site on Internet Information Services (IIS) and the underlying database."
              Display='expand'>
 
-      <ComponentGroupRef Id="DeviceManagerIISConfiguration" />
       <ComponentGroupRef Id="DeviceManagerDatabaseConfiguration" />
     </Feature>
 

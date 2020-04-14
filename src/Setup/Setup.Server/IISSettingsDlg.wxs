@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Fragment>
-    <Property Id="IIS_SITE" Value="0" />
-    <Property Id="IIS_PORT" />
-    <Property Id="IIS_PORT_AVAILABLE" Value="0" />
     <UI>
       <Dialog Id="IISSettingsDlg" Width="370" Height="270" Title="[ProductName] Setup" NoMinimize="yes">
         <Control Type="Text" Id="IISConfigDesc" Width="298" Height="24" X="38" Y="38" Text="Choose how the server application will be set up on Internet Information Services (IIS):" />

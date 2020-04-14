@@ -12,6 +12,11 @@ namespace DeviceManager.Setup.Server.CustomActions
 {
     public class CustomActions
     {
+        /// <summary>
+        /// Tests if the given port is available to bind for the new IIS website. Sets "IIS_PORT_AVAILABLE" to 1 if it is.
+        /// </summary>
+        /// <param name="session"></param>
+        /// <returns></returns>
         [CustomAction]
         public static ActionResult TestPort(Session session)
         {
@@ -28,7 +33,7 @@ namespace DeviceManager.Setup.Server.CustomActions
 
             int port;
             bool convertResult = int.TryParse(portParam, out port);
-            
+
             // Parameter is not a valid integer
             if (!convertResult)
             {
@@ -56,7 +61,11 @@ namespace DeviceManager.Setup.Server.CustomActions
             return ActionResult.Success;
         }
 
-
+        /// <summary>
+        /// Checks if database connection can be established. Sets "DB_SERVER_OK" to 1 if the connection was successfully established.
+        /// </summary>
+        /// <param name="session"></param>
+        /// <returns></returns>
         [CustomAction]
         public static ActionResult TestConnection(Session session)
         {
@@ -89,6 +98,11 @@ namespace DeviceManager.Setup.Server.CustomActions
             }
         }
 
+        /// <summary>
+        /// After install completes, runs an SQL file to give the IIS App Pool necessary permissions on the application database.
+        /// </summary>
+        /// <param name="session"></param>
+        /// <returns></returns>
         [CustomAction]
         public static ActionResult GrantDatabasePermissions(Session session)
         {
@@ -102,26 +116,40 @@ namespace DeviceManager.Setup.Server.CustomActions
                 return ActionResult.Success;
             }
 
-            string sqlCommand = GetEmbeddedSQLFileContents();
+            string sqlCommand = GetEmbeddedSQLFileContents("UserPermissions.sql");
+            if (string.IsNullOrEmpty(sqlCommand))
+            {
+                session.Log("Could not get SQL file contents for GrantDatabasePermissions");
+                return ActionResult.Success;
+            }
 
             using (SqlConnection connection = new SqlConnection(connString))
             {
+                connection.Open();
+                SqlTransaction transaction = connection.BeginTransaction("AfterInstallUserPermissions");
+                SqlCommand cmd = new SqlCommand(sqlCommand, connection);
+                cmd.Transaction = transaction;
                 try
                 {
-                    connection.Open();
-                    SqlCommand cmd = new SqlCommand(sqlCommand, connection);
                     cmd.ExecuteNonQuery();
+                    transaction.Commit();
                     session.Log("Granted database permissions successfully");
                     return ActionResult.Success;
                 }
-                catch (SqlException)
+                catch (Exception)
                 {
-                    session.Log("Could not grant database permissions");
+                    transaction.Rollback();
+                    session.Log("Error occured. Could not grant database permissions");
                     return ActionResult.Success;
                 }
             }
         }
 
+        /// <summary>
+        /// Generates a connection string from the Authentication mode, DB Server-Instance name and login information in the session.
+        /// </summary>
+        /// <param name="session"></param>
+        /// <returns></returns>
         private static string GenerateConnectionString(Session session)
         {
             string authMode = session["DB_AUTHENTICATIONMODE"];
@@ -153,16 +181,27 @@ namespace DeviceManager.Setup.Server.CustomActions
             return connString;
         }
 
-        private static string GetEmbeddedSQLFileContents()
+        /// <summary>
+        /// Gets the contents of the embedded file.
+        /// </summary>
+        /// <returns></returns>
+        private static string GetEmbeddedSQLFileContents(string resourceFileName)
         {
-            var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = "DeviceManager.Setup.Server.CustomActions.Resources.Script_v1.0.0.0_User.sql";
-
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-            using (StreamReader reader = new StreamReader(stream))
+            try
             {
-                string result = reader.ReadToEnd();
-                return result;
+                var assembly = Assembly.GetExecutingAssembly();
+                var resourceName = "DeviceManager.Setup.Server.CustomActions.Resources." + resourceFileName;
+
+                using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    string result = reader.ReadToEnd();
+                    return result;
+                }
+            }
+            catch (Exception)
+            {
+                return string.Empty;
             }
         }
     }

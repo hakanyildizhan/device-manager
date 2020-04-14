@@ -64,18 +64,18 @@ namespace DeviceManager.Setup.Server.CustomActions {
         ///   Looks up a localized string similar to IF NOT EXISTS (select loginname from master.dbo.syslogins where name = N&apos;IIS APPPOOL\DeviceManager&apos;)
         ///BEGIN
         ///    CREATE LOGIN [IIS APPPOOL\DeviceManager] FROM WINDOWS WITH DEFAULT_DATABASE=[master];
+        ///	USE [DeviceManager]
         ///	CREATE USER [IIS APPPOOL\DeviceManager] FOR LOGIN [IIS APPPOOL\DeviceManager] WITH DEFAULT_SCHEMA=[dbo];
         ///	ALTER ROLE [db_datareader] ADD MEMBER [IIS APPPOOL\DeviceManager];
         ///	ALTER ROLE [db_datawriter] ADD MEMBER [IIS APPPOOL\DeviceManager];
         ///END
         ///ELSE 
         ///BEGIN
-        ///	USE [DeviceManager]
         ///	IF NOT EXISTS (SELECT [na [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string Script_v1_0_0_0_User {
+        internal static string UserPermissions {
             get {
-                return ResourceManager.GetString("Script_v1_0_0_0_User", resourceCulture);
+                return ResourceManager.GetString("UserPermissions", resourceCulture);
             }
         }
     }

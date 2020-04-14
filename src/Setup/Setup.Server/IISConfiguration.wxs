@@ -2,12 +2,25 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension">
 	<Fragment>
+
+    <!-- Properties -->
+    <Property Id="IIS_SITE" Value="0">
+      <RegistrySearch Id="SITE_RegistrySearch"
+                      Root="HKLM"
+                      Key="Software\Hakan Yildizhan\DeviceManager"
+                      Name="SITE"
+                      Type="raw"/>
+    </Property>
+
+    <Property Id="IIS_PORT" />
+    <Property Id="IIS_PORT_AVAILABLE" Value="0" />
     
+    <!-- Components -->
     <ComponentGroup Id="DeviceManagerIISConfiguration" >
-      
       <ComponentRef Id="InstallWebsiteAsVirtualDirectory" />
       <ComponentRef Id="InstallWebsiteAsNewSite" />
       <ComponentRef Id="DeviceManagerAppPoolComponent" />
+      <ComponentRef Id="IISComponentRegistryEntries" />
     </ComponentGroup>
 
     <!-- Locator for "Default Web Site" -->
@@ -22,15 +35,24 @@
     <!-- Locator for Web Application definition -->
     <!-- Turns the Virtual Directory into a web application -->
     <iis:WebApplication Id="DeviceManagerWebApplication"
-                        Name="DeviceManager"
+                        Name="[DeviceManager][WEBSITE_ID]"
                         WebAppPool="DeviceManagerAppPool"/>
     
-
     <!-- Default: C:\inetpub\wwwroot\DeviceManager-->
     <DirectoryRef Id="INSTALLFOLDER">
-      
+
+      <!-- App Pool for the IIS site -->
+      <Component Id="DeviceManagerAppPoolComponent" KeyPath="yes" Guid="{FE1C4C87-E33B-4070-BD1B-0D0E150AA45C}" >
+
+        <iis:WebAppPool Id="DeviceManagerAppPool"
+                        Name="DeviceManager"
+                        Identity="applicationPoolIdentity"
+                        ManagedPipelineMode="Integrated"
+                        ManagedRuntimeVersion="v4.0" />
+      </Component>
+
       <!-- Site installed as a virtual directory under Default Web Site -->
-      <Component Id="InstallWebsiteAsVirtualDirectory" KeyPath="yes" Guid="1EC62477-78F4-4121-8CA7-7D496EBAEC5F">
+      <Component Id="InstallWebsiteAsVirtualDirectory" KeyPath="yes" Guid="{492DAEED-BAB6-43CE-AD3F-717AF584DFB9}">
         <Condition><![CDATA[IIS_SITE = "0"]]></Condition>
 
         <!-- The Alias attribute is the name that will be put into IIS -->
@@ -47,14 +69,10 @@
                            WebSite="DefaultWebSite"
                            WebApplication="DeviceManagerWebApplication"/>
         
-        <!-- If CreateFolder isn’t there WebVirtualDir won’t get created 
-              as there’s no files in this component. -->
-
-        <CreateFolder/>
       </Component>
 
       <!-- IIS site -->
-      <Component Id="InstallWebsiteAsNewSite" KeyPath="yes" Guid="93BBCD76-C979-4BE6-87DC-5D3C97D0F92F">
+      <Component Id="InstallWebsiteAsNewSite" KeyPath="yes" Guid="{BB80DBCA-521F-456E-BB6E-56DB876492D4}">
         <Condition><![CDATA[IIS_SITE = "1"]]></Condition>
 
         <!-- Install to new web site -->
@@ -72,18 +90,17 @@
           
         </iis:WebSite>
 
-        <CreateFolder/>
-
       </Component>
 
-      <!-- App Pool for the IIS site -->
-      <Component Id="DeviceManagerAppPoolComponent" KeyPath="yes" Guid="5ABCF20F-42BA-480E-B139-2948C2C440EF" >
+      <Component Id="IISComponentRegistryEntries" Guid="{854A7D57-B120-4F93-B15B-9E1227A582D1}">
 
-        <iis:WebAppPool Id="DeviceManagerAppPool"
-                        Name="DeviceManager"
-                        Identity="applicationPoolIdentity"
-                        ManagedPipelineMode="Integrated"
-                        ManagedRuntimeVersion="v4.0" />
+        <RegistryKey Id="SITE_RegistrySave"
+                     Root="HKLM"
+                     Key="Software\Hakan Yildizhan\DeviceManager"
+                     Action="createAndRemoveOnUninstall">
+          <RegistryValue Type="string" Name="SITE" Value="[IIS_SITE]" />
+        </RegistryKey>
+
       </Component>
 
     </DirectoryRef>
