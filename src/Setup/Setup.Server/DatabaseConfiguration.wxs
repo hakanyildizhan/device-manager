@@ -11,13 +11,14 @@
 
     <Binary Id="TablesBin" SourceFile="Scripts/Script_v1.0.0.0_Tables.sql"></Binary>
     <Binary Id="DataBin" SourceFile="Scripts/Script_v1.0.0.0_Data.sql"></Binary>
-    <Binary Id="UserBin" SourceFile="Scripts/Script_v1.0.0.0_User.sql"></Binary>
+    <!--<Binary Id="UserBin" SourceFile="Scripts/Script_v1.0.0.0_User.sql"></Binary>-->
+    <!--<Binary Id="UninstallBin" SourceFile="Scripts/Script_v1.0.0.0_Uninstall.sql"></Binary>-->
 
     <util:User Id="SQLUser" Name="[DB_USER]" Password="[DB_PASSWORD]"></util:User>
 
     <DirectoryRef Id="INSTALLFOLDER">
       
-      <Component Id="SqlComponentSAUser" Guid="8A1C82DB-1DD3-4FB5-8600-4F370FE1E04B">
+      <Component Id="SqlComponentSAUser" Guid="8A1C82DB-1DD3-4FB5-8600-4F370FE1E04B" KeyPath="yes">
         <Condition><![CDATA[DB_AUTHENTICATIONMODE = "1"]]></Condition>
         
         <sql:SqlDatabase Id="SqlDatabaseSAUser" 
@@ -42,12 +43,21 @@
                          ContinueOnError="no"
                          User="SQLUser" />
 
-          <sql:SqlScript Id="SqlScriptUserSAUser"
+          <!--<sql:SqlScript Id="SqlScriptUserSAUser"
                          ExecuteOnInstall="yes"
                          ExecuteOnUninstall="no"
                          BinaryKey="UserBin"
-                         ContinueOnError="no"
-                         User="SQLUser" />
+                         ContinueOnError="yes"
+                         User="SQLUser"
+                         Sequence="3"/>-->
+
+          <!--<sql:SqlScript Id="SqlScriptUninstallSAUser"
+                         ExecuteOnInstall="no"
+                         ExecuteOnUninstall="yes"
+                         BinaryKey="UninstallBin"
+                         ContinueOnError="yes"
+                         User="SQLUser"
+                         Sequence="3"/>-->
           
         </sql:SqlDatabase>
         
@@ -55,7 +65,7 @@
         
       </Component>
 
-      <Component Id="SqlComponentWinUser" Guid="C2FB0F78-3F46-4759-948F-52393CB466AD">
+      <Component Id="SqlComponentWinUser" Guid="C2FB0F78-3F46-4759-948F-52393CB466AD" KeyPath="yes">
         <Condition><![CDATA[DB_AUTHENTICATIONMODE = "0"]]></Condition>
 
         <sql:SqlDatabase Id="SqlDatabaseWinUser"
@@ -77,11 +87,19 @@
                          BinaryKey="DataBin"
                          ContinueOnError="no" />
 
-          <sql:SqlScript Id="SqlScriptUserWinUser"
+          <!--<sql:SqlScript Id="SqlScriptUserWinUser"
                          ExecuteOnInstall="yes"
                          ExecuteOnUninstall="no"
                          BinaryKey="UserBin"
-                         ContinueOnError="no" />
+                         ContinueOnError="yes"
+                         Sequence="3" />-->
+
+          <!--<sql:SqlScript Id="SqlScriptUninstallWinUser"
+                         ExecuteOnInstall="no"
+                         ExecuteOnUninstall="yes"
+                         BinaryKey="UninstallBin"
+                         ContinueOnError="yes"
+                         Sequence="3" />-->
 
         </sql:SqlDatabase>
 

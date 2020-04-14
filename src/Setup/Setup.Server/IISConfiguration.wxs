@@ -3,7 +3,8 @@
      xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension">
 	<Fragment>
     
-    <ComponentGroup Id="DeviceManagerIISConfiguration">
+    <ComponentGroup Id="DeviceManagerIISConfiguration" >
+      
       <ComponentRef Id="InstallWebsiteAsVirtualDirectory" />
       <ComponentRef Id="InstallWebsiteAsNewSite" />
       <ComponentRef Id="DeviceManagerAppPoolComponent" />
@@ -23,22 +24,13 @@
     <iis:WebApplication Id="DeviceManagerWebApplication"
                         Name="DeviceManager"
                         WebAppPool="DeviceManagerAppPool"/>
+    
 
     <!-- Default: C:\inetpub\wwwroot\DeviceManager-->
     <DirectoryRef Id="INSTALLFOLDER">
       
-      <!-- App Pool for the IIS site -->
-      <Component Id="DeviceManagerAppPoolComponent" KeyPath="yes" Guid="{5ABCF20F-42BA-480E-B139-2948C2C440EF}">
-        
-        <iis:WebAppPool Id="DeviceManagerAppPool"
-                        Name="DeviceManager"
-                        Identity="applicationPoolIdentity"
-                        ManagedPipelineMode="Integrated"
-                        ManagedRuntimeVersion="v4.0" />
-      </Component>
-
       <!-- Site installed as a virtual directory under Default Web Site -->
-      <Component Id="InstallWebsiteAsVirtualDirectory" KeyPath="yes" Guid="{1EC62477-78F4-4121-8CA7-7D496EBAEC5F}">
+      <Component Id="InstallWebsiteAsVirtualDirectory" KeyPath="yes" Guid="1EC62477-78F4-4121-8CA7-7D496EBAEC5F">
         <Condition><![CDATA[IIS_SITE = "0"]]></Condition>
 
         <!-- The Alias attribute is the name that will be put into IIS -->
@@ -58,11 +50,11 @@
         <!-- If CreateFolder isn’t there WebVirtualDir won’t get created 
               as there’s no files in this component. -->
 
-        <!--<CreateFolder/>-->
+        <CreateFolder/>
       </Component>
 
-        <!-- IIS site -->
-      <Component Id="InstallWebsiteAsNewSite" KeyPath="yes" Guid="{93BBCD76-C979-4BE6-87DC-5D3C97D0F92F}">
+      <!-- IIS site -->
+      <Component Id="InstallWebsiteAsNewSite" KeyPath="yes" Guid="93BBCD76-C979-4BE6-87DC-5D3C97D0F92F">
         <Condition><![CDATA[IIS_SITE = "1"]]></Condition>
 
         <!-- Install to new web site -->
@@ -79,9 +71,21 @@
                           IP="*"  /> 
           
         </iis:WebSite>
-        
+
+        <CreateFolder/>
+
       </Component>
-      
+
+      <!-- App Pool for the IIS site -->
+      <Component Id="DeviceManagerAppPoolComponent" KeyPath="yes" Guid="5ABCF20F-42BA-480E-B139-2948C2C440EF" >
+
+        <iis:WebAppPool Id="DeviceManagerAppPool"
+                        Name="DeviceManager"
+                        Identity="applicationPoolIdentity"
+                        ManagedPipelineMode="Integrated"
+                        ManagedRuntimeVersion="v4.0" />
+      </Component>
+
     </DirectoryRef>
     
 	</Fragment>

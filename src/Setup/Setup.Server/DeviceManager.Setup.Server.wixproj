@@ -24,7 +24,6 @@
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Components.wxs" />
     <Compile Include="DatabaseConfiguration.wxs" />
     <Compile Include="DatabaseSettingsDlg.wxs" />
     <Compile Include="Directories.wxs" />
@@ -58,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="license.rtf" />
+    <Content Include="Scripts\Script_v1.0.0.0_Uninstall.sql" />
     <Content Include="Scripts\Script_v1.0.0.0_Data.sql" />
     <Content Include="Scripts\Script_v1.0.0.0_Tables.sql" />
     <Content Include="Scripts\Script_v1.0.0.0_User.sql" />

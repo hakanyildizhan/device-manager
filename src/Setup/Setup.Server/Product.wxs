@@ -37,7 +37,7 @@
     <Feature Id="IISConfigurationFeature"
              Title="Server IIS configuration"
              Description="Configures the web site on Internet Information Services (IIS)."
-             Display='expand'>
+             Display='expand' >
 
       <ComponentGroupRef Id="DeviceManagerIISConfiguration" />
     </Feature>
@@ -47,8 +47,17 @@
              Title="Database configuration"
              Description="Configures the database."
              Display='expand'
-             Absent='disallow' >
+              >
 
+      <ComponentGroupRef Id="DeviceManagerDatabaseConfiguration" />
+    </Feature>
+
+    <Feature Id="IISConfigurationAndDatabaseFeature"
+             Title="Server IIS and Database configuration"
+             Description="Configures the web site on Internet Information Services (IIS) and the underlying database."
+             Display='expand'>
+
+      <ComponentGroupRef Id="DeviceManagerIISConfiguration" />
       <ComponentGroupRef Id="DeviceManagerDatabaseConfiguration" />
     </Feature>
 
@@ -80,6 +89,16 @@
                   DllEntry='TestConnection'
                   Execute='immediate'
                   Return='check'/>
+
+    <!-- Gives the App Pool necessary DB permissions -->
+    <CustomAction Id='CustomAction_GrantDatabasePermissions'
+                  BinaryKey='DeviceManager.Setup.Server.CustomActions.CA.dll'
+                  DllEntry='GrantDatabasePermissions'
+                  Return='check'/>
+    <!-- Run after setup is finalized -->
+    <InstallExecuteSequence>
+      <Custom Action='CustomAction_GrantDatabasePermissions' After='InstallFinalize' >NOT Installed</Custom>
+    </InstallExecuteSequence>
 
     <!-- Check if .Net Framework 4.6.1 is installed -->
     <PropertyRef Id="WIX_IS_NETFRAMEWORK_461_OR_LATER_INSTALLED" />
