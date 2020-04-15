@@ -24,6 +24,7 @@
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ConfigTransform.wxs" />
     <Compile Include="DatabaseConfiguration.wxs" />
     <Compile Include="DatabaseSettingsDlg.wxs" />
     <Compile Include="Directories.wxs" />
@@ -90,11 +91,11 @@
   </PropertyGroup>
   <Target Name="BeforeBuild">
     <!-- Build all necessary projects -->
-    <!--<MSBuild Projects="..\..\Server\DeviceManager.Entity\DeviceManager.Entity.csproj;&#xD;&#xA;                       ..\..\Server\DeviceManager.FileParsing\DeviceManager.FileParsing.csproj;&#xD;&#xA;                       ..\..\Server\DeviceManager.Service\DeviceManager.Service.csproj;&#xD;&#xA;                       $(WebProjectPath)\$(WebProjectName).csproj" Properties="Configuration=$(Configuration);Platform=AnyCPU;" Targets="Clean;Build" ContinueOnError="false" />-->
+    <MSBuild Projects="..\..\Server\DeviceManager.Entity\DeviceManager.Entity.csproj;&#xD;&#xA;                       ..\..\Server\DeviceManager.FileParsing\DeviceManager.FileParsing.csproj;&#xD;&#xA;                       ..\..\Server\DeviceManager.Service\DeviceManager.Service.csproj;&#xD;&#xA;                       $(WebProjectPath)\$(WebProjectName).csproj" Properties="Configuration=$(Configuration);Platform=AnyCPU;" Targets="Clean;Build" ContinueOnError="false" />
     <!-- Publish main project -->
-    <!--<MSBuild Projects="$(WebProjectPath)\$(WebProjectName).csproj" 
+    <MSBuild Projects="$(WebProjectPath)\$(WebProjectName).csproj" 
              Properties="Configuration=$(Configuration);Platform=AnyCPU;WebPublishMethod=FileSystem;DeleteExistingFiles=True;publishUrl=$(PublishPath);" Targets="WebPublish" 
-             ContinueOnError="false" />-->
+             ContinueOnError="false" />
     <!-- Get assembly version -->
     <GetAssemblyIdentity AssemblyFiles="$(PublishBinPath)\DeviceManager.Api.dll">
       <Output TaskParameter="Assemblies" ItemName="AssemblyVersion" />

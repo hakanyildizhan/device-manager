@@ -24,12 +24,13 @@
 
     <!-- Feature for application files -->
     <Feature Id="ApplicationFilesFeature" 
-             Title="Server application files"
+             Title="Application files"
              Description="Installs required files for the application."
              Display='expand'
              ConfigurableDirectory='INSTALLFOLDER' AllowAdvertise='no' Absent='disallow' >
 
       <ComponentGroupRef Id="PublishedComponents" />
+      <ComponentGroupRef Id="TransformWebConfig" />
     </Feature>
 
     <!-- Feature for IIS configuration -->

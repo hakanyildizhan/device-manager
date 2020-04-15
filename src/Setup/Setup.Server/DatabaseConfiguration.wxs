@@ -2,30 +2,43 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
          xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
          xmlns:sql="http://schemas.microsoft.com/wix/SqlExtension">
-	<Fragment>
+  <Fragment>
 
     <!-- Properties -->
-    <Property Id="DB_USER"  />
-    <Property Id="DB_PASSWORD"  />
-
-    <Property Id="DB_SERVER" >
-      <RegistrySearch Id="SERVER_RegistrySearch"
+    <Property Id="DB_USER">
+      <RegistrySearch Id="DB_USER_RegistrySearch"
                       Root="HKLM"
                       Key="Software\Hakan Yildizhan\DeviceManager"
-                      Name="SERVER"
+                      Name="DB_USER"
+                      Type="raw"/>
+    </Property>
+
+    <Property Id="DB_PASSWORD">
+      <RegistrySearch Id="DB_PASSWORD_RegistrySearch"
+                      Root="HKLM"
+                      Key="Software\Hakan Yildizhan\DeviceManager"
+                      Name="DB_PASSWORD"
+                      Type="raw"/>
+    </Property>
+
+    <Property Id="DB_SERVER" >
+      <RegistrySearch Id="DB_SERVER_RegistrySearch"
+                      Root="HKLM"
+                      Key="Software\Hakan Yildizhan\DeviceManager"
+                      Name="DB_SERVER"
                       Type="raw"/>
     </Property>
 
     <Property Id="DB_AUTHENTICATIONMODE" Value="0">
-      <RegistrySearch Id="AUTHENTICATIONMODE_RegistrySearch"
+      <RegistrySearch Id="DB_AUTHENTICATIONMODE_RegistrySearch"
                       Root="HKLM"
                       Key="Software\Hakan Yildizhan\DeviceManager"
-                      Name="AUTHENTICATIONMODE"
+                      Name="DB_AUTHENTICATIONMODE"
                       Type="raw"/>
     </Property>
 
     <Property Id="DB_SERVER_OK" Value="0" />
-    
+
     <!-- Components -->
     <ComponentGroup Id="DeviceManagerDatabaseConfiguration">
       <ComponentRef Id="SqlComponentSAUser" />
@@ -35,7 +48,7 @@
 
     <Binary Id="TablesBin" SourceFile="Scripts/OnInstall/Tables_v1.0.0.0.sql"></Binary>
     <Binary Id="DataBin" SourceFile="Scripts/OnInstall/Data_v1.0.0.0.sql"></Binary>
-    
+
     <!-- On uninstall -->
     <Binary Id="DropDBBin" SourceFile="Scripts/OnUninstall/DropDatabase.sql"></Binary>
     <Binary Id="DropLoginBin" SourceFile="Scripts/OnUninstall/DropLogin.sql"></Binary>
@@ -43,50 +56,50 @@
     <util:User Id="SQLUser" Name="[DB_USER]" Password="[DB_PASSWORD]"></util:User>
 
     <DirectoryRef Id="INSTALLFOLDER">
-      
+
       <Component Id="SqlComponentSAUser" Guid="{7F1F8DFB-6B0D-48E6-9F80-E5218000BD3E}" KeyPath="yes">
         <Condition><![CDATA[DB_AUTHENTICATIONMODE = "1"]]></Condition>
-        
-        <sql:SqlDatabase Id="SqlDatabaseSAUser" 
-                         Database="DeviceManager" 
-                         Server="[DB_SERVER]" 
-                         CreateOnInstall="yes" 
-                         DropOnUninstall="yes" 
-                         User="SQLUser" 
+
+        <sql:SqlDatabase Id="SqlDatabaseSAUser"
+                         Database="DeviceManager"
+                         Server="[DB_SERVER]"
+                         CreateOnInstall="yes"
+                         DropOnUninstall="yes"
+                         User="SQLUser"
                          ContinueOnError="yes"/>
-          
-          <sql:SqlScript Id="SqlScriptTablesSAUser" 
-                         ExecuteOnInstall="yes" 
-                         ExecuteOnUninstall="no" 
-                         BinaryKey="TablesBin" 
-                         ContinueOnError="no"
-                         User="SQLUser" SqlDb="SqlDatabaseSAUser" />
 
-          <sql:SqlScript Id="SqlScriptDataSAUser"
-                         ExecuteOnInstall="yes"
-                         ExecuteOnUninstall="no"
-                         BinaryKey="DataBin"
-                         ContinueOnError="no"
-                         User="SQLUser" SqlDb="SqlDatabaseSAUser" />
+        <sql:SqlScript Id="SqlScriptTablesSAUser"
+                       ExecuteOnInstall="yes"
+                       ExecuteOnUninstall="no"
+                       BinaryKey="TablesBin"
+                       ContinueOnError="no"
+                       User="SQLUser" SqlDb="SqlDatabaseSAUser" />
 
-          <sql:SqlScript Id="SqlScriptDropDBSAUser"
-                         ExecuteOnInstall="no"
-                         ExecuteOnUninstall="yes"
-                         BinaryKey="DropDBBin"
-                         ContinueOnError="yes"
-                         User="SQLUser" SqlDb="SqlDatabaseSAUser"
-                         Sequence="1" />
+        <sql:SqlScript Id="SqlScriptDataSAUser"
+                       ExecuteOnInstall="yes"
+                       ExecuteOnUninstall="no"
+                       BinaryKey="DataBin"
+                       ContinueOnError="no"
+                       User="SQLUser" SqlDb="SqlDatabaseSAUser" />
 
-          <sql:SqlScript Id="SqlScriptDropLoginSAUser"
-                         ExecuteOnInstall="no"
-                         ExecuteOnUninstall="yes"
-                         BinaryKey="DropLoginBin"
-                         ContinueOnError="yes"
-                         User="SQLUser" SqlDb="SqlDatabaseSAUser"
-                         Sequence="2" />
-          
+        <sql:SqlScript Id="SqlScriptDropDBSAUser"
+                       ExecuteOnInstall="no"
+                       ExecuteOnUninstall="yes"
+                       BinaryKey="DropDBBin"
+                       ContinueOnError="yes"
+                       User="SQLUser" SqlDb="SqlDatabaseSAUser"
+                       Sequence="1" />
+
+        <sql:SqlScript Id="SqlScriptDropLoginSAUser"
+                       ExecuteOnInstall="no"
+                       ExecuteOnUninstall="yes"
+                       BinaryKey="DropLoginBin"
+                       ContinueOnError="yes"
+                       User="SQLUser" SqlDb="SqlDatabaseSAUser"
+                       Sequence="2" />
+
         <!--</sql:SqlDatabase>-->
-        
+
       </Component>
 
       <Component Id="SqlComponentWinUser" Guid="{5B23BE18-C09F-4584-ADB2-538F8AEA0963}" KeyPath="yes">
@@ -99,53 +112,59 @@
                          DropOnUninstall="yes"
                          ContinueOnError="yes"/>
 
-          <sql:SqlScript Id="SqlScriptTablesWinUser"
-                         ExecuteOnInstall="yes"
-                         ExecuteOnUninstall="no"
-                         BinaryKey="TablesBin"
-                         ContinueOnError="no" SqlDb="SqlDatabaseWinUser" />
+        <sql:SqlScript Id="SqlScriptTablesWinUser"
+                       ExecuteOnInstall="yes"
+                       ExecuteOnUninstall="no"
+                       BinaryKey="TablesBin"
+                       ContinueOnError="no" SqlDb="SqlDatabaseWinUser" />
 
-          <sql:SqlScript Id="SqlScriptDataWinUser"
-                         ExecuteOnInstall="yes"
-                         ExecuteOnUninstall="no"
-                         BinaryKey="DataBin"
-                         ContinueOnError="no" SqlDb="SqlDatabaseWinUser" />
+        <sql:SqlScript Id="SqlScriptDataWinUser"
+                       ExecuteOnInstall="yes"
+                       ExecuteOnUninstall="no"
+                       BinaryKey="DataBin"
+                       ContinueOnError="no" SqlDb="SqlDatabaseWinUser" />
 
-          <sql:SqlScript Id="SqlScriptDropDBWinUser"
-                         ExecuteOnInstall="no"
-                         ExecuteOnUninstall="yes"
-                         BinaryKey="DropDBBin"
-                         ContinueOnError="yes" SqlDb="SqlDatabaseWinUser"
-                         Sequence="1"/>
+        <sql:SqlScript Id="SqlScriptDropDBWinUser"
+                       ExecuteOnInstall="no"
+                       ExecuteOnUninstall="yes"
+                       BinaryKey="DropDBBin"
+                       ContinueOnError="yes" SqlDb="SqlDatabaseWinUser"
+                       Sequence="1"/>
 
-          <sql:SqlScript Id="SqlScriptDropLoginWinUser"
-                         ExecuteOnInstall="no"
-                         ExecuteOnUninstall="yes"
-                         BinaryKey="DropLoginBin"
-                         ContinueOnError="yes" SqlDb="SqlDatabaseWinUser"
-                         Sequence="2"/>
+        <sql:SqlScript Id="SqlScriptDropLoginWinUser"
+                       ExecuteOnInstall="no"
+                       ExecuteOnUninstall="yes"
+                       BinaryKey="DropLoginBin"
+                       ContinueOnError="yes" SqlDb="SqlDatabaseWinUser"
+                       Sequence="2"/>
 
         <!--</sql:SqlDatabase>-->
 
       </Component>
 
       <Component Id="SqlComponentRegistryEntries" Guid="{566CA52D-09CC-4582-8BAA-A2698765BD19}">
-        
-        <RegistryKey Id="AUTHENTICATIONMODE_RegistrySave" 
-                     Root="HKLM"
-                     Key="Software\Hakan Yildizhan\DeviceManager"
-                     Action="createAndRemoveOnUninstall">
-          <RegistryValue Type="string" Name="AUTHENTICATIONMODE" Value="[DB_AUTHENTICATIONMODE]" />
+
+        <RegistryKey Root="HKLM"
+                     Key="Software\Hakan Yildizhan\DeviceManager">
+          <RegistryValue Type="string" Name="DB_AUTHENTICATIONMODE" Value="[DB_AUTHENTICATIONMODE]" />
         </RegistryKey>
-        
-        <RegistryKey Id="SERVER_RegistrySave" 
-                     Root="HKLM"
-                     Key="Software\Hakan Yildizhan\DeviceManager"
-                     Action="createAndRemoveOnUninstall">
-          <RegistryValue Type="string" Name="SERVER" Value="[DB_SERVER]" />
+
+        <RegistryKey Root="HKLM"
+                     Key="Software\Hakan Yildizhan\DeviceManager">
+          <RegistryValue Type="string" Name="DB_SERVER" Value="[DB_SERVER]" />
         </RegistryKey>
-        
+
+        <RegistryKey Root="HKLM"
+                     Key="Software\Hakan Yildizhan\DeviceManager">
+          <RegistryValue Type="string" Name="DB_USER" Value="[DB_USER]" />
+        </RegistryKey>
+
+        <RegistryKey Root="HKLM"
+                     Key="Software\Hakan Yildizhan\DeviceManager">
+          <RegistryValue Type="string" Name="DB_PASSWORD" Value="[DB_PASSWORD]" />
+        </RegistryKey>
+
       </Component>
     </DirectoryRef>
-	</Fragment>
+  </Fragment>
 </Wix>

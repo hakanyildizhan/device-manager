@@ -5,14 +5,21 @@
 
     <!-- Properties -->
     <Property Id="IIS_SITE" Value="0">
-      <RegistrySearch Id="SITE_RegistrySearch"
+      <RegistrySearch Id="IIS_SITE_RegistrySearch"
                       Root="HKLM"
                       Key="Software\Hakan Yildizhan\DeviceManager"
-                      Name="SITE"
+                      Name="IIS_SITE"
                       Type="raw"/>
     </Property>
 
-    <Property Id="IIS_PORT" />
+    <Property Id="IIS_PORT" >
+      <RegistrySearch Id="IIS_PORT_RegistrySearch"
+                      Root="HKLM"
+                      Key="Software\Hakan Yildizhan\DeviceManager"
+                      Name="IIS_PORT"
+                      Type="raw"/>
+    </Property>
+    
     <Property Id="IIS_PORT_AVAILABLE" Value="0" />
     
     <!-- Components -->
@@ -94,11 +101,14 @@
 
       <Component Id="IISComponentRegistryEntries" Guid="{854A7D57-B120-4F93-B15B-9E1227A582D1}">
 
-        <RegistryKey Id="SITE_RegistrySave"
-                     Root="HKLM"
-                     Key="Software\Hakan Yildizhan\DeviceManager"
-                     Action="createAndRemoveOnUninstall">
-          <RegistryValue Type="string" Name="SITE" Value="[IIS_SITE]" />
+        <RegistryKey Root="HKLM"
+                     Key="Software\Hakan Yildizhan\DeviceManager">
+          <RegistryValue Type="string" Name="IIS_SITE" Value="[IIS_SITE]" />
+        </RegistryKey>
+
+        <RegistryKey Root="HKLM"
+                     Key="Software\Hakan Yildizhan\DeviceManager">
+          <RegistryValue Type="string" Name="IIS_PORT" Value="[IIS_PORT]" />
         </RegistryKey>
 
       </Component>
