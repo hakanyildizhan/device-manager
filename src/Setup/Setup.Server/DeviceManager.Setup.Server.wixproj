@@ -93,8 +93,8 @@
     <!-- Build all necessary projects -->
     <MSBuild Projects="..\..\Server\DeviceManager.Entity\DeviceManager.Entity.csproj;&#xD;&#xA;                       ..\..\Server\DeviceManager.FileParsing\DeviceManager.FileParsing.csproj;&#xD;&#xA;                       ..\..\Server\DeviceManager.Service\DeviceManager.Service.csproj;&#xD;&#xA;                       $(WebProjectPath)\$(WebProjectName).csproj" Properties="Configuration=$(Configuration);Platform=AnyCPU;" Targets="Clean;Build" ContinueOnError="false" />
     <!-- Publish main project -->
-    <MSBuild Projects="$(WebProjectPath)\$(WebProjectName).csproj" 
-             Properties="Configuration=$(Configuration);Platform=AnyCPU;WebPublishMethod=FileSystem;DeleteExistingFiles=True;publishUrl=$(PublishPath);" Targets="WebPublish" 
+    <MSBuild Projects="$(WebProjectPath)\$(WebProjectName).csproj"
+             Properties="Configuration=$(Configuration);Platform=AnyCPU;WebPublishMethod=FileSystem;DeleteExistingFiles=True;publishUrl=$(PublishPath);" Targets="WebPublish"
              ContinueOnError="false" />
     <!-- Get assembly version -->
     <GetAssemblyIdentity AssemblyFiles="$(PublishBinPath)\DeviceManager.Api.dll">
@@ -108,7 +108,7 @@
       </DefineConstants>
     </PropertyGroup>
     <!-- Harvest file components from bin\$(Configuration) folder -->
-    <HeatDirectory OutputFile="GeneratedComponents.wxs" DirectoryRefId="INSTALLFOLDER" ComponentGroupName="PublishedComponents" SuppressCom="true" Directory="$(PublishPath)" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" AutoGenerateGuids="false" GenerateGuidsNow="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.PublishPath" />
+    <HeatDirectory OutputFile="GeneratedComponents.wxs" DirectoryRefId="INSTALLFOLDER" ComponentGroupName="PublishedComponents" SuppressCom="true" SuppressUniqueIds="true" Directory="$(PublishPath)" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" AutoGenerateGuids="false" GenerateGuidsNow="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.PublishPath" />
   </Target>
   <Target Name="AfterBuild">
     <!-- Get assembly version -->
