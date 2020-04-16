@@ -65,10 +65,10 @@ Patch dialog sequence:
       <Publish Dialog="SetupTypeDlg" Control="TypicalButton" Order="1" Property="InstallSelectedAndNotInstalledIIS" Value="0"> <![CDATA[ NOT((&IISConfigurationFeature = 3) AND NOT (!IISConfigurationFeature = 3))]]> </Publish>
       
       <!-- TYPICAL: Care about both feature selection state & whether feature is already installed. -->
-      <Publish Dialog="SetupTypeDlg" Control="TypicalButton" Order="1" Event="Reset" Value="0">1</Publish>
-      <Publish Dialog="SetupTypeDlg" Control="TypicalButton" Order="2" Event="NewDialog" Value="DatabaseSettingsDlg"> <![CDATA[ (&DatabaseConfigurationFeature = 3) AND NOT (!DatabaseConfigurationFeature = 3) ]]> </Publish>
-      <Publish Dialog="SetupTypeDlg" Control="TypicalButton" Order="3" Event="NewDialog" Value="IISSettingsDlg"> <![CDATA[ NOT((&DatabaseConfigurationFeature = 3) AND NOT (!DatabaseConfigurationFeature = 3)) AND (&IISConfigurationFeature = 3) AND NOT (!IISConfigurationFeature = 3) ]]> </Publish>
-      <Publish Dialog="SetupTypeDlg" Control="TypicalButton" Order="4" Event="NewDialog" Value="VerifyReadyDlg"> <![CDATA[ (!DatabaseConfigurationFeature = 3) AND (!IISConfigurationFeature = 3) AND (&DatabaseConfigurationFeature = 3) AND (&IISConfigurationFeature = 3) ]]> </Publish>
+      <!--<Publish Dialog="SetupTypeDlg" Control="TypicalButton" Order="1" Event="Reset" Value="0">1</Publish>-->
+      <Publish Dialog="SetupTypeDlg" Control="TypicalButton" Order="2" Event="NewDialog" Value="DatabaseSettingsDlg"> <![CDATA[ NOT OLDERFOUND OR DB_SERVER = ""]]> </Publish>
+      <Publish Dialog="SetupTypeDlg" Control="TypicalButton" Order="3" Event="NewDialog" Value="IISSettingsDlg"> <![CDATA[ NOT OLDERFOUND OR IIS_SITE_DIRECTORY = "" ]]> </Publish>
+      <Publish Dialog="SetupTypeDlg" Control="TypicalButton" Order="4" Event="NewDialog" Value="VerifyReadyDlg"> <![CDATA[ OLDERFOUND OR (DB_SERVER <> "" AND IIS_SITE_DIRECTORY <> "")]]> </Publish>
 
       <!-- COMPLETE: Only check if the feature is already installed. Do not care about "feature selected state" -->
       <Publish Dialog="SetupTypeDlg" Control="CompleteButton" Order="1" Event="NewDialog" Value="DatabaseSettingsDlg"> <![CDATA[ NOT (!DatabaseConfigurationFeature = 3) ]]></Publish>

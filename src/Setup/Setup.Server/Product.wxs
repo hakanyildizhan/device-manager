@@ -17,7 +17,35 @@
              Compressed="yes" 
              InstallScope="perMachine" />
 
-		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed. Setup will now exit." />
+    <!-- For Minor Updates: Comment this. -->
+    <!-- For Major Upgrade: Uncomment this, comment Upgrade tag -->
+    <!-- It will remove all previous versions from Add\Remove Programs & install this new version -->
+    <!-- Beware: It will also reinstall IIS site & Database, removing all data! -->
+    <!-- Then in order to deliver minor updates again: -->
+    <!-- - Uncomment RemoveExistingProducts tag -->
+    <!-- - Up the UpgradeVersions below accordingly -->
+		<!--<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed. Setup will now exit." />-->
+
+    <!-- This is for minor updates to get installed side by side -->
+    <!-- Always up these versions to the Current product version -->
+    <!-- Comment it when delivering a major upgrade -->
+    <Upgrade Id='4AD49979-E74E-4BEE-9930-1389557CF69C'>
+      <UpgradeVersion OnlyDetect='yes' Property='SELFFOUND'
+          Minimum='1.0.0.0' IncludeMinimum='yes'
+          Maximum='1.0.0.0' IncludeMaximum='yes' />
+      <UpgradeVersion OnlyDetect='yes' Property='NEWERFOUND'
+          Minimum='1.0.0.0' IncludeMinimum='no' />
+      <UpgradeVersion OnlyDetect='yes' Property='OLDERFOUND'
+          Maximum='1.0.0.0' IncludeMaximum='no' />
+    </Upgrade>
+
+    <CustomAction Id='AlreadyUpdated' Error='[ProductName] has already been updated to 1.0.1 or newer.' />
+    <CustomAction Id='NoDowngrade' Error='A later version of [ProductName] is already installed.' />
+
+    <InstallExecuteSequence>
+      <Custom Action='AlreadyUpdated' After='FindRelatedProducts'>SELFFOUND</Custom>
+      <Custom Action='NoDowngrade' After='FindRelatedProducts'>NEWERFOUND</Custom>
+    </InstallExecuteSequence>
 
     <!-- Include .cab file into .msi file -->
     <MediaTemplate EmbedCab="yes" />
@@ -27,7 +55,8 @@
              Title="Application files"
              Description="Installs required files for the application."
              Display='expand'
-             ConfigurableDirectory='INSTALLFOLDER' AllowAdvertise='no' Absent='disallow' >
+             ConfigurableDirectory='INSTALLFOLDER'
+             >
 
       <ComponentGroupRef Id="PublishedComponents" />
       <ComponentGroupRef Id="TransformWebConfig" />

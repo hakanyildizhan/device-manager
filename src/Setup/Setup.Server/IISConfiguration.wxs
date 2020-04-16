@@ -19,8 +19,16 @@
                       Name="IIS_PORT"
                       Type="raw"/>
     </Property>
-    
+
     <Property Id="IIS_PORT_AVAILABLE" Value="0" />
+    
+    <Property Id="IIS_SITE_DIRECTORY" >
+      <RegistrySearch Id="IIS_SITE_DIRECTORY_RegistrySearch"
+                      Root="HKLM"
+                      Key="Software\Hakan Yildizhan\DeviceManager"
+                      Name="IIS_SITE_DIRECTORY"
+                      Type="raw"/>
+    </Property>
     
     <!-- Components -->
     <ComponentGroup Id="DeviceManagerIISConfiguration" >
@@ -109,6 +117,11 @@
         <RegistryKey Root="HKLM"
                      Key="Software\Hakan Yildizhan\DeviceManager">
           <RegistryValue Type="string" Name="IIS_PORT" Value="[IIS_PORT]" />
+        </RegistryKey>
+
+        <RegistryKey Root="HKLM"
+                     Key="Software\Hakan Yildizhan\DeviceManager">
+          <RegistryValue Type="string" Name="IIS_SITE_DIRECTORY" Value="[INSTALLFOLDER]" />
         </RegistryKey>
 
       </Component>

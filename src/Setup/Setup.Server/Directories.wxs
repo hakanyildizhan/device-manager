@@ -5,30 +5,17 @@
     <!-- Will default to C:\ if that is the main disk-->
     <Directory Id="TARGETDIR" Name="SourceDir">
 
-      <!-- C:\inetpub-->
-      <!--<Directory Id="INETPUB" Name="inetpub">-->
+      <!-- Default: C:\inetpub\wwwroot-->
       <Directory Id="IISROOT" Name='WebDir'>
 
-        <!-- c:\inetpub\DeviceManager-->
-        <Directory Id="INSTALLFOLDER" Name="DeviceManager" >
-
-          <Directory Id="bin" Name="bin">
-            <Directory Id="roslyn" Name="roslyn"/>
-          </Directory>
-
-          <Directory Id="ClientLibraries" Name="ClientLibraries"/>
-
-          <Directory Id="Content" Name="Content"/>
-
-          <Directory Id="Views" Name="Views"/>
-
-        </Directory>
+        <!-- Default: C:\inetpub\wwwroot\DeviceManager-->
+        <Directory Id="INSTALLFOLDER" Name="DeviceManager" />
 
       </Directory>
     </Directory>
 
     <!-- Installed files -->
-    <DirectoryRef Id="INSTALLFOLDER" FileSource="..\..\Server\DeviceManager.Api\bin\Release\Publish\"/>
+    <DirectoryRef Id="INSTALLFOLDER" FileSource="..\..\Server\DeviceManager.Api\bin\$(var.Configuration)\Publish\"/>
 
   </Fragment>
 </Wix>
