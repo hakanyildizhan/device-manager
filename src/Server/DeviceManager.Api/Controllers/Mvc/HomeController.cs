@@ -15,14 +15,14 @@ namespace DeviceManager.Api.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IUserService _userService;
+        private readonly IClientService _userService;
         private readonly IDeviceService _deviceListService;
         private readonly ISessionService _sessionService;
         private readonly ISettingsService _settingsService;
         private readonly ILogService _logService;
 
         public HomeController(
-            IUserService userService, 
+            IClientService userService, 
             IDeviceService deviceListService, 
             ISessionService sessionService,
             ISettingsService settingsService,
@@ -40,7 +40,7 @@ namespace DeviceManager.Api.Controllers
         {
             StatusPageViewModel model = new StatusPageViewModel()
             {
-                UserList = _userService.GetUserInfo(),
+                UserList = _userService.GetClientInfo(),
                 HardwareList = _deviceListService.GetDevices().OrderBy(d => d.DeviceGroup).ToList()
             };
 

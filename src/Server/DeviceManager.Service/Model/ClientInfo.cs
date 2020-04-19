@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DeviceManager.Service.Model
 {
-    public class UserInfo
+    public class ClientInfo
     {
         public string UserName { get; set; }
         public string FriendlyName { get; set; }

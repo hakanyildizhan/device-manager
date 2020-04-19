@@ -45,8 +45,8 @@ namespace DeviceManager.Service
                         IsAvailable = !DbContext.Sessions.Any(s => s.IsActive && s.Device.Id == d.Id),
                         Name = d.Name,
                         DeviceGroup = d.Group,
-                        UsedBy = activeSession?.User?.DomainUsername,
-                        UsedByFriendly = activeSession?.User?.FriendlyName
+                        UsedBy = activeSession?.Client?.DomainUsername,
+                        UsedByFriendly = activeSession?.Client?.FriendlyName
                     });
                 }
                 return devices;

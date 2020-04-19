@@ -14,10 +14,10 @@ namespace DeviceManager.Api.Controllers
 {
     public class UserController : ApiController
     {
-        private readonly IUserService _userService;
+        private readonly IClientService _userService;
         private readonly ILogService _logService;
 
-        public UserController(IUserService userService, ILogService<UserController> logService)
+        public UserController(IClientService userService, ILogService<UserController> logService)
         {
             _userService = userService;
             _logService = logService;
@@ -33,7 +33,7 @@ namespace DeviceManager.Api.Controllers
             }
 
             HttpStatusCode statusCode = HttpStatusCode.OK;
-            RegisterResult result = await _userService.RegisterUserAsync(domainUserName);
+            RegisterResult result = await _userService.RegisterClientAsync(domainUserName);
             if (result.Result == RegisterUserResult.AlreadyExists)
             {
                 statusCode = HttpStatusCode.OK;

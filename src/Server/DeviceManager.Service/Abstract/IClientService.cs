@@ -7,26 +7,26 @@ using System.Threading.Tasks;
 
 namespace DeviceManager.Service
 {
-    public interface IUserService
+    public interface IClientService
     {
         /// <summary>
-        /// Registers a new user if it does not already exist.
+        /// Registers a new client if it does not already exist.
         /// </summary>
         /// <param name="domainUserName"></param>
         /// <returns></returns>
-        Task<RegisterResult> RegisterUserAsync(string domainUserName);
+        Task<RegisterResult> RegisterClientAsync(string domainUserName);
 
         /// <summary>
-        /// Sets a friendly name for given user. Returns false if the user is not found.
+        /// Sets a friendly name for given client. Returns false if the user is not found.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
         Task<bool> SetFriendlyNameAsync(string domainUserName, string name);
 
         /// <summary>
-        /// Gets a list of users connected to the server.
+        /// Gets a list of clients connected to the server.
         /// </summary>
         /// <returns></returns>
-        IList<UserInfo> GetUserInfo();
+        IList<ClientInfo> GetClientInfo();
     }
 }

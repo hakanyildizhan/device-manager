@@ -8,7 +8,7 @@ namespace DeviceManager.Api.Model
 {
     public class StatusPageViewModel
     {
-        public IList<UserInfo> UserList { get; set; }
+        public IList<ClientInfo> UserList { get; set; }
         public IList<Device> HardwareList { get; set; }
     }
 }

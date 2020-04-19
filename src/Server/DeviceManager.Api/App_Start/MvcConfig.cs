@@ -1,5 +1,7 @@
 ﻿using DeviceManager.Api.IoC;
 using DeviceManager.Service;
+using DeviceManager.Service.Identity;
+using Microsoft.Owin.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,16 +12,22 @@ using Unity.Lifetime;
 
 namespace DeviceManager.Api
 {
-    public static class IoCMVCConfig
+    public static class MvcConfig
     {
-        public static void RegisterComponents()
+        /// <summary>
+        /// Registers types for MVC dependency injection.
+        /// </summary>
+        public static void Register()
         {
             var container = new UnityContainer();
+            container.RegisterType<IIdentityService, IdentityService>(new TransientLifetimeManager());
             container.RegisterType<IDeviceService, DeviceService>(new TransientLifetimeManager());
             container.RegisterType<ISessionService, SessionService>(new TransientLifetimeManager());
-            container.RegisterType<IUserService, UserService>(new TransientLifetimeManager());
+            container.RegisterType<IClientService, ClientService>(new TransientLifetimeManager());
             container.RegisterType<ISettingsService, SettingsService>(new TransientLifetimeManager());
             container.RegisterType(typeof(ILogService<>), typeof(NLogLogger<>));
+            container.RegisterFactory<IAuthenticationManager>(c => HttpContext.Current.GetOwinContext().Authentication);
+            IdentityStartup.RegisterServices(container);
             DependencyResolver.SetResolver(new UnityResolverMVC(container));
         }
     }
