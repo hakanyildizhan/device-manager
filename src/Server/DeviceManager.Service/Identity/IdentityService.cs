@@ -1,4 +1,5 @@
-﻿using DeviceManager.Entity.Context.Entity;
+﻿using DeviceManager.Entity.Context;
+using DeviceManager.Entity.Context.Entity;
 using DeviceManager.Service.Model;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -7,15 +8,19 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity;
 
 namespace DeviceManager.Service.Identity
 {
     public class IdentityService : IIdentityService
     {
-        
+        [Dependency]
+        public DeviceManagerContext DbContext { get; set; }
+
         private readonly ApplicationSignInManager _securityManager;
         private readonly ApplicationUserManager _userManager;
         private readonly IAuthenticationManager _authenticationManager;
@@ -38,7 +43,7 @@ namespace DeviceManager.Service.Identity
 
         public async Task<bool> LoginAsync(LoginModel model)
         {
-            var result = await _securityManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await _securityManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -51,24 +56,68 @@ namespace DeviceManager.Service.Identity
             }
         }
 
+        public async Task<bool> IsAdminAccountPresentAsync()
+        {
+            IList<UserAccount> accounts = await DbContext.Users.ToListAsync();
+            if (accounts == null || !accounts.Any())
+            {
+                return false;
+            }
+
+            foreach (var account in accounts)
+            {
+                if (_userManager.IsInRole(account.Id, "Admin"))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public void Logout()
         {
             _authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
         }
 
-        public async Task<bool> RegisterAsync(RegisterModel model)
+        public async Task<RegisterAccountResult> RegisterAsync(RegisterModel model)
         {
-            var user = new UserAccount { UserName = model.Email, Email = model.Email };
+            var user = new UserAccount { UserName = model.UserName };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
                 await _securityManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                return true;
+                var userAccount = await _userManager.FindByNameAsync(model.UserName);
+                return new RegisterAccountResult { Succeeded = true, UserId = userAccount.Id };
             }
             else
             {
+                return new RegisterAccountResult { Succeeded = false };
+            }
+        }
+
+        public bool IsUserInRole(string userId, string role)
+        {
+            return _userManager.IsInRole(userId, role);
+        }
+
+        public async Task<bool> AddUserToRoleAsync(string userId, string role)
+        {
+            var result = await _userManager.AddToRoleAsync(userId, role);
+            return result.Succeeded;
+        }
+
+        public async Task<bool> RemoveUserAsync(string userId)
+        {
+            var user = DbContext.Users.Find(userId);
+
+            if (user == null)
+            {
                 return false;
             }
+
+            var result = await _userManager.DeleteAsync(user);
+            return result.Succeeded;
         }
     }
 }

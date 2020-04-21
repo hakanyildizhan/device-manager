@@ -15,9 +15,17 @@ namespace DeviceManager.Api
     public static class MvcConfig
     {
         /// <summary>
-        /// Registers types for MVC dependency injection.
+        /// Sets up initial configuration for the MVC part of the application.
         /// </summary>
         public static void Register()
+        {
+            ConfigureDIContainer();
+        }
+
+        /// <summary>
+        /// Registers types for dependency injection.
+        /// </summary>
+        private static void ConfigureDIContainer()
         {
             var container = new UnityContainer();
             container.RegisterType<IIdentityService, IdentityService>(new TransientLifetimeManager());

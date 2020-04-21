@@ -84,7 +84,7 @@
                         }
                         <span id="upload-finished-message" hidden="hidden">Import is completed. Click Next to confirm data import.</span>
                         <span id="upload-finished-message-error" hidden="hidden">An error occurred during upload. Please try again later.</span>
-                        @using (Html.BeginForm("ImportData", "Home", FormMethod.Post, new { id = "importData", enctype = "multipart/form-data" }))
+                        @using (Html.BeginForm("ImportData", "Administration", FormMethod.Post, new { id = "importData", enctype = "multipart/form-data" }))
                         {
                             @*<div id="hardwarePreview" hidden="hidden"></div>*@
                             @*<button id="confirm" type="submit" class="btn btn-primary">Confirm</button>*@
@@ -170,7 +170,7 @@
                     });
 
                     $.ajax({
-                        url: '/Home/ImportData',
+                        url: '/Administration/ImportData',
                         type: 'POST',
                         data: JSON.stringify({ 'hardwareList': hardwareList }),
                         dataType: 'json',

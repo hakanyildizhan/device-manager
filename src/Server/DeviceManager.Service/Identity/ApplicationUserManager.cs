@@ -21,22 +21,22 @@ namespace DeviceManager.Service.Identity
             // Configure validation logic for usernames
             this.UserValidator = new UserValidator<UserAccount>(this)
             {
-                AllowOnlyAlphanumericUserNames = false,
-                RequireUniqueEmail = true
+                AllowOnlyAlphanumericUserNames = false
+                //RequireUniqueEmail = true
             };
 
             // Configure validation logic for passwords
             this.PasswordValidator = new PasswordValidator
             {
-                RequiredLength = 6,
-                RequireNonLetterOrDigit = true,
-                RequireDigit = true,
-                RequireLowercase = true,
-                RequireUppercase = true,
+                RequiredLength = 5,
+                RequireNonLetterOrDigit = false,
+                RequireDigit = false,
+                RequireLowercase = false,
+                RequireUppercase = false
             };
 
             // Configure user lockout defaults
-            this.UserLockoutEnabledByDefault = true;
+            this.UserLockoutEnabledByDefault = false;
             this.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
             this.MaxFailedAccessAttemptsBeforeLockout = 5;
 

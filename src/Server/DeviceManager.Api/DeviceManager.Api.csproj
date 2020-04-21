@@ -173,6 +173,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Api\DeviceController.cs" />
     <Compile Include="Controllers\Mvc\AccountController.cs" />
+    <Compile Include="Controllers\Mvc\AdministrationController.cs" />
     <Compile Include="Controllers\Mvc\HomeController.cs" />
     <Compile Include="Controllers\Api\RefreshController.cs" />
     <Compile Include="Controllers\Api\SessionController.cs" />
@@ -241,20 +242,21 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Home\Settings.cshtml" />
-    <Content Include="Views\Home\Manage.cshtml" />
+    <Content Include="Views\Administration\Settings.cshtml" />
+    <Content Include="Views\Administration\Import.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Scripts\" />
-    <Folder Include="Views\Account\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\LocalProfile.pubxml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\Partial\HardwareListPreview.cshtml" />
+    <Content Include="Views\Administration\Partial\HardwareListPreview.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DeviceManager.FileParsing\DeviceManager.FileParsing.csproj">

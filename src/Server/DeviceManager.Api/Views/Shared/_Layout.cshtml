@@ -23,15 +23,30 @@
                     <li class="nav-item active @(ViewBag.ActivePage == "Index" ? "current-page" : "")">
                         <a class="nav-link" href="@Url.Action("Index", "Home")">Server status<span class="sr-only">(current)</span></a>
                     </li>
-                    @*<li class="nav-item active @(ViewBag.ActivePage == "Manage" ? "current-page" : "")">
-                        <a class="nav-link" href="@Url.Action("Manage", "Home")">Manage hardware list</a>
-                    </li>*@
-                    <li class="nav-item active @(ViewBag.ActivePage == "Manage" ? "current-page" : "")">
-                        <a class="nav-link" href="@Url.Action("Index", "Account")">Manage hardware list</a>
-                    </li>
-                    <li class="nav-item active @(ViewBag.ActivePage == "Settings" ? "current-page" : "")">
-                        <a class="nav-link" href="@Url.Action("Settings", "Home")">Server settings</a>
-                    </li>
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li class="nav-item active @(ViewBag.ActivePage == "Settings" ? "current-page" : "")">
+                            <a class="nav-link" href="@Url.Action("Settings", "Administration")">Server settings</a>
+                        </li>
+                        <li class="nav-item active @(ViewBag.ActivePage == "Import" ? "current-page" : "")">
+                            <a class="nav-link" href="@Url.Action("Import", "Administration")">Import hardware</a>
+                        </li>
+                        <li class="nav-item active">
+                            @using (Html.BeginForm("Logout", "Account", FormMethod.Post, new { id = "logout-form" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <li class="nav-item active">
+                                    <a class="nav-link" href="#" onclick="$('#logout-form').submit();">Logout</a>
+                                </li>
+                            }
+                        </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item active @(ViewBag.ActivePage == "Manage" ? "current-page" : "")">
+                                <a class="nav-link" href="@Url.Action("Index", "Account")">Manage</a>
+                            </li>
+                        }
                 </ul>
             </div>
         </nav>
@@ -43,7 +58,5 @@
     </div>
 
     @RenderSection("scripts", required: false)
-    
-    
 </body>
 </html>
