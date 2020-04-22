@@ -1,6 +1,7 @@
 ﻿using DeviceManager.Api.Model;
 using DeviceManager.FileParsing;
 using DeviceManager.Service;
+using DeviceManager.Service.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,18 +17,18 @@ namespace DeviceManager.Api.Controllers
     {
         private readonly ISettingsService _settingsService;
         private readonly ILogService _logService;
-        private readonly IDeviceService _deviceListService;
+        private readonly IDeviceService _deviceService;
         private readonly ISessionService _sessionService;
 
         public AdministrationController(
-            ISettingsService settingsService, 
+            ISettingsService settingsService,
             ILogService<AdministrationController> logService,
             IDeviceService deviceListService,
             ISessionService sessionService)
         {
             _settingsService = settingsService;
             _logService = logService;
-            _deviceListService = deviceListService;
+            _deviceService = deviceListService;
             _sessionService = sessionService;
         }
 
@@ -36,7 +37,7 @@ namespace DeviceManager.Api.Controllers
         {
             ViewBag.ActivePage = "Settings";
             Dictionary<string, string> settings = _settingsService.Get();
-            return View(settings);
+            return View("Settings", settings);
         }
 
         // GET: Settings
@@ -52,6 +53,137 @@ namespace DeviceManager.Api.Controllers
         {
             ViewBag.ActivePage = "Import";
             return View();
+        }
+
+        // GET: Review
+        public ActionResult Review()
+        {
+            ViewBag.ActivePage = "Review";
+            var hardwareList = _deviceService.GetDevices().OrderBy(d => d.DeviceGroup).ToList();
+            return View(hardwareList);
+        }
+
+        // POST: UpdateHardware
+        /// <summary>
+        /// This method parses the information on Edit Hardware modal dialog in order to update the corresponding item.
+        /// </summary>
+        /// <param name="device"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UpdateHardware(DeviceDetail device)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Json(new
+                {
+                    success = false,
+                    formErrors = ModelState.Select(kvp => new { key = kvp.Key, errors = kvp.Value.Errors.Select(e => e.ErrorMessage) })
+                });
+            }
+
+            bool result = await _deviceService.UpdateDevice(device);
+
+            return Json(new
+            {
+                success = result
+            });
+        }
+
+        // POST: DeleteHardware
+        /// <summary>
+        /// This method parses the information on Delete Hardware modal dialog in order to update the corresponding item.
+        /// </summary>
+        /// <param name="device"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteHardware(DeviceDetail device)
+        {
+            bool result = await _deviceService.DeactivateDevice(device.Id);
+
+            return Json(new
+            {
+                success = result
+            });
+        }
+
+        // POST: AddHardware
+        /// <summary>
+        /// This method parses the information on Add New Hardware modal dialog in order to add a new item.
+        /// </summary>
+        /// <param name="device"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddHardware(DeviceDetail device)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Json(new
+                {
+                    success = false,
+                    formErrors = ModelState.Select(kvp => new { key = kvp.Key, errors = kvp.Value.Errors.Select(e => e.ErrorMessage) })
+                });
+            }
+
+            bool result = await _deviceService.AddDevice(device);
+
+            return Json(new
+            {
+                success = result
+            });
+        }
+
+        /// <summary>
+        /// Shows a modal dialog for editing a hardware item.
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult UpdateHardwarePopup(string itemId)
+        {
+            int deviceId;
+            bool idIsValid = int.TryParse(itemId, out deviceId);
+
+            if (!idIsValid)
+            {
+                return RedirectToAction("Review");
+            }
+
+            var device = _deviceService.GetDevice(deviceId);
+            return PartialView("~/Views/Administration/Partial/HardwareUpdate.cshtml", device);
+        }
+
+        /// <summary>
+        /// Shows a modal dialog for deleting a hardware item.
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult DeleteHardwarePopup(string itemId)
+        {
+            int deviceId;
+            bool idIsValid = int.TryParse(itemId, out deviceId);
+
+            if (!idIsValid)
+            {
+                return RedirectToAction("Review");
+            }
+
+            var device = _deviceService.GetDevice(deviceId);
+            return PartialView("~/Views/Administration/Partial/HardwareDelete.cshtml", device);
+        }
+
+        /// <summary>
+        /// Shows a modal dialog for adding a new hardware item.
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult AddHardwarePopup()
+        {
+            return PartialView("~/Views/Administration/Partial/HardwareAdd.cshtml");
         }
 
         // POST: UploadFile
@@ -91,7 +223,7 @@ namespace DeviceManager.Api.Controllers
                 return Json(new
                 {
                     Error = false,
-                    Message = RenderRazorViewToString("Partial/HardwareListPreview", hardwareList.ToHardwareInfo())
+                    Message = RenderRazorViewToString("~/Views/Administration/Partial/HardwareListPreview.cshtml", hardwareList.ToHardwareInfo())
                 });
             }
             catch (Exception ex)
@@ -110,7 +242,7 @@ namespace DeviceManager.Api.Controllers
         public async Task<JsonResult> ImportData(IEnumerable<HardwareInfo> hardwareList)
         {
             bool success = await _sessionService.EndActiveSessionsAsync();
-            success &= await _deviceListService.Import(hardwareList.ToDeviceImport());
+            success &= await _deviceService.Import(hardwareList.ToDeviceImport());
 
             return Json(new
             {

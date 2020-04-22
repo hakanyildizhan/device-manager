@@ -197,6 +197,42 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ClientLibraries\font-awesome\css\all.css" />
+    <Content Include="ClientLibraries\font-awesome\css\all.min.css" />
+    <Content Include="ClientLibraries\font-awesome\css\brands.css" />
+    <Content Include="ClientLibraries\font-awesome\css\brands.min.css" />
+    <Content Include="ClientLibraries\font-awesome\css\fontawesome.css" />
+    <Content Include="ClientLibraries\font-awesome\css\fontawesome.min.css" />
+    <Content Include="ClientLibraries\font-awesome\css\regular.css" />
+    <Content Include="ClientLibraries\font-awesome\css\regular.min.css" />
+    <Content Include="ClientLibraries\font-awesome\css\solid.css" />
+    <Content Include="ClientLibraries\font-awesome\css\solid.min.css" />
+    <Content Include="ClientLibraries\font-awesome\css\svg-with-js.css" />
+    <Content Include="ClientLibraries\font-awesome\css\svg-with-js.min.css" />
+    <Content Include="ClientLibraries\font-awesome\css\v4-shims.css" />
+    <Content Include="ClientLibraries\font-awesome\css\v4-shims.min.css" />
+    <Content Include="ClientLibraries\font-awesome\js\all.js" />
+    <Content Include="ClientLibraries\font-awesome\js\all.min.js" />
+    <Content Include="ClientLibraries\font-awesome\js\brands.js" />
+    <Content Include="ClientLibraries\font-awesome\js\brands.min.js" />
+    <Content Include="ClientLibraries\font-awesome\js\conflict-detection.js" />
+    <Content Include="ClientLibraries\font-awesome\js\conflict-detection.min.js" />
+    <Content Include="ClientLibraries\font-awesome\js\fontawesome.js" />
+    <Content Include="ClientLibraries\font-awesome\js\fontawesome.min.js" />
+    <Content Include="ClientLibraries\font-awesome\js\regular.js" />
+    <Content Include="ClientLibraries\font-awesome\js\regular.min.js" />
+    <Content Include="ClientLibraries\font-awesome\js\solid.js" />
+    <Content Include="ClientLibraries\font-awesome\js\solid.min.js" />
+    <Content Include="ClientLibraries\font-awesome\js\v4-shims.js" />
+    <Content Include="ClientLibraries\font-awesome\js\v4-shims.min.js" />
+    <Content Include="ClientLibraries\font-awesome\sprites\brands.svg" />
+    <Content Include="ClientLibraries\font-awesome\sprites\regular.svg" />
+    <Content Include="ClientLibraries\font-awesome\sprites\solid.svg" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-brands-400.svg" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-regular-400.svg" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-solid-900.svg" />
+    <Content Include="ClientLibraries\jquery-ajax-unobtrusive\jquery.unobtrusive-ajax.js" />
+    <Content Include="ClientLibraries\jquery-ajax-unobtrusive\jquery.unobtrusive-ajax.min.js" />
     <Content Include="ClientLibraries\jquery\core.js" />
     <Content Include="ClientLibraries\jquery\jquery.js" />
     <Content Include="ClientLibraries\jquery\jquery.min.js" />
@@ -250,6 +286,18 @@
     <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-brands-400.eot" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-brands-400.ttf" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-brands-400.woff" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-brands-400.woff2" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-regular-400.eot" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-regular-400.ttf" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-regular-400.woff" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-regular-400.woff2" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-solid-900.eot" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-solid-900.ttf" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-solid-900.woff" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-solid-900.woff2" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\LocalProfile.pubxml" />
@@ -257,6 +305,10 @@
     <Content Include="Views\Administration\Partial\HardwareListPreview.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Administration\Review.cshtml" />
+    <Content Include="Views\Administration\Partial\HardwareAdd.cshtml" />
+    <Content Include="Views\Administration\Partial\HardwareUpdate.cshtml" />
+    <Content Include="Views\Administration\Partial\HardwareDelete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DeviceManager.FileParsing\DeviceManager.FileParsing.csproj">

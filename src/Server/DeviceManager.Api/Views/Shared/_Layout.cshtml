@@ -8,6 +8,7 @@
     @Scripts.Render("~/bundles/modernizr")
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jquery-unobtrusive")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/bootstrap-wizard")
 </head>
@@ -30,6 +31,9 @@
                         </li>
                         <li class="nav-item active @(ViewBag.ActivePage == "Import" ? "current-page" : "")">
                             <a class="nav-link" href="@Url.Action("Import", "Administration")">Import hardware</a>
+                        </li>
+                        <li class="nav-item active @(ViewBag.ActivePage == "Review" ? "current-page" : "")">
+                            <a class="nav-link" href="@Url.Action("Review", "Administration")">Review hardware</a>
                         </li>
                         <li class="nav-item active">
                             @using (Html.BeginForm("Logout", "Account", FormMethod.Post, new { id = "logout-form" }))

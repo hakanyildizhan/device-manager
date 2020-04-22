@@ -11,12 +11,20 @@
       "destination": "ClientLibraries/jquery"
     },
     {
+      "library": "jquery-ajax-unobtrusive@3.2.6",
+      "destination": "ClientLibraries/jquery-ajax-unobtrusive"
+    },
+    {
       "library": "twitter-bootstrap@4.4.0",
       "destination": "ClientLibraries/twitter-bootstrap"
     },
     {
       "library": "modernizr@2.8.3",
       "destination": "ClientLibraries/modernizr"
+    },
+    {
+      "library": "font-awesome@5.13.0",
+      "destination": "ClientLibraries/font-awesome"
     }
   ]
 }

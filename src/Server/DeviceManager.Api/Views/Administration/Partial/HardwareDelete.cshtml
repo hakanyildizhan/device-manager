@@ -1,0 +1,30 @@
+﻿@using DeviceManager.Service.Model
+
+@model DeviceDetail
+
+
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="deleteHardwareModalLongTitle">Delete hardware item</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        @using (Ajax.BeginForm("DeleteHardware", "Administration", new { @class = "form-horizontal", role = "form" }, new AjaxOptions { OnSuccess = "onDeleteSuccess" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="modal-body">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(m => m.Id)
+                @Html.HiddenFor(m => m.Name)
+                <div>Are you sure you want to delete the hardware item with name @Model.Name?</div>
+            </div>
+            <div class="modal-footer">
+                <div id="delete-error" style="color:red; display:block;"/>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <input type="submit" value="Delete" class="btn btn-primary" />
+            </div>
+        }
+    </div>
+</div>

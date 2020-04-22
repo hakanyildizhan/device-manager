@@ -122,6 +122,7 @@
     <Compile Include="Identity\Model\User.cs" />
     <Compile Include="Identity\IdentityStartup.cs" />
     <Compile Include="Model\Device.cs" />
+    <Compile Include="Model\DeviceDetail.cs" />
     <Compile Include="Model\DeviceSessionInfo.cs" />
     <Compile Include="Model\DeviceImport.cs" />
     <Compile Include="Model\Enum\RegisterUserResult.cs" />
