@@ -12,6 +12,8 @@ namespace DeviceManager.Service
         {
             public const string REFRESH_INTERVAL = "refreshInterval";
             public const string LAST_DEVICE_LIST_UPDATE = "lastDeviceListUpdate";
+            public const string VERSION = "serverVersion";
+            public const string USAGE_PROMPT_INTERVAL = "usagePromptInterval";
         }
     }
 }

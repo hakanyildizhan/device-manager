@@ -119,6 +119,7 @@
     <Compile Include="Identity\Model\LoginModel.cs" />
     <Compile Include="Identity\Model\RegisterModel.cs" />
     <Compile Include="Identity\Model\RegisterAccountResult.cs" />
+    <Compile Include="Model\SettingsUpdate.cs" />
     <Compile Include="Identity\Model\User.cs" />
     <Compile Include="Identity\IdentityStartup.cs" />
     <Compile Include="Model\Device.cs" />
@@ -127,7 +128,6 @@
     <Compile Include="Model\DeviceImport.cs" />
     <Compile Include="Model\Enum\RegisterUserResult.cs" />
     <Compile Include="Model\RegisterResult.cs" />
-    <Compile Include="Model\Settings.cs" />
     <Compile Include="Model\ClientInfo.cs" />
     <Compile Include="NLogLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,15 +1,8 @@
 ﻿using DeviceManager.Api.Model;
-using DeviceManager.FileParsing;
 using DeviceManager.Service;
-using DeviceManager.Service.Model;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using FromBody = System.Web.Http.FromBodyAttribute;
 
 namespace DeviceManager.Api.Controllers
 {
@@ -17,14 +10,17 @@ namespace DeviceManager.Api.Controllers
     {
         private readonly IClientService _userService;
         private readonly IDeviceService _deviceListService;
+        private readonly ISettingsService _settingsService;
 
 
         public HomeController(
             IClientService userService, 
-            IDeviceService deviceListService)
+            IDeviceService deviceListService,
+            ISettingsService settingsService)
         {
             _userService = userService;
             _deviceListService = deviceListService;
+            _settingsService = settingsService;
         }
 
         // GET: Home
@@ -40,6 +36,18 @@ namespace DeviceManager.Api.Controllers
             return View(model);
         }
 
-        
+        //GET: Info
+        public ActionResult Info()
+        {
+            Dictionary<string, string> settings = _settingsService.Get();
+            ServerStats model = new ServerStats()
+            {
+                LastDeviceListUpdate = settings[ServiceConstants.Settings.LAST_DEVICE_LIST_UPDATE],
+                ServerVersion = settings[ServiceConstants.Settings.VERSION]
+            };
+
+            ViewBag.ActivePage = "Info";
+            return View(model);
+        }
     }
 }

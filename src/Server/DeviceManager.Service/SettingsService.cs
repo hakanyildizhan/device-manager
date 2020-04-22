@@ -38,7 +38,7 @@ namespace DeviceManager.Service
             }
         }
 
-        public async Task<bool> AddOrUpdate(string name, string value)
+        public async Task<bool> AddOrUpdateAsync(string name, string value)
         {
             try
             {

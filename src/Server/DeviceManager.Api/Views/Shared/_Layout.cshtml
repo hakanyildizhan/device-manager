@@ -30,10 +30,10 @@
                             <a class="nav-link" href="@Url.Action("Settings", "Administration")">Server settings</a>
                         </li>
                         <li class="nav-item active @(ViewBag.ActivePage == "Import" ? "current-page" : "")">
-                            <a class="nav-link" href="@Url.Action("Import", "Administration")">Import hardware</a>
+                            <a class="nav-link" href="@Url.Action("Import", "Administration")">Import hardware list</a>
                         </li>
                         <li class="nav-item active @(ViewBag.ActivePage == "Review" ? "current-page" : "")">
-                            <a class="nav-link" href="@Url.Action("Review", "Administration")">Review hardware</a>
+                            <a class="nav-link" href="@Url.Action("Review", "Administration")">Add/update/remove hardware</a>
                         </li>
                         <li class="nav-item active">
                             @using (Html.BeginForm("Logout", "Account", FormMethod.Post, new { id = "logout-form" }))
@@ -47,6 +47,9 @@
                         }
                         else
                         {
+                            <li class="nav-item active @(ViewBag.ActivePage == "Info" ? "current-page" : "")">
+                                <a class="nav-link" href="@Url.Action("Info", "Home")">Info</a>
+                            </li>
                             <li class="nav-item active @(ViewBag.ActivePage == "Manage" ? "current-page" : "")">
                                 <a class="nav-link" href="@Url.Action("Index", "Account")">Manage</a>
                             </li>

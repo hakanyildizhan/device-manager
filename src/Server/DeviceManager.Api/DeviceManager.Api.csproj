@@ -192,6 +192,8 @@
     <Compile Include="Model\SessionRequest.cs" />
     <Compile Include="Model\SetFriendlyNameRequest.cs" />
     <Compile Include="Model\View\HardwareInfo.cs" />
+    <Compile Include="Model\View\SettingsOverview.cs" />
+    <Compile Include="Model\View\ServerStats.cs" />
     <Compile Include="Model\View\StatusPageViewModel.cs" />
     <Compile Include="Model\View\UploadViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -278,7 +280,7 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Administration\Settings.cshtml" />
+    <Content Include="Views\Home\Info.cshtml" />
     <Content Include="Views\Administration\Import.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -309,6 +311,7 @@
     <Content Include="Views\Administration\Partial\HardwareAdd.cshtml" />
     <Content Include="Views\Administration\Partial\HardwareUpdate.cshtml" />
     <Content Include="Views\Administration\Partial\HardwareDelete.cshtml" />
+    <Content Include="Views\Administration\Settings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DeviceManager.FileParsing\DeviceManager.FileParsing.csproj">

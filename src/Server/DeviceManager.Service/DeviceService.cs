@@ -222,7 +222,7 @@ namespace DeviceManager.Service
 
         private async Task<bool> UpdateDeviceListUpdateDate()
         {
-            return await _settingsService.AddOrUpdate(ServiceConstants.Settings.LAST_DEVICE_LIST_UPDATE, DateTime.UtcNow.ToStringTurkish());
+            return await _settingsService.AddOrUpdateAsync(ServiceConstants.Settings.LAST_DEVICE_LIST_UPDATE, DateTime.UtcNow.ToStringTurkish());
         }
     }
 }

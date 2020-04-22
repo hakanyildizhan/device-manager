@@ -35,17 +35,22 @@ namespace DeviceManager.Api.Controllers
         // GET: Index
         public ActionResult Index()
         {
-            ViewBag.ActivePage = "Settings";
-            Dictionary<string, string> settings = _settingsService.Get();
-            return View("Settings", settings);
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Settings
         public ActionResult Settings()
         {
             ViewBag.ActivePage = "Settings";
+
             Dictionary<string, string> settings = _settingsService.Get();
-            return View(settings);
+            return View(new SettingsOverview 
+            { 
+                LastDeviceListUpdate = settings[ServiceConstants.Settings.LAST_DEVICE_LIST_UPDATE],
+                RefreshInterval = int.Parse(settings[ServiceConstants.Settings.REFRESH_INTERVAL]),
+                ServerVersion = settings[ServiceConstants.Settings.VERSION],
+                UsagePromptInterval = int.Parse(settings[ServiceConstants.Settings.USAGE_PROMPT_INTERVAL])
+            });
         }
 
         // GET: Import
@@ -61,6 +66,28 @@ namespace DeviceManager.Api.Controllers
             ViewBag.ActivePage = "Review";
             var hardwareList = _deviceService.GetDevices().OrderBy(d => d.DeviceGroup).ToList();
             return View(hardwareList);
+        }
+
+        // POST: UpdateSettings
+        /// <summary>
+        /// Updates relevant server settings.
+        /// </summary>
+        /// <param name="settings"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UpdateSettings(SettingsOverview settings)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ActivePage = "Settings";
+                return View("Settings", settings);
+            }
+
+            await _settingsService.AddOrUpdateAsync(ServiceConstants.Settings.REFRESH_INTERVAL, settings.RefreshInterval.ToString());
+            await _settingsService.AddOrUpdateAsync(ServiceConstants.Settings.USAGE_PROMPT_INTERVAL, settings.UsagePromptInterval.ToString());
+
+            return RedirectToAction("Settings");
         }
 
         // POST: UpdateHardware

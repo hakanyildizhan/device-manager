@@ -76,3 +76,11 @@ div.navbar-inner {
         background-color: #fff;
     }
 /* wizard end */
+
+.single-button-container {
+    text-align: center;
+}
+
+.single-button-container input {
+    width: 25%;
+}
