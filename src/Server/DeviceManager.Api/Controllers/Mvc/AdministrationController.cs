@@ -12,7 +12,7 @@ using System.Web.Mvc;
 
 namespace DeviceManager.Api.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class AdministrationController : Controller
     {
         private readonly ISettingsService _settingsService;

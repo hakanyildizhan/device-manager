@@ -16,6 +16,7 @@
                     <th scope="col" hidden="hidden">Id</th>
                     <th scope="col">Hardware Group</th>
                     <th scope="col">Hardware Name</th>
+                    <th scope="col">Hardware Info</th>
                     <th scope="col">Hardware Address</th>
                     <th scope="col">Connected Module Info</th>
                     <th scope="col">Update / Remove</th>
@@ -28,6 +29,7 @@
                         <td hidden="hidden">@Html.HiddenFor(d => Model[i].Id)</td>
                         <td>@Model[i].DeviceGroup</td>
                         <td>@Model[i].Name</td>
+                        <td>@Model[i].HardwareInfo</td>
                         <td>@Model[i].Address</td>
                         <td>@Model[i].ConnectedModuleInfo</td>
                         <td>
