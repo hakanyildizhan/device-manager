@@ -1,0 +1,61 @@
+﻿@using DeviceManager.Api.Model
+
+@{
+    ViewBag.Title = "Settings";
+}
+
+@model SettingsOverview
+
+<div class="row">
+    <div class="col-lg-10 content">
+        <h2>Server Settings</h2>
+        @using (Html.BeginForm("UpdateSettings", "Administration", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(m => m.ServerVersion, new { @class = "col-form-label" })
+                </div>
+                <div class="col-lg-8">
+                    @Html.TextBoxFor(m => m.ServerVersion, new { @class = "form-control", disabled = "disabled" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(m => m.LastDeviceListUpdate, new { @class = "col-form-label" })
+                </div>
+                <div class="col-lg-8">
+                    @Html.TextBoxFor(m => m.LastDeviceListUpdate, new { @class = "form-control", disabled = "disabled" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(m => m.RefreshInterval, new { @class = "col-form-label" })
+                </div>
+                <div class="col-lg-8">
+                    @Html.TextBoxFor(m => m.RefreshInterval, new { @class = "form-control" })
+                </div>
+                <div class="col-lg-4"></div>
+                <div class="col-lg-8">
+                    @Html.ValidationMessageFor(m => m.RefreshInterval, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(m => m.UsagePromptInterval, new { @class = "col-form-label" })
+                </div>
+                <div class="col-lg-8">
+                    @Html.TextBoxFor(m => m.UsagePromptInterval, new { @class = "form-control" })
+                </div>
+                <div class="col-lg-4"></div>
+                <div class="col-lg-8">
+                    @Html.ValidationMessageFor(m => m.UsagePromptInterval, "", new { @class = "text-danger" })
+                </div>
+            </div>
+             <div class="form-group single-button-container">
+                <input type="submit" value="Update Settings" class="form-control btn btn-primary" />
+            </div>
+        }
+    </div>
+</div>

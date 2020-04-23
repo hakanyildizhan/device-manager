@@ -28,7 +28,7 @@ namespace DeviceManager.Service
             {
                 Session activeSession = DbContext.Sessions
                 .Where(s => s.Device.Id == deviceId &&
-                    s.User.DomainUsername == userName &&
+                    s.Client.DomainUsername == userName &&
                     s.IsActive).FirstOrDefault();
 
                 if (activeSession != null)
@@ -39,7 +39,7 @@ namespace DeviceManager.Service
                 DbContext.Sessions.Add(new Session
                 {
                     Device = await DbContext.Devices.FindAsync(deviceId),
-                    User = await DbContext.Users.FindAsync(userName),
+                    Client = await DbContext.Clients.FindAsync(userName),
                     StartedAt = DateTime.UtcNow,
                     IsActive = true
                 });
@@ -89,7 +89,7 @@ namespace DeviceManager.Service
             {
                 Session activeSession = DbContext.Sessions
                 .Where(s => s.Device.Id == deviceId &&
-                    s.User.DomainUsername == userName &&
+                    s.Client.DomainUsername == userName &&
                     s.IsActive).FirstOrDefault();
 
                 if (activeSession == null)
@@ -147,8 +147,8 @@ namespace DeviceManager.Service
                     if (isBusy)
                     {
                         Session session = DbContext.Sessions.Where(s => s.IsActive && s.Device.Id == device.Id).FirstOrDefault();
-                        usedBy = session.User.DomainUsername;
-                        usedByFriendly = session.User.FriendlyName;
+                        usedBy = session.Client.DomainUsername;
+                        usedByFriendly = session.Client.FriendlyName;
                     }
 
                     deviceSessions.Add(new DeviceSessionInfo

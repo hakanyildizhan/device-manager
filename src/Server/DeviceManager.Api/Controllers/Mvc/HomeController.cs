@@ -1,38 +1,26 @@
 ﻿using DeviceManager.Api.Model;
-using DeviceManager.FileParsing;
 using DeviceManager.Service;
-using DeviceManager.Service.Model;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using FromBody = System.Web.Http.FromBodyAttribute;
 
 namespace DeviceManager.Api.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IUserService _userService;
+        private readonly IClientService _userService;
         private readonly IDeviceService _deviceListService;
-        private readonly ISessionService _sessionService;
         private readonly ISettingsService _settingsService;
-        private readonly ILogService _logService;
+
 
         public HomeController(
-            IUserService userService, 
-            IDeviceService deviceListService, 
-            ISessionService sessionService,
-            ISettingsService settingsService,
-            ILogService<HomeController> logService)
+            IClientService userService, 
+            IDeviceService deviceListService,
+            ISettingsService settingsService)
         {
             _userService = userService;
             _deviceListService = deviceListService;
-            _sessionService = sessionService;
             _settingsService = settingsService;
-            _logService = logService;
         }
 
         // GET: Home
@@ -40,7 +28,7 @@ namespace DeviceManager.Api.Controllers
         {
             StatusPageViewModel model = new StatusPageViewModel()
             {
-                UserList = _userService.GetUserInfo(),
+                UserList = _userService.GetClientInfo(),
                 HardwareList = _deviceListService.GetDevices().OrderBy(d => d.DeviceGroup).ToList()
             };
 
@@ -48,96 +36,18 @@ namespace DeviceManager.Api.Controllers
             return View(model);
         }
 
-        // GET: Manage
-        public ActionResult Manage()
+        //GET: Info
+        public ActionResult Info()
         {
-            ViewBag.ActivePage = "Manage";
-            return View();
-        }
-
-        // GET: Settings
-        public ActionResult Settings()
-        {
-            ViewBag.ActivePage = "Settings";
-            Dictionary<string, string> settings =_settingsService.Get();
-            return View(settings);
-        }
-
-        // POST: Dashboard/File/UploadFile
-        [HttpPost]
-        public JsonResult UploadFile(UploadViewModel viewModel)
-        {
-            // Validate inputs
-            if ((viewModel.File == null || viewModel.File.ContentLength == 0) && 
-                (string.IsNullOrEmpty(viewModel.OneNotePath) || string.IsNullOrEmpty(viewModel.OneNotePageName)))
+            Dictionary<string, string> settings = _settingsService.Get();
+            ServerStats model = new ServerStats()
             {
-                return Json(new
-                {
-                    Error = true,
-                    Message = ""
-                });
-            }
+                LastDeviceListUpdate = settings[ServiceConstants.Settings.LAST_DEVICE_LIST_UPDATE],
+                ServerVersion = settings[ServiceConstants.Settings.VERSION]
+            };
 
-            try
-            {
-                string path = string.Empty;
-
-                if (viewModel.File != null)
-                {
-                    string fileName = Path.GetFileName(viewModel.File.FileName); // extract only the filename
-                    string generatedName = fileName.Insert(viewModel.File.FileName.IndexOf('.'), "_" + DateTime.UtcNow.ToString("yyyyMMdd-HHmmss"));
-                    path = Path.Combine(Utility.GetAppRoamingFolder(), generatedName);
-                    viewModel.File.SaveAs(path);
-                }
-                else
-                {
-                    path = viewModel.OneNotePath;
-                }
-
-                IParser parser = ParserFactory.CreateParser(path, viewModel.OneNotePageName);
-                IList<Hardware> hardwareList = parser.Parse();
-
-                return Json(new
-                {
-                    Error = false,
-                    Message = RenderRazorViewToString("Partial/HardwareListPreview", hardwareList.ToHardwareInfo())
-                });
-            }
-            catch (Exception ex)
-            {
-                _logService.LogException(ex, "Error occured during file upload/processing");
-
-                return Json(new
-                {
-                    Error = true,
-                    Message = ""
-                });
-            }
-        }
-
-        [HttpPost]
-        public async Task<JsonResult> ImportData(IEnumerable<HardwareInfo> hardwareList)
-        {
-            bool success = await _sessionService.EndActiveSessionsAsync();
-            success &= await _deviceListService.Import(hardwareList.ToDeviceImport());
-
-            return Json(new
-            {
-                Error = !success
-            });
-        }
-
-        private string RenderRazorViewToString(string viewName, object model)
-        {
-            ViewData.Model = model;
-            using (var sw = new StringWriter())
-            {
-                var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
-                var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
-                viewResult.View.Render(viewContext, sw);
-                viewResult.ViewEngine.ReleaseView(ControllerContext, viewResult.View);
-                return sw.GetStringBuilder().ToString();
-            }
+            ViewBag.ActivePage = "Info";
+            return View(model);
         }
     }
 }

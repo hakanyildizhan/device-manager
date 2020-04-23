@@ -10,47 +10,47 @@ using Unity;
 
 namespace DeviceManager.Service
 {
-    public class UserService : IUserService
+    public class ClientService : IClientService
     {
         private readonly ILogService _logService;
 
         [Dependency]
         public DeviceManagerContext DbContext { get; set; }
 
-        public UserService(ILogService<UserService> logService)
+        public ClientService(ILogService<ClientService> logService)
         {
             _logService = logService;
         }
 
-        public IList<UserInfo> GetUserInfo()
+        public IList<ClientInfo> GetClientInfo()
         {
             try
             {
-                IList<UserInfo> userList = new List<UserInfo>();
-                DbContext.Users.ToList().ForEach(u => userList.Add(new UserInfo
+                IList<ClientInfo> clientList = new List<ClientInfo>();
+                DbContext.Clients.ToList().ForEach(u => clientList.Add(new ClientInfo
                 {
                     UserName = u.DomainUsername,
                     FriendlyName = u.FriendlyName
                 }));
-                return userList;
+                return clientList;
             }
             catch (Exception ex)
             {
-                _logService.LogException(ex, "Unknown error occured while getting users");
+                _logService.LogException(ex, "Unknown error occured while getting clients");
                 throw new ServiceException(ex);
             }
         }
 
-        public async Task<RegisterResult> RegisterUserAsync(string domainUserName)
+        public async Task<RegisterResult> RegisterClientAsync(string domainUserName)
         {
             try
             {
-                User user = DbContext.Users.Where(u => u.DomainUsername.Equals(domainUserName)).FirstOrDefault();
+                Client client = DbContext.Clients.Where(u => u.DomainUsername.Equals(domainUserName)).FirstOrDefault();
                 RegisterUserResult result = RegisterUserResult.Unknown;
 
-                if (user == null)
+                if (client == null)
                 {
-                    user = DbContext.Users.Add(new User { DomainUsername = domainUserName });
+                    client = DbContext.Clients.Add(new Client { DomainUsername = domainUserName });
                     await DbContext.SaveChangesAsync();
                     result = RegisterUserResult.Created;
                 }
@@ -60,10 +60,10 @@ namespace DeviceManager.Service
                 }
                 return new RegisterResult
                 {
-                    User = new UserInfo
+                    User = new ClientInfo
                     {
-                        UserName = user.DomainUsername,
-                        FriendlyName = user.FriendlyName
+                        UserName = client.DomainUsername,
+                        FriendlyName = client.FriendlyName
                     },
 
                     Result = result
@@ -71,7 +71,7 @@ namespace DeviceManager.Service
             }
             catch (System.Data.DataException ex)
             {
-                _logService.LogException(ex, $"DataException occured while registering user {domainUserName}");
+                _logService.LogException(ex, $"DataException occured while registering client {domainUserName}");
                 return new RegisterResult
                 {
                     Result = RegisterUserResult.Unknown
@@ -79,7 +79,7 @@ namespace DeviceManager.Service
             }
             catch (Exception ex)
             {
-                _logService.LogException(ex, $"Unknown error occured while registering user {domainUserName}");
+                _logService.LogException(ex, $"Unknown error occured while registering client {domainUserName}");
                 throw new ServiceException(ex);
             }
         }
@@ -88,28 +88,28 @@ namespace DeviceManager.Service
         {
             try
             {
-                bool userExists = DbContext.Users.Any(u => u.DomainUsername.Equals(domainUserName));
+                bool clientExists = DbContext.Clients.Any(u => u.DomainUsername.Equals(domainUserName));
 
-                if (!userExists)
+                if (!clientExists)
                 {
                     return false;
                 }
                 else
                 {
-                    User user = await DbContext.Users.FindAsync(domainUserName);
-                    user.FriendlyName = name;
+                    Client client = await DbContext.Clients.FindAsync(domainUserName);
+                    client.FriendlyName = name;
                     await DbContext.SaveChangesAsync();
                     return true;
                 }
             }
             catch (System.Data.DataException ex)
             {
-                _logService.LogException(ex, $"DataException occured while setting name for user {domainUserName}");
+                _logService.LogException(ex, $"DataException occured while setting name for client {domainUserName}");
                 return false;
             }
             catch (Exception ex)
             {
-                _logService.LogException(ex, $"DataException occured while setting name for user {domainUserName}");
+                _logService.LogException(ex, $"DataException occured while setting name for client {domainUserName}");
                 throw new ServiceException(ex);
             }
         }

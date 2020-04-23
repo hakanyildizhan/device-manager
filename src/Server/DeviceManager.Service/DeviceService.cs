@@ -45,8 +45,8 @@ namespace DeviceManager.Service
                         IsAvailable = !DbContext.Sessions.Any(s => s.IsActive && s.Device.Id == d.Id),
                         Name = d.Name,
                         DeviceGroup = d.Group,
-                        UsedBy = activeSession?.User?.DomainUsername,
-                        UsedByFriendly = activeSession?.User?.FriendlyName
+                        UsedBy = activeSession?.Client?.DomainUsername,
+                        UsedByFriendly = activeSession?.Client?.FriendlyName
                     });
                 }
                 return devices;
@@ -65,9 +65,9 @@ namespace DeviceManager.Service
 
         public async Task<bool> Import(IEnumerable<DeviceImport> deviceData)
         {
-            try
+            using (var transaction = DbContext.Database.BeginTransaction())
             {
-                using (var transaction = DbContext.Database.BeginTransaction())
+                try
                 {
                     DbContext.Devices.ToList().ForEach(d => { d.IsActive = false; });
                     await DbContext.SaveChangesAsync();
@@ -86,25 +86,143 @@ namespace DeviceManager.Service
                         }
                     }
 
-                    bool lastUpdateSaved = await _settingsService.AddOrUpdate(ServiceConstants.Settings.LAST_DEVICE_LIST_UPDATE, DateTime.UtcNow.ToStringTurkish());
-
-                    if (lastUpdateSaved)
-                    {
-                        transaction.Commit();
-                    }
+                    await UpdateDeviceListUpdateDate();
+                    transaction.Commit();
                 }
-                return true;
+                catch (System.Data.DataException ex)
+                {
+                    _logService.LogException(ex, "DataException occured during hardware import");
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    _logService.LogException(ex, "Unknown error occured during hardware import");
+                    throw new ServiceException(ex);
+                }
             }
-            catch (System.Data.DataException ex)
+            return true;
+        }
+
+        public DeviceDetail GetDevice(int id)
+        {
+            Entity.Context.Entity.Device device = DbContext.Devices.Find(id);
+
+            if (device == null)
             {
-                _logService.LogException(ex, "DataException occured during hardware import");
-                return false;
+                _logService.LogError($"Device with Id {id} was not found. Could not fetch device");
+                return null;
             }
-            catch (Exception ex)
+
+            return new DeviceDetail
             {
-                _logService.LogException(ex, "Unknown error occured during hardware import");
-                throw new ServiceException(ex);
+                Id = device.Id,
+                Info = device.HardwareInfo,
+                Address = device.Address,
+                Address2 = device.Address2,
+                ConnectedModuleInfo = device.ConnectedModuleInfo,
+                Name = device.Name,
+                Group = device.Group
+            };
+        }
+
+        public async Task<bool> AddDevice(DeviceDetail device)
+        {
+            using (var transaction = DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    DbContext.Devices.Add(new Entity.Context.Entity.Device()
+                    {
+                        Name = device.Name,
+                        Group = device.Group,
+                        Address = device.Address,
+                        Address2 = device.Address2,
+                        ConnectedModuleInfo = device.ConnectedModuleInfo,
+                        HardwareInfo = device.Info,
+                        IsActive = true
+                    });
+
+                    await DbContext.SaveChangesAsync();
+                    await UpdateDeviceListUpdateDate();
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    _logService.LogException(ex, "Error occured during adding new device item");
+                    transaction.Rollback();
+                    return false;
+                }
             }
+        }
+
+        public async Task<bool> UpdateDevice(DeviceDetail device)
+        {
+            using (var transaction = DbContext.Database.BeginTransaction())
+            {
+                var existingDevice = await DbContext.Devices.FindAsync(device.Id);
+
+                if (existingDevice == null)
+                {
+                    _logService.LogError($"Device with Id {device.Id} was not found. Could not update device");
+                    return false;
+                }
+
+                try
+                {
+                    existingDevice.Name = device.Name;
+                    existingDevice.Group = device.Group;
+                    existingDevice.HardwareInfo = device.Info;
+                    existingDevice.ConnectedModuleInfo = device.ConnectedModuleInfo;
+                    existingDevice.Address = device.Address;
+                    existingDevice.Address2 = device.Address2;
+
+                    await DbContext.SaveChangesAsync();
+                    await UpdateDeviceListUpdateDate();
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    _logService.LogException(ex, "Error occured during device item update");
+                    transaction.Rollback();
+                    return false;
+                }
+            }
+        }
+
+        public async Task<bool> DeactivateDevice(int deviceId)
+        {
+            using (var transaction = DbContext.Database.BeginTransaction())
+            {
+                var existingDevice = await DbContext.Devices.FindAsync(deviceId);
+
+                if (existingDevice == null)
+                {
+                    _logService.LogError($"Device with Id {deviceId} was not found. Could not deactivate device");
+                    return false;
+                }
+
+                try
+                {
+                    existingDevice.IsActive = false;
+                    await DbContext.SaveChangesAsync();
+                    await UpdateDeviceListUpdateDate();
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    _logService.LogException(ex, "Error occured during deleting device item");
+                    transaction.Rollback();
+                    return false;
+                }
+            }
+        }
+
+        private async Task<bool> UpdateDeviceListUpdateDate()
+        {
+            return await _settingsService.AddOrUpdateAsync(ServiceConstants.Settings.LAST_DEVICE_LIST_UPDATE, DateTime.UtcNow.ToStringTurkish());
         }
     }
 }

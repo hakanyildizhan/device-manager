@@ -1,0 +1,31 @@
+﻿@using DeviceManager.Api.Model
+
+@{
+    ViewBag.Title = "Info";
+}
+
+@model ServerStats
+
+<div class="row">
+    <div class="col-lg-8 content">
+        <h2>Server info</h2>
+        <form class="content">
+            <div class="form-group row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(m => Model.ServerVersion, new { @class = "col-form-label" })
+                </div>
+                <div class="col-lg-8">
+                    @Html.TextBoxFor(m => Model.ServerVersion, new { @class = "form-control", disabled = "disabled" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-lg-4">
+                    @Html.LabelFor(m => Model.LastDeviceListUpdate, new { @class = "col-form-label" })
+                </div>
+                <div class="col-lg-8">
+                    @Html.TextBoxFor(m => Model.LastDeviceListUpdate, new { @class = "form-control", disabled = "disabled" })
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

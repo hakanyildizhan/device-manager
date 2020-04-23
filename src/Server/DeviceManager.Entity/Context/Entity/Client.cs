@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DeviceManager.Entity.Context.Entity
 {
-    public class User
+    public class Client
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

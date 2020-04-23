@@ -12,23 +12,27 @@ namespace DeviceManager.Api
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/ClientLibraries/jquery/jquery.js"));
+                        "~/ClientLibraries/jquery/jquery.min.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jquery-unobtrusive").Include(
+                        "~/ClientLibraries/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-                        "~/ClientLibraries/modernizr/modernizr.js"));
+                        "~/ClientLibraries/modernizr/modernizr.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                        "~/ClientLibraries/twitter-bootstrap/js/bootstrap.js"));
+                        "~/ClientLibraries/twitter-bootstrap/js/bootstrap.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap-wizard").Include(
                         "~/ClientLibraries/twitter-bootstrap-wizard/jquery.bootstrap.wizard.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                        "~/ClientLibraries/twitter-bootstrap/css/bootstrap.css",
+                        "~/ClientLibraries/twitter-bootstrap/css/bootstrap.min.css",
                         "~/Content/Styles/site.css",
-                        "~/Content/Styles/loading-button.css"));
+                        "~/Content/Styles/loading-button.css",
+                        "~/ClientLibraries/font-awesome/css/all.min.css"));
         }
     }
 }

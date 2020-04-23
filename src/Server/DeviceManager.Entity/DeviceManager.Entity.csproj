@@ -44,6 +44,12 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.3\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.3\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -58,8 +64,9 @@
     <Compile Include="Context\Entity\Device.cs" />
     <Compile Include="Context\Entity\Session.cs" />
     <Compile Include="Context\Entity\Setting.cs" />
-    <Compile Include="Context\Entity\User.cs" />
+    <Compile Include="Context\Entity\Client.cs" />
     <Compile Include="Context\DeviceManagerContext.cs" />
+    <Compile Include="Context\Entity\Identity\UserAccount.cs" />
     <Compile Include="Migrations\202003172007444_InitialCreate.cs" />
     <Compile Include="Migrations\202003172007444_InitialCreate.designer.cs">
       <DependentUpon>202003172007444_InitialCreate.cs</DependentUpon>
@@ -92,6 +99,10 @@
     <Compile Include="Migrations\202004010955138_Settings.designer.cs">
       <DependentUpon>202004010955138_Settings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202004171059111_Identity.cs" />
+    <Compile Include="Migrations\202004171059111_Identity.designer.cs">
+      <DependentUpon>202004171059111_Identity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -123,6 +134,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202004010955138_Settings.resx">
       <DependentUpon>202004010955138_Settings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004171059111_Identity.resx">
+      <DependentUpon>202004171059111_Identity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
