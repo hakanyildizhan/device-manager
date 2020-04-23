@@ -82,7 +82,13 @@
                         {
                             <button id="upload" hidden="hidden" type="submit">In progress</button>
                         }
-                        <span id="upload-finished-message" hidden="hidden">Import is completed. Click Next to confirm data import.</span>
+                        <div class="row">
+                            <span id="upload-finished-message" hidden="hidden">Import is completed. Click Next to confirm data import.</span>
+                        </div>
+                        <div class="row">
+                            <span id="discarded-row-warning" hidden="hidden" style="color:red;font-weight:bold;"></span>
+                        </div>
+                        
                         <span id="upload-finished-message-error" hidden="hidden">An error occurred during upload. Please try again later.</span>
                         @using (Html.BeginForm("ImportData", "Administration", FormMethod.Post, new { id = "importData", enctype = "multipart/form-data" }))
                         {
@@ -293,6 +299,11 @@
                     $('div#upload-error').hide();
                     $('span#upload-finished-message').removeAttr('hidden');
                     $('#importData').html(data.Message);
+
+                    if (data.DiscardedRowWarning) {
+                        $('#discarded-row-warning').removeAttr('hidden');
+                        $('#discarded-row-warning').html(data.DiscardedRowWarning);
+                    }
 
                     makeNextActive();
                 }

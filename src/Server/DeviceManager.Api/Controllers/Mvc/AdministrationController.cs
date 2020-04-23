@@ -247,10 +247,23 @@ namespace DeviceManager.Api.Controllers
                 IParser parser = ParserFactory.CreateParser(path, viewModel.OneNotePageName);
                 IList<Hardware> hardwareList = parser.Parse();
 
+                // if name, primary address or hardware info is null or empty, discard those items
+                List<Hardware> invalidRows = hardwareList
+                    .Where(r => string.IsNullOrWhiteSpace(r.Name) ||
+                                string.IsNullOrWhiteSpace(r.PrimaryAddress) ||
+                                string.IsNullOrWhiteSpace(r.HardwareInfo))
+                    .ToList();
+
+                if (invalidRows.Any())
+                {
+                    invalidRows.ForEach(invalidRow => hardwareList.Remove(invalidRow));
+                }
+
                 return Json(new
                 {
                     Error = false,
-                    Message = RenderRazorViewToString("~/Views/Administration/Partial/HardwareListPreview.cshtml", hardwareList.ToHardwareInfo())
+                    Message = RenderRazorViewToString("~/Views/Administration/Partial/HardwareListPreview.cshtml", hardwareList.ToHardwareInfo()),
+                    DiscardedRowWarning = invalidRows.Any() ? "Some rows were discarded. Make sure that each row has its hardware name, primary address and hardware info filled and not set to an empty string." : ""
                 });
             }
             catch (Exception ex)
