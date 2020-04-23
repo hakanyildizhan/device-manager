@@ -78,7 +78,7 @@
                 </div>
                 <div class="tab-pane" id="tab2">
                     <div class="tab-content">
-                        @using (Html.BeginForm("UploadFile", "Home", FormMethod.Post, new { id = "fileUpload", enctype = "multipart/form-data" }))
+                        @using (Html.BeginForm("UploadFile", "Administration", FormMethod.Post, new { id = "fileUpload", enctype = "multipart/form-data" }))
                         {
                             <button id="upload" hidden="hidden" type="submit">In progress</button>
                         }
@@ -86,8 +86,6 @@
                         <span id="upload-finished-message-error" hidden="hidden">An error occurred during upload. Please try again later.</span>
                         @using (Html.BeginForm("ImportData", "Administration", FormMethod.Post, new { id = "importData", enctype = "multipart/form-data" }))
                         {
-                            @*<div id="hardwarePreview" hidden="hidden"></div>*@
-                            @*<button id="confirm" type="submit" class="btn btn-primary">Confirm</button>*@
                         }
                     </div>
                 </div>
@@ -142,7 +140,6 @@
                         else {
                             makeNextActive();
                         }
-                        //makeNextActive();
                     });
                 }
 
@@ -178,7 +175,6 @@
                         contentType: 'application/json; charset=utf-8',
                         processData: false,
                         success: function (data) {
-                            //$(confirmButton).removeClass('loader active');
 
                             if (data.Error === true) {
                                 $('#import-finished-message-error').removeAttr('hidden');
@@ -267,15 +263,6 @@
         formData.append('OneNotePageName', $('input#inputPageName').val());
         formData.append('OneNotePath', $('input#inputOneNotePath').val());
 
-        //var viewModel = [];
-        //viewModel.push({
-        //    File: $('input#inputGroupFile04').prop('files')[0],
-        //    PageName: $('input#inputPageName').val()
-        //});
-
-        //var uploadButton = $('button#upload');
-        //$(uploadButton).addClass('loader active');
-
         function makeButtonUnclickable(btn) {
             $(btn).click(function () {
                 var input = this;
@@ -292,42 +279,27 @@
         $.ajax({
             url: this.action,
             type: 'POST',
-            //data: JSON.stringify({ 'viewModel': viewModel }),//formdata,
             data: formData,
-            //dataType: 'json',
             cache: false,
-            //contentType: 'application/json',//'application/json; charset=utf-8',//false,
-            //contentType: "application/x-www-form-urlencoded; charset=UTF-8",
             contentType: false,
             processData: false,
             success: function (data) {
-                //$(uploadButton).removeClass('loader active');
 
                 if (data.Error === true) {
-                    //$(uploadButton).text('Error');
-                    //$(uploadButton).addClass('error animated pulse');
                     $('div#upload-error').removeAttr('hidden');
                     $('span#upload-finished-message-error').removeAttr('hidden');
                 }
                 else {
-                    //$(uploadButton).text('Success');
-                    //$(uploadButton).addClass('success animated pulse');
                     $('div#upload-error').hide();
-
                     $('span#upload-finished-message').removeAttr('hidden');
                     $('#importData').html(data.Message);
-                    //$('#hardwarePreview').removeAttr('hidden');
+
                     makeNextActive();
                 }
                 setSpinner(false);
-                //makeButtonUnclickable(uploadButton);
-                //console.log('Error: ' + data.error);
             },
             error: function (xhr, error, status) {
                 console.log(error, status);
-                //$(uploadButton).text('Error');
-                //$(uploadButton).addClass('error animated pulse');
-                //makeButtonUnclickable(uploadButton);
                 $('span#upload-finished-message-error').removeAttr('hidden');
                 setSpinner(false);
             }

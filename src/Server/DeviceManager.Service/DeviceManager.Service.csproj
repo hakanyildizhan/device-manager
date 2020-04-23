@@ -113,6 +113,7 @@
     <Compile Include="Helper\ServiceException.cs" />
     <Compile Include="Helper\Utility.cs" />
     <Compile Include="Identity\ApplicationUserManager.cs" />
+    <Compile Include="Identity\IdentityConstants.cs" />
     <Compile Include="Identity\IdentityService.cs" />
     <Compile Include="Identity\ApplicationSignInManager.cs" />
     <Compile Include="Identity\ApplicationUserStore.cs" />

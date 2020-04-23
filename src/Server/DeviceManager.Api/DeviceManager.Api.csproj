@@ -256,6 +256,7 @@
     <Content Include="ClientLibraries\twitter-bootstrap\js\bootstrap.min.js" />
     <Content Include="Content\Styles\loading-button.css" />
     <Content Include="Content\Styles\site.css" />
+    <Content Include="Content\Images\icon.ico" />
     <Content Include="Global.asax" />
     <Content Include="libman.json" />
     <Content Include="ClientLibraries\jquery\jquery.min.map" />

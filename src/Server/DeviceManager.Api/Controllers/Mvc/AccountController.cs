@@ -66,6 +66,11 @@ namespace DeviceManager.Api.Controllers
         }
 
         // POST: /Account/Register
+        /// <summary>
+        /// Registers a user with "Admin" role.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -76,19 +81,8 @@ namespace DeviceManager.Api.Controllers
                 return View(model);
             }
 
-            var result = await _identityService.RegisterAsync(model);
-
-            if (result.Succeeded)
-            {
-                bool addToRoleSucceeded = await _identityService.AddUserToRoleAsync(result.UserId, "Admin");
-
-                if (!addToRoleSucceeded)
-                {
-                    await _identityService.RemoveUserAsync(result.UserId);
-                }
-            }
-
-            return RedirectToAction("Index", "Administration");
+            var result = await _identityService.RegisterWithRoleAsync(model, "Admin");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

@@ -2,427 +2,635 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
         <DirectoryRef Id="INSTALLFOLDER">
-            <Component Id="Global.asax" Guid="{47BCC23C-655C-4A68-8E10-B3D804F0FBC8}">
+            <Component Id="Global.asax" Guid="{31DD578A-ED4A-4A9F-B261-38EE46191673}">
                 <File Id="Global.asax" KeyPath="yes" Source="$(var.PublishPath)\Global.asax" />
             </Component>
-            <Component Id="libman.json" Guid="{36062F7A-67FE-4D33-923E-6277051868A3}">
+            <Component Id="libman.json" Guid="{F991BA28-A65F-4591-86AC-9ECE89599E22}">
                 <File Id="libman.json" KeyPath="yes" Source="$(var.PublishPath)\libman.json" />
             </Component>
-            <Component Id="Web.config" Guid="{5613C220-997A-4B54-A5ED-C8EFF06B7887}">
+            <Component Id="Web.config" Guid="{B3D6AB9A-A2AA-470C-8B00-B0B473674B87}">
                 <File Id="Web.config" KeyPath="yes" Source="$(var.PublishPath)\Web.config" />
             </Component>
             <Directory Id="bin" Name="bin">
-                <Component Id="Antlr3.Runtime.dll" Guid="{E38FBBB7-3AF0-45C7-B198-6DC9B65F6843}">
+                <Component Id="Antlr3.Runtime.dll" Guid="{4E0A0346-48B6-4CB4-9358-C02A20500912}">
                     <File Id="Antlr3.Runtime.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\Antlr3.Runtime.dll" />
                 </Component>
-                <Component Id="Antlr3.Runtime.pdb" Guid="{45F4DED1-7114-4A9D-BD9E-00997DE2E264}">
+                <Component Id="Antlr3.Runtime.pdb" Guid="{68FA841D-757D-4F18-9A75-506C21035F6F}">
                     <File Id="Antlr3.Runtime.pdb" KeyPath="yes" Source="$(var.PublishPath)\bin\Antlr3.Runtime.pdb" />
                 </Component>
-                <Component Id="DeviceManager.Api.dll" Guid="{F91CE7E3-8287-43B5-9A3D-CC73C772CA31}">
+                <Component Id="DeviceManager.Api.dll" Guid="{59F32644-F28E-4D08-A35F-DD437ACF3DAD}">
                     <File Id="DeviceManager.Api.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\DeviceManager.Api.dll" />
                 </Component>
-                <Component Id="DeviceManager.Api.pdb" Guid="{89FF0148-94BD-405A-811D-09046AC9AD3A}">
+                <Component Id="DeviceManager.Api.pdb" Guid="{D41651F7-CBCC-4424-A481-5C62D1A52ADD}">
                     <File Id="DeviceManager.Api.pdb" KeyPath="yes" Source="$(var.PublishPath)\bin\DeviceManager.Api.pdb" />
                 </Component>
-                <Component Id="DeviceManager.Entity.dll" Guid="{5DDBF2E6-F226-4DDF-B462-6F3BAC65D882}">
+                <Component Id="DeviceManager.Entity.dll" Guid="{E4DABC3F-565B-4B0F-A521-123F9A4BC664}">
                     <File Id="DeviceManager.Entity.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\DeviceManager.Entity.dll" />
                 </Component>
-                <Component Id="DeviceManager.Entity.dll.config" Guid="{ED85793E-42B0-46EC-A5AB-7C70AC5D0DB1}">
+                <Component Id="DeviceManager.Entity.dll.config" Guid="{D6CBC190-9100-4A35-905C-72D2C35CB226}">
                     <File Id="DeviceManager.Entity.dll.config" KeyPath="yes" Source="$(var.PublishPath)\bin\DeviceManager.Entity.dll.config" />
                 </Component>
-                <Component Id="DeviceManager.Entity.pdb" Guid="{4CB88FB1-C7A6-46EC-9005-2F1F134D7FED}">
+                <Component Id="DeviceManager.Entity.pdb" Guid="{94BEF77D-55C4-4DCC-9A2A-FF4605FCDB5B}">
                     <File Id="DeviceManager.Entity.pdb" KeyPath="yes" Source="$(var.PublishPath)\bin\DeviceManager.Entity.pdb" />
                 </Component>
-                <Component Id="DeviceManager.FileParsing.dll" Guid="{13C03C4C-2C8C-45B9-8B4D-95EBB0173625}">
+                <Component Id="DeviceManager.FileParsing.dll" Guid="{E2D0840C-3D8B-4128-BF58-30F54C7C2658}">
                     <File Id="DeviceManager.FileParsing.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\DeviceManager.FileParsing.dll" />
                 </Component>
-                <Component Id="DeviceManager.FileParsing.pdb" Guid="{9DA1689F-0119-4774-9187-4AF098BE21F6}">
+                <Component Id="DeviceManager.FileParsing.pdb" Guid="{6BE161DE-B378-43AC-A123-C0D580C04679}">
                     <File Id="DeviceManager.FileParsing.pdb" KeyPath="yes" Source="$(var.PublishPath)\bin\DeviceManager.FileParsing.pdb" />
                 </Component>
-                <Component Id="DeviceManager.Service.dll" Guid="{BECF59CF-5BF8-418F-8059-54815B33F362}">
+                <Component Id="DeviceManager.Service.dll" Guid="{4B9D6E94-559C-40C4-A1AF-9B7888767ACB}">
                     <File Id="DeviceManager.Service.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\DeviceManager.Service.dll" />
                 </Component>
-                <Component Id="DeviceManager.Service.dll.config" Guid="{0C307DBB-83CF-4B5D-859C-EDF07040B1B3}">
+                <Component Id="DeviceManager.Service.dll.config" Guid="{E197515D-576D-4F9B-A2D8-CC961A9F4C74}">
                     <File Id="DeviceManager.Service.dll.config" KeyPath="yes" Source="$(var.PublishPath)\bin\DeviceManager.Service.dll.config" />
                 </Component>
-                <Component Id="DeviceManager.Service.pdb" Guid="{5C41B5A1-78B3-4D9C-A6F6-5E345900927A}">
+                <Component Id="DeviceManager.Service.pdb" Guid="{21A9DB72-91ED-464D-B77C-ECC3377D9398}">
                     <File Id="DeviceManager.Service.pdb" KeyPath="yes" Source="$(var.PublishPath)\bin\DeviceManager.Service.pdb" />
                 </Component>
-                <Component Id="EntityFramework.dll" Guid="{14C37C2E-6EAD-42FB-ABBD-6166E3A942CF}">
+                <Component Id="EntityFramework.dll" Guid="{378DD427-DA66-4BB3-8657-AC6033199191}">
                     <File Id="EntityFramework.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\EntityFramework.dll" />
                 </Component>
-                <Component Id="EntityFramework.SqlServer.dll" Guid="{52448A67-80AF-4D55-B6F4-86F48027C79E}">
+                <Component Id="EntityFramework.SqlServer.dll" Guid="{42365C32-7AC5-4B81-BEA0-33E38A2A8A22}">
                     <File Id="EntityFramework.SqlServer.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\EntityFramework.SqlServer.dll" />
                 </Component>
-                <Component Id="ExcelDataReader.DataSet.dll" Guid="{7E61D947-A411-47F6-AEFC-7E51490DE427}">
+                <Component Id="ExcelDataReader.DataSet.dll" Guid="{DDA99BC7-A674-4D61-95EE-D066E77BC5BE}">
                     <File Id="ExcelDataReader.DataSet.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\ExcelDataReader.DataSet.dll" />
                 </Component>
-                <Component Id="ExcelDataReader.DataSet.pdb" Guid="{C778EEB6-BB07-4398-9600-6918327DBEC6}">
+                <Component Id="ExcelDataReader.DataSet.pdb" Guid="{64F25F2E-9589-4EBF-ABA6-19681B3C98A8}">
                     <File Id="ExcelDataReader.DataSet.pdb" KeyPath="yes" Source="$(var.PublishPath)\bin\ExcelDataReader.DataSet.pdb" />
                 </Component>
-                <Component Id="ExcelDataReader.dll" Guid="{CA946DF8-90AF-4D9E-B8B9-D9F9838DD3D8}">
+                <Component Id="ExcelDataReader.dll" Guid="{1A2D9D3B-368F-42AD-B759-8777EC26C66C}">
                     <File Id="ExcelDataReader.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\ExcelDataReader.dll" />
                 </Component>
-                <Component Id="ExcelDataReader.pdb" Guid="{872EED9A-E206-418E-AF62-C92F9967B3C6}">
+                <Component Id="ExcelDataReader.pdb" Guid="{5D8A8D90-7046-4A00-9C32-84288E8A9759}">
                     <File Id="ExcelDataReader.pdb" KeyPath="yes" Source="$(var.PublishPath)\bin\ExcelDataReader.pdb" />
                 </Component>
-                <Component Id="Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" Guid="{7747D8EC-A95E-4306-B7F0-D3C019675627}">
+                <Component Id="Microsoft.AspNet.Identity.Core.dll" Guid="{D2AAF66B-8AE4-465E-B02E-ACD8F1191FFF}">
+                    <File Id="Microsoft.AspNet.Identity.Core.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\Microsoft.AspNet.Identity.Core.dll" />
+                </Component>
+                <Component Id="Microsoft.AspNet.Identity.EntityFramework.dll" Guid="{FA3BF1B0-5632-414A-94D8-554411BF05DD}">
+                    <File Id="Microsoft.AspNet.Identity.EntityFramework.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\Microsoft.AspNet.Identity.EntityFramework.dll" />
+                </Component>
+                <Component Id="Microsoft.AspNet.Identity.Owin.dll" Guid="{BC750D6E-24B9-44F2-9FCC-5C03619A7DAE}">
+                    <File Id="Microsoft.AspNet.Identity.Owin.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\Microsoft.AspNet.Identity.Owin.dll" />
+                </Component>
+                <Component Id="Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" Guid="{120A2923-327C-4337-A7B5-D61AC158FC54}">
                     <File Id="Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" />
                 </Component>
-                <Component Id="Microsoft.Web.Infrastructure.dll" Guid="{F4EE497A-C1FA-4ABB-9700-2BFB86B542C6}">
+                <Component Id="Microsoft.Owin.dll" Guid="{7BACA39C-6622-4D49-837D-96ADD7DF31FA}">
+                    <File Id="Microsoft.Owin.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\Microsoft.Owin.dll" />
+                </Component>
+                <Component Id="Microsoft.Owin.Host.SystemWeb.dll" Guid="{7955FA7F-2A82-43F0-846A-59EBFC3E5193}">
+                    <File Id="Microsoft.Owin.Host.SystemWeb.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\Microsoft.Owin.Host.SystemWeb.dll" />
+                </Component>
+                <Component Id="Microsoft.Owin.Security.Cookies.dll" Guid="{088415BA-E3F5-4BB7-8BEC-14DA8EE38DFC}">
+                    <File Id="Microsoft.Owin.Security.Cookies.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\Microsoft.Owin.Security.Cookies.dll" />
+                </Component>
+                <Component Id="Microsoft.Owin.Security.dll" Guid="{0372E537-AC8C-40C2-8D22-56899D4A239E}">
+                    <File Id="Microsoft.Owin.Security.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\Microsoft.Owin.Security.dll" />
+                </Component>
+                <Component Id="Microsoft.Owin.Security.OAuth.dll" Guid="{407FD57B-053D-44EE-AB98-E16191A75F0F}">
+                    <File Id="Microsoft.Owin.Security.OAuth.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\Microsoft.Owin.Security.OAuth.dll" />
+                </Component>
+                <Component Id="Microsoft.Web.Infrastructure.dll" Guid="{4BEBE95A-CE01-4726-AD01-7C8018F6E373}">
                     <File Id="Microsoft.Web.Infrastructure.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\Microsoft.Web.Infrastructure.dll" />
                 </Component>
-                <Component Id="Newtonsoft.Json.dll" Guid="{D813A99A-F54A-4D1E-B868-1AABADFDBEF3}">
+                <Component Id="Newtonsoft.Json.dll" Guid="{2F52197F-D575-456C-8812-734DD559614A}">
                     <File Id="Newtonsoft.Json.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\Newtonsoft.Json.dll" />
                 </Component>
-                <Component Id="NLog.dll" Guid="{FCB95D7E-727B-4A50-8DA9-C742DE3F198A}">
+                <Component Id="NLog.dll" Guid="{C609A622-EE4E-4F05-B599-DB4C8FE86279}">
                     <File Id="NLog.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\NLog.dll" />
                 </Component>
-                <Component Id="System.Net.Http.Formatting.dll" Guid="{8789F663-6EF6-4AE2-86F1-FAD4579935BD}">
+                <Component Id="Owin.dll" Guid="{B0F5511C-0FD9-4ED4-B92D-67C0AD94F644}">
+                    <File Id="Owin.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\Owin.dll" />
+                </Component>
+                <Component Id="System.Net.Http.Formatting.dll" Guid="{9236B90C-A796-4AC2-9B6C-155988159CBC}">
                     <File Id="System.Net.Http.Formatting.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\System.Net.Http.Formatting.dll" />
                 </Component>
-                <Component Id="System.Runtime.CompilerServices.Unsafe.dll" Guid="{7D0A9884-15A8-4CC1-87D8-D013ABD7A8DA}">
+                <Component Id="System.Runtime.CompilerServices.Unsafe.dll" Guid="{C28DB0EF-D3CB-443B-B2DD-587077468A26}">
                     <File Id="System.Runtime.CompilerServices.Unsafe.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\System.Runtime.CompilerServices.Unsafe.dll" />
                 </Component>
-                <Component Id="System.Web.Helpers.dll" Guid="{2E344C9D-E223-47A0-8AE8-59F4E7E760E5}">
+                <Component Id="System.Web.Helpers.dll" Guid="{66914A16-E84B-46EA-92FA-F0E6FE256AF3}">
                     <File Id="System.Web.Helpers.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\System.Web.Helpers.dll" />
                 </Component>
-                <Component Id="System.Web.Http.dll" Guid="{4B32AB5C-B459-46C5-83B6-D27897AE9255}">
+                <Component Id="System.Web.Http.dll" Guid="{1871C59D-B0B2-4930-A51C-5A0186ECF7CA}">
                     <File Id="System.Web.Http.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\System.Web.Http.dll" />
                 </Component>
-                <Component Id="System.Web.Http.WebHost.dll" Guid="{DC4520C9-FCA1-4275-8B21-7C2F55AE5DD7}">
+                <Component Id="System.Web.Http.WebHost.dll" Guid="{FBC2D818-7AE4-4AF6-94BE-4515929329D9}">
                     <File Id="System.Web.Http.WebHost.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\System.Web.Http.WebHost.dll" />
                 </Component>
-                <Component Id="System.Web.Mvc.dll" Guid="{FF49B6A9-E1CD-4DE8-AD79-ECE07089874B}">
+                <Component Id="System.Web.Mvc.dll" Guid="{FE7AC62C-5E22-46E4-9B06-A4721B95A4D2}">
                     <File Id="System.Web.Mvc.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\System.Web.Mvc.dll" />
                 </Component>
-                <Component Id="System.Web.Optimization.dll" Guid="{39239495-D337-49BA-B7E4-2D6C00E0C344}">
+                <Component Id="System.Web.Optimization.dll" Guid="{75FD370C-DF2E-479D-A492-B32DBC8788C1}">
                     <File Id="System.Web.Optimization.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\System.Web.Optimization.dll" />
                 </Component>
-                <Component Id="System.Web.Razor.dll" Guid="{9287A2D3-88E9-47DC-8672-EB707EA904D2}">
+                <Component Id="System.Web.Razor.dll" Guid="{763A14CD-CE35-441C-B9B0-37DE8D723F6F}">
                     <File Id="System.Web.Razor.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\System.Web.Razor.dll" />
                 </Component>
-                <Component Id="System.Web.WebPages.Deployment.dll" Guid="{F683D46F-D1A7-4FB3-BCDB-92F37A6596C6}">
+                <Component Id="System.Web.WebPages.Deployment.dll" Guid="{639B4FC3-91E6-4D20-AA9E-3F87A7DEF04C}">
                     <File Id="System.Web.WebPages.Deployment.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\System.Web.WebPages.Deployment.dll" />
                 </Component>
-                <Component Id="System.Web.WebPages.dll" Guid="{CCADE347-183A-4EFC-8130-FBB3346DCA58}">
+                <Component Id="System.Web.WebPages.dll" Guid="{29A9F2F7-D64F-48AE-A487-19C4D0D7474E}">
                     <File Id="System.Web.WebPages.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\System.Web.WebPages.dll" />
                 </Component>
-                <Component Id="System.Web.WebPages.Razor.dll" Guid="{4629800F-33C0-4C47-93A4-5B2B51B54AC5}">
+                <Component Id="System.Web.WebPages.Razor.dll" Guid="{08FE6353-89D5-4DC0-AAE7-1F55C167BDAD}">
                     <File Id="System.Web.WebPages.Razor.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\System.Web.WebPages.Razor.dll" />
                 </Component>
-                <Component Id="Unity.Abstractions.dll" Guid="{C356D82C-B827-4A8B-B243-C4620B7E49DC}">
+                <Component Id="Unity.Abstractions.dll" Guid="{D622D3B3-4218-46C7-93CB-3F34E892E54E}">
                     <File Id="Unity.Abstractions.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\Unity.Abstractions.dll" />
                 </Component>
-                <Component Id="Unity.Abstractions.pdb" Guid="{F7458E44-D4B1-43DC-8A9D-11FA74F278B4}">
+                <Component Id="Unity.Abstractions.pdb" Guid="{38719EE9-332A-43BF-B207-9254151EE75C}">
                     <File Id="Unity.Abstractions.pdb" KeyPath="yes" Source="$(var.PublishPath)\bin\Unity.Abstractions.pdb" />
                 </Component>
-                <Component Id="Unity.Container.dll" Guid="{296472D3-7DB5-4B8C-8164-B302F42D5B1B}">
+                <Component Id="Unity.Container.dll" Guid="{2B105408-D5D4-4E43-A1DF-CF8FE246DB9B}">
                     <File Id="Unity.Container.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\Unity.Container.dll" />
                 </Component>
-                <Component Id="Unity.Container.pdb" Guid="{6D9018B9-D81C-47BA-8EEC-248C84B5C345}">
+                <Component Id="Unity.Container.pdb" Guid="{7765B224-C796-4D4C-B3A4-64B70407477E}">
                     <File Id="Unity.Container.pdb" KeyPath="yes" Source="$(var.PublishPath)\bin\Unity.Container.pdb" />
                 </Component>
-                <Component Id="WebGrease.dll" Guid="{1BD35652-BBC4-45D0-9447-CA0E8F0AFABA}">
+                <Component Id="WebGrease.dll" Guid="{93D5E556-161D-4CDA-A9B6-CB865D06426C}">
                     <File Id="WebGrease.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\WebGrease.dll" />
                 </Component>
                 <Directory Id="roslyn" Name="roslyn">
-                    <Component Id="csc.exe" Guid="{A847FFA5-255B-402E-B5AB-4F75C0F65F9E}">
+                    <Component Id="csc.exe" Guid="{0A93C062-FD19-4159-B129-A1988DF22C86}">
                         <File Id="csc.exe" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\csc.exe" />
                     </Component>
-                    <Component Id="csc.exe.config" Guid="{647BF414-5BFF-422D-B893-704DEFA9814C}">
+                    <Component Id="csc.exe.config" Guid="{7898FE80-CFE8-47B3-AAA8-DF3AEA77D784}">
                         <File Id="csc.exe.config" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\csc.exe.config" />
                     </Component>
-                    <Component Id="csc.rsp" Guid="{DD40E38F-DD09-4348-8934-7C83F60113F0}">
+                    <Component Id="csc.rsp" Guid="{989142A0-2301-4E0B-B9E8-A08C56B46FB6}">
                         <File Id="csc.rsp" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\csc.rsp" />
                     </Component>
-                    <Component Id="csi.exe" Guid="{C90CA989-E6DB-4631-9D34-7C58FEF65DB1}">
+                    <Component Id="csi.exe" Guid="{11F33743-7AB2-4565-9DAC-FF856FE15A7B}">
                         <File Id="csi.exe" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\csi.exe" />
                     </Component>
-                    <Component Id="csi.exe.config" Guid="{DB971180-AD63-49B6-BB34-C3CE0315BBFD}">
+                    <Component Id="csi.exe.config" Guid="{3EACDBCC-DB45-48C4-8B18-0EC9E9075FAA}">
                         <File Id="csi.exe.config" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\csi.exe.config" />
                     </Component>
-                    <Component Id="csi.rsp" Guid="{06EAFF85-FC02-434F-81EB-95DAFFBDBA9B}">
+                    <Component Id="csi.rsp" Guid="{2FA6D796-FD10-4599-B2CF-4AACFA3DE5CC}">
                         <File Id="csi.rsp" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\csi.rsp" />
                     </Component>
-                    <Component Id="Microsoft.Build.Tasks.CodeAnalysis.dll" Guid="{F23C762F-1C92-43E3-A254-E53E0778C1BD}">
+                    <Component Id="Microsoft.Build.Tasks.CodeAnalysis.dll" Guid="{3F130DFB-9603-494C-9914-3746005FF26D}">
                         <File Id="Microsoft.Build.Tasks.CodeAnalysis.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll" />
                     </Component>
-                    <Component Id="Microsoft.CodeAnalysis.CSharp.dll" Guid="{E640462E-006F-42DD-A1D1-BD6C5D0615FB}">
+                    <Component Id="Microsoft.CodeAnalysis.CSharp.dll" Guid="{979BE274-6101-4AA5-A55A-1D648B4BD4D7}">
                         <File Id="Microsoft.CodeAnalysis.CSharp.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll" />
                     </Component>
-                    <Component Id="Microsoft.CodeAnalysis.CSharp.Scripting.dll" Guid="{02945E8E-E19C-4AA3-B4E2-FBEB402206F1}">
+                    <Component Id="Microsoft.CodeAnalysis.CSharp.Scripting.dll" Guid="{0E90FDB2-1D6B-4638-B015-901D4906FB49}">
                         <File Id="Microsoft.CodeAnalysis.CSharp.Scripting.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll" />
                     </Component>
-                    <Component Id="Microsoft.CodeAnalysis.dll" Guid="{158B7FE6-BC08-4A07-9C44-AB4E45ED8C06}">
+                    <Component Id="Microsoft.CodeAnalysis.dll" Guid="{D34EBAFC-FF4C-4AB1-9DEA-B5F000F492E9}">
                         <File Id="Microsoft.CodeAnalysis.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\Microsoft.CodeAnalysis.dll" />
                     </Component>
-                    <Component Id="Microsoft.CodeAnalysis.Scripting.dll" Guid="{7CA75726-C78B-4F93-BE75-04EA310B07C5}">
+                    <Component Id="Microsoft.CodeAnalysis.Scripting.dll" Guid="{3F357ECC-23A1-4453-99F2-D244BC99530A}">
                         <File Id="Microsoft.CodeAnalysis.Scripting.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll" />
                     </Component>
-                    <Component Id="Microsoft.CodeAnalysis.VisualBasic.dll" Guid="{3526A9B8-EC13-4A74-9CDC-DD47952D7E7D}">
+                    <Component Id="Microsoft.CodeAnalysis.VisualBasic.dll" Guid="{BC73AC31-B5AB-463C-84DC-8A718ED4571D}">
                         <File Id="Microsoft.CodeAnalysis.VisualBasic.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll" />
                     </Component>
-                    <Component Id="Microsoft.CSharp.Core.targets" Guid="{C0A30556-5A6B-48F2-B906-EA79CE9DBD78}">
+                    <Component Id="Microsoft.CSharp.Core.targets" Guid="{B09713E7-5756-412F-84A1-341925312562}">
                         <File Id="Microsoft.CSharp.Core.targets" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\Microsoft.CSharp.Core.targets" />
                     </Component>
-                    <Component Id="Microsoft.DiaSymReader.Native.amd64.dll" Guid="{CFBF6E17-37F8-4E2A-B109-0DC1D189F9F8}">
+                    <Component Id="Microsoft.DiaSymReader.Native.amd64.dll" Guid="{F0495E54-58F6-42EB-8E62-4EDBDF691CAB}">
                         <File Id="Microsoft.DiaSymReader.Native.amd64.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll" />
                     </Component>
-                    <Component Id="Microsoft.DiaSymReader.Native.x86.dll" Guid="{B5311F69-06DB-47A1-BA84-99361F0E23E0}">
+                    <Component Id="Microsoft.DiaSymReader.Native.x86.dll" Guid="{DE4202B2-A93C-4CB3-9F4B-160AF2753E96}">
                         <File Id="Microsoft.DiaSymReader.Native.x86.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll" />
                     </Component>
-                    <Component Id="Microsoft.Managed.Core.targets" Guid="{A90461ED-B12B-4D75-B0D9-6B5A7886F2EE}">
+                    <Component Id="Microsoft.Managed.Core.targets" Guid="{B44F0B6A-CE54-4EE8-B2D8-F94D63399ABE}">
                         <File Id="Microsoft.Managed.Core.targets" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\Microsoft.Managed.Core.targets" />
                     </Component>
-                    <Component Id="Microsoft.VisualBasic.Core.targets" Guid="{68F9007B-10D4-435E-94A5-F578285A4D91}">
+                    <Component Id="Microsoft.VisualBasic.Core.targets" Guid="{648288D1-1458-495E-B0DE-2E0363E1C59D}">
                         <File Id="Microsoft.VisualBasic.Core.targets" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\Microsoft.VisualBasic.Core.targets" />
                     </Component>
-                    <Component Id="Microsoft.Win32.Primitives.dll" Guid="{41C2E4C3-4EB0-433F-A9F0-16E00CA88B7A}">
+                    <Component Id="Microsoft.Win32.Primitives.dll" Guid="{66E0EEDC-2086-4872-A668-3D2339F3F560}">
                         <File Id="Microsoft.Win32.Primitives.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\Microsoft.Win32.Primitives.dll" />
                     </Component>
-                    <Component Id="System.AppContext.dll" Guid="{94C714BA-41D8-4F93-8216-156CC0AF5FA8}">
+                    <Component Id="System.AppContext.dll" Guid="{266BECF9-15FF-4D17-8254-8EE1330E79DB}">
                         <File Id="System.AppContext.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.AppContext.dll" />
                     </Component>
-                    <Component Id="System.Collections.Immutable.dll" Guid="{19093F21-1DBD-418E-8EE1-6708E991625A}">
+                    <Component Id="System.Collections.Immutable.dll" Guid="{68ABB10A-E925-43F1-85E6-7466D816A376}">
                         <File Id="System.Collections.Immutable.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.Collections.Immutable.dll" />
                     </Component>
-                    <Component Id="System.Console.dll" Guid="{30C8A5A1-A858-42D1-A7A6-8C9C017298F1}">
+                    <Component Id="System.Console.dll" Guid="{7A005D7A-15DD-4485-B950-E46AE78F76CB}">
                         <File Id="System.Console.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.Console.dll" />
                     </Component>
-                    <Component Id="System.Diagnostics.DiagnosticSource.dll" Guid="{04723D23-6E04-4250-B7D6-DE660EE5D814}">
+                    <Component Id="System.Diagnostics.DiagnosticSource.dll" Guid="{0ED53015-EDB3-4554-84C5-2C8A8F111390}">
                         <File Id="System.Diagnostics.DiagnosticSource.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.Diagnostics.DiagnosticSource.dll" />
                     </Component>
-                    <Component Id="System.Diagnostics.FileVersionInfo.dll" Guid="{AAC1DB1A-387B-4AAA-832E-79A060E586DF}">
+                    <Component Id="System.Diagnostics.FileVersionInfo.dll" Guid="{12405EF5-3933-469F-A424-C4B02BB1009A}">
                         <File Id="System.Diagnostics.FileVersionInfo.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.Diagnostics.FileVersionInfo.dll" />
                     </Component>
-                    <Component Id="System.Diagnostics.StackTrace.dll" Guid="{38DC786A-454C-4FA9-8FD4-4CCBF41F93DE}">
+                    <Component Id="System.Diagnostics.StackTrace.dll" Guid="{9D41B3CE-9E0B-44DF-B71F-2E608A841581}">
                         <File Id="System.Diagnostics.StackTrace.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.Diagnostics.StackTrace.dll" />
                     </Component>
-                    <Component Id="System.Globalization.Calendars.dll" Guid="{6EF22B1F-D68D-4FEB-BF5A-E95F6BD6364A}">
+                    <Component Id="System.Globalization.Calendars.dll" Guid="{046C52DD-53D0-4832-BAAE-4166AFE64B3F}">
                         <File Id="System.Globalization.Calendars.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.Globalization.Calendars.dll" />
                     </Component>
-                    <Component Id="System.IO.Compression.dll" Guid="{EA666888-55A3-420A-9E20-6CBBBCA80B0E}">
+                    <Component Id="System.IO.Compression.dll" Guid="{F45145E4-E686-4798-868F-7B2EFA93FD7C}">
                         <File Id="System.IO.Compression.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.IO.Compression.dll" />
                     </Component>
-                    <Component Id="System.IO.Compression.ZipFile.dll" Guid="{769C3549-C738-4FF6-9A00-0ADCFC1639C2}">
+                    <Component Id="System.IO.Compression.ZipFile.dll" Guid="{5BE78BA3-FCA3-458D-A11E-4683E8C09EBA}">
                         <File Id="System.IO.Compression.ZipFile.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.IO.Compression.ZipFile.dll" />
                     </Component>
-                    <Component Id="System.IO.FileSystem.dll" Guid="{2794C517-15FC-4C17-B1F7-3527DC815748}">
+                    <Component Id="System.IO.FileSystem.dll" Guid="{78B436B5-7890-479B-9DAD-90636262B739}">
                         <File Id="System.IO.FileSystem.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.IO.FileSystem.dll" />
                     </Component>
-                    <Component Id="System.IO.FileSystem.Primitives.dll" Guid="{7E2D5E4F-CABB-4D7E-9806-A41DB7066364}">
+                    <Component Id="System.IO.FileSystem.Primitives.dll" Guid="{78DFBDA4-B637-476F-8086-1B07573F7D1E}">
                         <File Id="System.IO.FileSystem.Primitives.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.IO.FileSystem.Primitives.dll" />
                     </Component>
-                    <Component Id="System.Net.Http.dll" Guid="{23662E15-6BE5-4BF2-8E57-4DA36FF35201}">
+                    <Component Id="System.Net.Http.dll" Guid="{C2BBB1F6-3C8D-4364-AA98-14C14337C921}">
                         <File Id="System.Net.Http.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.Net.Http.dll" />
                     </Component>
-                    <Component Id="System.Net.Sockets.dll" Guid="{E1E3C5CD-A581-4A70-ABD8-AB25487D59AD}">
+                    <Component Id="System.Net.Sockets.dll" Guid="{5CD6FF80-28BE-453C-9B10-84C56EECE593}">
                         <File Id="System.Net.Sockets.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.Net.Sockets.dll" />
                     </Component>
-                    <Component Id="System.Reflection.Metadata.dll" Guid="{0279A0EA-FA1E-445B-A20B-9D5B47D0E901}">
+                    <Component Id="System.Reflection.Metadata.dll" Guid="{6D82E13D-AC4E-4F40-9FE1-AC2E4E85ED11}">
                         <File Id="System.Reflection.Metadata.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.Reflection.Metadata.dll" />
                     </Component>
-                    <Component Id="System.Runtime.InteropServices.RuntimeInformation.dll" Guid="{346A335A-5207-4DEB-8B89-6020ED24AE6C}">
+                    <Component Id="System.Runtime.InteropServices.RuntimeInformation.dll" Guid="{0C81A570-6542-44D8-B547-0CFF27D87202}">
                         <File Id="System.Runtime.InteropServices.RuntimeInformation.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.Runtime.InteropServices.RuntimeInformation.dll" />
                     </Component>
-                    <Component Id="System.Security.Cryptography.Algorithms.dll" Guid="{4E80B4EB-0FD2-4A7D-A585-7AEB46595341}">
+                    <Component Id="System.Security.Cryptography.Algorithms.dll" Guid="{393936BA-4438-4DDF-9B5D-F56E24AC557C}">
                         <File Id="System.Security.Cryptography.Algorithms.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.Security.Cryptography.Algorithms.dll" />
                     </Component>
-                    <Component Id="System.Security.Cryptography.Encoding.dll" Guid="{F0F8E351-EB7E-46A4-B481-E618596B31F6}">
+                    <Component Id="System.Security.Cryptography.Encoding.dll" Guid="{9420153F-6047-428B-ABFC-A5F7A5CC7FFB}">
                         <File Id="System.Security.Cryptography.Encoding.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.Security.Cryptography.Encoding.dll" />
                     </Component>
-                    <Component Id="System.Security.Cryptography.Primitives.dll" Guid="{C05DB3FC-E086-4C1B-B9E9-1889A5DB2B57}">
+                    <Component Id="System.Security.Cryptography.Primitives.dll" Guid="{69059882-C3C1-4395-B07E-4B130A0D3772}">
                         <File Id="System.Security.Cryptography.Primitives.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.Security.Cryptography.Primitives.dll" />
                     </Component>
-                    <Component Id="System.Security.Cryptography.X509Certificates.dll" Guid="{90DF4EA3-026A-4EA0-BD4D-E83D6454ACF9}">
+                    <Component Id="System.Security.Cryptography.X509Certificates.dll" Guid="{634043DE-966C-49CB-BDDA-CAF790064978}">
                         <File Id="System.Security.Cryptography.X509Certificates.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.Security.Cryptography.X509Certificates.dll" />
                     </Component>
-                    <Component Id="System.Text.Encoding.CodePages.dll" Guid="{329A7521-C498-451F-AD52-3FB6D7500FE3}">
+                    <Component Id="System.Text.Encoding.CodePages.dll" Guid="{40DD3A9D-9DE0-491B-B003-89E3ACC0131D}">
                         <File Id="System.Text.Encoding.CodePages.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.Text.Encoding.CodePages.dll" />
                     </Component>
-                    <Component Id="System.Threading.Tasks.Extensions.dll" Guid="{58961E66-6FBA-425C-B829-77B4CF867CE8}">
+                    <Component Id="System.Threading.Tasks.Extensions.dll" Guid="{CDB28105-F414-4179-9238-BD144E091AA2}">
                         <File Id="System.Threading.Tasks.Extensions.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.Threading.Tasks.Extensions.dll" />
                     </Component>
-                    <Component Id="System.ValueTuple.dll" Guid="{A41E2657-F96E-4B25-BA09-2869CCD9420E}">
+                    <Component Id="System.ValueTuple.dll" Guid="{3F2F696D-0F65-41E3-8019-7738EB2BBB8B}">
                         <File Id="System.ValueTuple.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.ValueTuple.dll" />
                     </Component>
-                    <Component Id="System.Xml.ReaderWriter.dll" Guid="{2EBDD038-453A-4F75-826C-9BF389AEE654}">
+                    <Component Id="System.Xml.ReaderWriter.dll" Guid="{1C990034-2CF3-4210-872A-2E7DDCCDE7F7}">
                         <File Id="System.Xml.ReaderWriter.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.Xml.ReaderWriter.dll" />
                     </Component>
-                    <Component Id="System.Xml.XmlDocument.dll" Guid="{13AFDD90-0E36-4A43-8FAB-40E5BE408EEB}">
+                    <Component Id="System.Xml.XmlDocument.dll" Guid="{468D9213-3ABC-4FF7-9467-073043245334}">
                         <File Id="System.Xml.XmlDocument.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.Xml.XmlDocument.dll" />
                     </Component>
-                    <Component Id="System.Xml.XPath.dll" Guid="{1463FFD9-0B73-443F-881E-0BF6CE698674}">
+                    <Component Id="System.Xml.XPath.dll" Guid="{8DAFA9B3-A4BA-4D95-AA26-4009BF06B4F3}">
                         <File Id="System.Xml.XPath.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.Xml.XPath.dll" />
                     </Component>
-                    <Component Id="System.Xml.XPath.XDocument.dll" Guid="{A0A9CAB9-445C-44A4-BB42-76E50AE65422}">
+                    <Component Id="System.Xml.XPath.XDocument.dll" Guid="{EE26D3A2-38DE-4FC6-9FBA-AFD1D331E073}">
                         <File Id="System.Xml.XPath.XDocument.dll" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\System.Xml.XPath.XDocument.dll" />
                     </Component>
-                    <Component Id="vbc.exe" Guid="{96F5A5DC-F080-4B3B-8732-341EA5ECAD11}">
+                    <Component Id="vbc.exe" Guid="{DE58AC5A-F89C-4B6B-9CE1-707E84AC8119}">
                         <File Id="vbc.exe" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\vbc.exe" />
                     </Component>
-                    <Component Id="vbc.exe.config" Guid="{0B9BFE2A-F1A0-46C6-BB2E-CD5C14EA4B5F}">
+                    <Component Id="vbc.exe.config" Guid="{84D4A19D-4CF6-4D87-8C1A-7BBD9CF9D6C6}">
                         <File Id="vbc.exe.config" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\vbc.exe.config" />
                     </Component>
-                    <Component Id="vbc.rsp" Guid="{61E883B7-D47C-4B6B-8E56-DADA89F78DF8}">
+                    <Component Id="vbc.rsp" Guid="{4E9ABCE8-648F-4A1B-95D3-0BEB6100EEF2}">
                         <File Id="vbc.rsp" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\vbc.rsp" />
                     </Component>
-                    <Component Id="VBCSCompiler.exe" Guid="{4751DCA8-D889-4FA9-8662-E23CF8A7BB1A}">
+                    <Component Id="VBCSCompiler.exe" Guid="{E157EA0E-2868-4628-814A-10E98AC9EC6A}">
                         <File Id="VBCSCompiler.exe" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\VBCSCompiler.exe" />
                     </Component>
-                    <Component Id="VBCSCompiler.exe.config" Guid="{174BE3B2-CD0D-4051-A2EE-39269BB15D57}">
+                    <Component Id="VBCSCompiler.exe.config" Guid="{16BD00F2-93F0-4488-B115-618E71FEA8E2}">
                         <File Id="VBCSCompiler.exe.config" KeyPath="yes" Source="$(var.PublishPath)\bin\roslyn\VBCSCompiler.exe.config" />
                     </Component>
                 </Directory>
             </Directory>
             <Directory Id="ClientLibraries" Name="ClientLibraries">
+                <Directory Id="font_awesome" Name="font-awesome">
+                    <Directory Id="css" Name="css">
+                        <Component Id="all.css" Guid="{1F0E5A24-4012-46B8-A000-BAE95C6287C5}">
+                            <File Id="all.css" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\css\all.css" />
+                        </Component>
+                        <Component Id="all.min.css" Guid="{308B86D3-5BE5-48C6-812E-B8122DAA6311}">
+                            <File Id="all.min.css" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\css\all.min.css" />
+                        </Component>
+                        <Component Id="brands.css" Guid="{FF048D76-5636-46B0-A592-B72B608CE060}">
+                            <File Id="brands.css" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\css\brands.css" />
+                        </Component>
+                        <Component Id="brands.min.css" Guid="{C6875D5D-2F78-4267-AB79-3691C7DB6078}">
+                            <File Id="brands.min.css" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\css\brands.min.css" />
+                        </Component>
+                        <Component Id="fontawesome.css" Guid="{BD1B8F19-2AA9-4726-B8F9-9D10AD01E3DA}">
+                            <File Id="fontawesome.css" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\css\fontawesome.css" />
+                        </Component>
+                        <Component Id="fontawesome.min.css" Guid="{1F98285A-F4E9-4238-9EC5-3ACE403432CF}">
+                            <File Id="fontawesome.min.css" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\css\fontawesome.min.css" />
+                        </Component>
+                        <Component Id="regular.css" Guid="{81A12472-A7D5-4ACB-83B2-E587F09233AE}">
+                            <File Id="regular.css" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\css\regular.css" />
+                        </Component>
+                        <Component Id="regular.min.css" Guid="{26BC7154-F2B7-4776-B34B-3D45EBC3FEDF}">
+                            <File Id="regular.min.css" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\css\regular.min.css" />
+                        </Component>
+                        <Component Id="solid.css" Guid="{146F0CB9-1949-46C9-8C68-FCB34DF6B5BD}">
+                            <File Id="solid.css" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\css\solid.css" />
+                        </Component>
+                        <Component Id="solid.min.css" Guid="{0BDDEA40-7351-46F1-B835-236C37DBAFA5}">
+                            <File Id="solid.min.css" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\css\solid.min.css" />
+                        </Component>
+                        <Component Id="svg_with_js.css" Guid="{3575BFAF-AA9D-4CD2-8F89-C2E3BC3F8F91}">
+                            <File Id="svg_with_js.css" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\css\svg-with-js.css" />
+                        </Component>
+                        <Component Id="svg_with_js.min.css" Guid="{95C6D46C-31B8-432F-A2FD-A5CF3CED9400}">
+                            <File Id="svg_with_js.min.css" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\css\svg-with-js.min.css" />
+                        </Component>
+                        <Component Id="v4_shims.css" Guid="{2450E26B-4496-49D4-A769-265840D18C05}">
+                            <File Id="v4_shims.css" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\css\v4-shims.css" />
+                        </Component>
+                        <Component Id="v4_shims.min.css" Guid="{C4AAE6D0-2F5D-4FAD-A2EC-0FABDFD89380}">
+                            <File Id="v4_shims.min.css" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\css\v4-shims.min.css" />
+                        </Component>
+                    </Directory>
+                    <Directory Id="js" Name="js">
+                        <Component Id="all.js" Guid="{B2DE5EB1-60D8-4DE6-915B-CA7721BECD0C}">
+                            <File Id="all.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\js\all.js" />
+                        </Component>
+                        <Component Id="all.min.js" Guid="{E154C399-F5FC-4BEB-963C-3BC9E0870252}">
+                            <File Id="all.min.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\js\all.min.js" />
+                        </Component>
+                        <Component Id="brands.js" Guid="{4AC8B125-9E8E-435E-98D8-56E9FF38AF96}">
+                            <File Id="brands.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\js\brands.js" />
+                        </Component>
+                        <Component Id="brands.min.js" Guid="{3C7794FF-3507-4CB6-825C-F2BCF5668A22}">
+                            <File Id="brands.min.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\js\brands.min.js" />
+                        </Component>
+                        <Component Id="conflict_detection.js" Guid="{8637DD74-74F0-4F2F-9210-0CF2FC44695B}">
+                            <File Id="conflict_detection.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\js\conflict-detection.js" />
+                        </Component>
+                        <Component Id="conflict_detection.min.js" Guid="{8D0B14A2-8930-4A27-ABB9-4214E468484D}">
+                            <File Id="conflict_detection.min.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\js\conflict-detection.min.js" />
+                        </Component>
+                        <Component Id="fontawesome.js" Guid="{F08E8945-0396-41F2-903C-BD3A079F5F5C}">
+                            <File Id="fontawesome.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\js\fontawesome.js" />
+                        </Component>
+                        <Component Id="fontawesome.min.js" Guid="{AD5F1D6D-905A-42CE-8DD9-D8BD52400C75}">
+                            <File Id="fontawesome.min.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\js\fontawesome.min.js" />
+                        </Component>
+                        <Component Id="regular.js" Guid="{EDF607FB-F5BE-4422-87EE-31095120BFAF}">
+                            <File Id="regular.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\js\regular.js" />
+                        </Component>
+                        <Component Id="regular.min.js" Guid="{566223F1-BBA7-455C-A59D-7A84DC03F67D}">
+                            <File Id="regular.min.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\js\regular.min.js" />
+                        </Component>
+                        <Component Id="solid.js" Guid="{E49986F9-2880-403F-AF84-B55E4687622A}">
+                            <File Id="solid.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\js\solid.js" />
+                        </Component>
+                        <Component Id="solid.min.js" Guid="{0ECC5C17-8621-4596-B6E9-4F6D113EE180}">
+                            <File Id="solid.min.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\js\solid.min.js" />
+                        </Component>
+                        <Component Id="v4_shims.js" Guid="{9BA21AEF-FCAF-4C54-907A-D0BC727C5E68}">
+                            <File Id="v4_shims.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\js\v4-shims.js" />
+                        </Component>
+                        <Component Id="v4_shims.min.js" Guid="{D7DE1A60-729C-427D-913A-A36BAB5CBE19}">
+                            <File Id="v4_shims.min.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\js\v4-shims.min.js" />
+                        </Component>
+                    </Directory>
+                    <Directory Id="sprites" Name="sprites">
+                        <Component Id="brands.svg" Guid="{6DF93000-A881-4CCA-BCCF-658A78778BC5}">
+                            <File Id="brands.svg" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\sprites\brands.svg" />
+                        </Component>
+                        <Component Id="regular.svg" Guid="{0D28CCD9-E2AE-4A44-A96C-FBAC6988B8CB}">
+                            <File Id="regular.svg" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\sprites\regular.svg" />
+                        </Component>
+                        <Component Id="solid.svg" Guid="{BE6118C7-25CA-4669-93E2-BE4222278462}">
+                            <File Id="solid.svg" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\sprites\solid.svg" />
+                        </Component>
+                    </Directory>
+                    <Directory Id="webfonts" Name="webfonts">
+                        <Component Id="fa_brands_400.eot" Guid="{AAC66935-E6BF-40D9-80A9-04FBE0FE465F}">
+                            <File Id="fa_brands_400.eot" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\webfonts\fa-brands-400.eot" />
+                        </Component>
+                        <Component Id="fa_brands_400.svg" Guid="{75F639E0-DF2C-4352-838C-1B3EA1384C06}">
+                            <File Id="fa_brands_400.svg" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\webfonts\fa-brands-400.svg" />
+                        </Component>
+                        <Component Id="fa_brands_400.ttf" Guid="{0F5DA132-4A60-4F2F-951E-D9639B84DD8C}">
+                            <File Id="fa_brands_400.ttf" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\webfonts\fa-brands-400.ttf" />
+                        </Component>
+                        <Component Id="fa_brands_400.woff" Guid="{660D278F-D4DC-415A-A7C5-6C783F311AAC}">
+                            <File Id="fa_brands_400.woff" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\webfonts\fa-brands-400.woff" />
+                        </Component>
+                        <Component Id="fa_brands_400.woff2" Guid="{0C6097EE-4D3E-42E7-A7BD-94A2D46BFD24}">
+                            <File Id="fa_brands_400.woff2" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\webfonts\fa-brands-400.woff2" />
+                        </Component>
+                        <Component Id="fa_regular_400.eot" Guid="{A5353B95-69B9-492C-8F1D-14DF4F7AE02A}">
+                            <File Id="fa_regular_400.eot" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\webfonts\fa-regular-400.eot" />
+                        </Component>
+                        <Component Id="fa_regular_400.svg" Guid="{EC1FA741-A1D4-4C6F-84C5-F7418DA9EC06}">
+                            <File Id="fa_regular_400.svg" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\webfonts\fa-regular-400.svg" />
+                        </Component>
+                        <Component Id="fa_regular_400.ttf" Guid="{0CE1718F-6263-411C-A72F-67BD9AA9B700}">
+                            <File Id="fa_regular_400.ttf" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\webfonts\fa-regular-400.ttf" />
+                        </Component>
+                        <Component Id="fa_regular_400.woff" Guid="{7617E024-BD30-4DB5-8AC6-E106BF968B2B}">
+                            <File Id="fa_regular_400.woff" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\webfonts\fa-regular-400.woff" />
+                        </Component>
+                        <Component Id="fa_regular_400.woff2" Guid="{B2EFCD61-1E80-45AC-8DA9-4D59F40E344D}">
+                            <File Id="fa_regular_400.woff2" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\webfonts\fa-regular-400.woff2" />
+                        </Component>
+                        <Component Id="fa_solid_900.eot" Guid="{6EC0AB53-2BF9-4CE1-8AD7-F0D1F5EBA8C5}">
+                            <File Id="fa_solid_900.eot" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\webfonts\fa-solid-900.eot" />
+                        </Component>
+                        <Component Id="fa_solid_900.svg" Guid="{A6E8ABBE-7B2A-4E13-99CB-7A84590ACBEE}">
+                            <File Id="fa_solid_900.svg" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\webfonts\fa-solid-900.svg" />
+                        </Component>
+                        <Component Id="fa_solid_900.ttf" Guid="{31D05503-C3D8-450E-B528-70BCD0D9A3F1}">
+                            <File Id="fa_solid_900.ttf" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\webfonts\fa-solid-900.ttf" />
+                        </Component>
+                        <Component Id="fa_solid_900.woff" Guid="{6027F47F-0430-4BE6-8ED7-B005CD261D0A}">
+                            <File Id="fa_solid_900.woff" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\webfonts\fa-solid-900.woff" />
+                        </Component>
+                        <Component Id="fa_solid_900.woff2" Guid="{EBB25E00-FABE-4E53-8282-DD5BB8391660}">
+                            <File Id="fa_solid_900.woff2" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\font-awesome\webfonts\fa-solid-900.woff2" />
+                        </Component>
+                    </Directory>
+                </Directory>
                 <Directory Id="jquery" Name="jquery">
-                    <Component Id="core.js" Guid="{A99C7700-5848-44D2-A4C6-6E15EDC142B0}">
+                    <Component Id="core.js" Guid="{32609354-3653-4C1A-9EEC-54053A90CE6D}">
                         <File Id="core.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\jquery\core.js" />
                     </Component>
-                    <Component Id="jquery.js" Guid="{C22CB5BB-19D3-4DD4-85A2-020B94A6B384}">
+                    <Component Id="jquery.js" Guid="{144EEB99-95CA-4634-B229-EFE316A2EFE3}">
                         <File Id="jquery.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\jquery\jquery.js" />
                     </Component>
-                    <Component Id="jquery.min.js" Guid="{F97E5D2A-32FD-44AE-B42F-E989C49BFC0A}">
+                    <Component Id="jquery.min.js" Guid="{5016DDF5-E6E7-43B3-B962-0324015550F3}">
                         <File Id="jquery.min.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\jquery\jquery.min.js" />
                     </Component>
-                    <Component Id="jquery.min.map" Guid="{217BCC83-79A1-4ADA-878D-5C5AFBDEFBBF}">
+                    <Component Id="jquery.min.map" Guid="{CEFAADC3-561C-4B9E-BC15-7B69B9B2C41B}">
                         <File Id="jquery.min.map" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\jquery\jquery.min.map" />
                     </Component>
-                    <Component Id="jquery.slim.js" Guid="{D9F51DA0-6AFC-4D8C-9970-B3985F8A3C6C}">
+                    <Component Id="jquery.slim.js" Guid="{65B26274-295F-49FF-9280-044BBDD3908D}">
                         <File Id="jquery.slim.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\jquery\jquery.slim.js" />
                     </Component>
-                    <Component Id="jquery.slim.min.js" Guid="{7268E386-FEC8-47D8-966F-31AED4675546}">
+                    <Component Id="jquery.slim.min.js" Guid="{83297437-94D5-4D6B-905B-5F43803CC055}">
                         <File Id="jquery.slim.min.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\jquery\jquery.slim.min.js" />
                     </Component>
-                    <Component Id="jquery.slim.min.map" Guid="{C33A5CF7-DE2A-4874-843F-0B077DDD289E}">
+                    <Component Id="jquery.slim.min.map" Guid="{3B3D016E-752A-444F-98FB-53EC2AA15D48}">
                         <File Id="jquery.slim.min.map" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\jquery\jquery.slim.min.map" />
                     </Component>
                 </Directory>
+                <Directory Id="jquery_ajax_unobtrusive" Name="jquery-ajax-unobtrusive">
+                    <Component Id="jquery.unobtrusive_ajax.js" Guid="{6A2AD0F1-4822-4BCB-9C24-2551F82278E5}">
+                        <File Id="jquery.unobtrusive_ajax.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\jquery-ajax-unobtrusive\jquery.unobtrusive-ajax.js" />
+                    </Component>
+                    <Component Id="jquery.unobtrusive_ajax.min.js" Guid="{4CDD0727-67B2-406E-9AD4-BD582A81D5AE}">
+                        <File Id="jquery.unobtrusive_ajax.min.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\jquery-ajax-unobtrusive\jquery.unobtrusive-ajax.min.js" />
+                    </Component>
+                </Directory>
                 <Directory Id="modernizr" Name="modernizr">
-                    <Component Id="modernizr.js" Guid="{F34F8217-3B23-4634-8F2F-177A442CE0ED}">
+                    <Component Id="modernizr.js" Guid="{D2467D64-2E4F-4803-92B1-CDAEBFBEC743}">
                         <File Id="modernizr.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\modernizr\modernizr.js" />
                     </Component>
-                    <Component Id="modernizr.min.js" Guid="{E0812C86-CDCC-4E8C-B2D9-737B8A732C62}">
+                    <Component Id="modernizr.min.js" Guid="{3DB6F32B-9FDB-4CC8-AA76-7DBBF3CD7BBE}">
                         <File Id="modernizr.min.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\modernizr\modernizr.min.js" />
                     </Component>
                 </Directory>
                 <Directory Id="twitter_bootstrap" Name="twitter-bootstrap">
-                    <Directory Id="css" Name="css">
-                        <Component Id="bootstrap_grid.css" Guid="{DC283752-ACC8-4D25-8915-1017AB8C6569}">
+                    <Directory Id="css_1" Name="css">
+                        <Component Id="bootstrap_grid.css" Guid="{8C29847D-91FD-4E87-A120-34FF87659A82}">
                             <File Id="bootstrap_grid.css" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\twitter-bootstrap\css\bootstrap-grid.css" />
                         </Component>
-                        <Component Id="bootstrap_grid.css.map" Guid="{DBFFA5C9-6B36-4E94-B84C-65B663FFC2FA}">
+                        <Component Id="bootstrap_grid.css.map" Guid="{439BA825-2BDA-473E-BD65-ADC6213A68FF}">
                             <File Id="bootstrap_grid.css.map" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\twitter-bootstrap\css\bootstrap-grid.css.map" />
                         </Component>
-                        <Component Id="bootstrap_grid.min.css" Guid="{AFFB9498-4436-400F-BA65-2589DC5868D7}">
+                        <Component Id="bootstrap_grid.min.css" Guid="{C8745681-F903-4B84-BA49-3D58612A5D46}">
                             <File Id="bootstrap_grid.min.css" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\twitter-bootstrap\css\bootstrap-grid.min.css" />
                         </Component>
-                        <Component Id="bootstrap_grid.min.css.map" Guid="{F2DA5333-AC22-4BBF-BB30-2B90F30D1EB0}">
+                        <Component Id="bootstrap_grid.min.css.map" Guid="{1ACD2A9D-2030-4250-AD69-EA817BF5DBA2}">
                             <File Id="bootstrap_grid.min.css.map" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\twitter-bootstrap\css\bootstrap-grid.min.css.map" />
                         </Component>
-                        <Component Id="bootstrap_reboot.css" Guid="{300D975E-64D6-46D2-8F14-E070C9E8FDE7}">
+                        <Component Id="bootstrap_reboot.css" Guid="{9191ACC7-B3E2-4604-B8D5-47D7541EFBC7}">
                             <File Id="bootstrap_reboot.css" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\twitter-bootstrap\css\bootstrap-reboot.css" />
                         </Component>
-                        <Component Id="bootstrap_reboot.css.map" Guid="{FB165E73-B549-45F1-B122-BBF411AD91D0}">
+                        <Component Id="bootstrap_reboot.css.map" Guid="{8228B37C-5537-42EF-BA96-4D6EABD075D0}">
                             <File Id="bootstrap_reboot.css.map" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\twitter-bootstrap\css\bootstrap-reboot.css.map" />
                         </Component>
-                        <Component Id="bootstrap_reboot.min.css" Guid="{C1CA6DC6-E917-4C10-B70F-766C0C9F78ED}">
+                        <Component Id="bootstrap_reboot.min.css" Guid="{5529B02C-02A6-4930-94BC-082C929A788C}">
                             <File Id="bootstrap_reboot.min.css" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\twitter-bootstrap\css\bootstrap-reboot.min.css" />
                         </Component>
-                        <Component Id="bootstrap_reboot.min.css.map" Guid="{C81A9CE5-452B-4F4C-B734-E5749C527EBB}">
+                        <Component Id="bootstrap_reboot.min.css.map" Guid="{3CA821B8-4D55-4F36-8CE4-257E89861096}">
                             <File Id="bootstrap_reboot.min.css.map" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\twitter-bootstrap\css\bootstrap-reboot.min.css.map" />
                         </Component>
-                        <Component Id="bootstrap.css" Guid="{F141C879-8E46-41D8-BDE3-CB1DD1D71F24}">
+                        <Component Id="bootstrap.css" Guid="{79AA73A3-5784-4E32-A39F-3A0108D7FEBC}">
                             <File Id="bootstrap.css" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\twitter-bootstrap\css\bootstrap.css" />
                         </Component>
-                        <Component Id="bootstrap.css.map" Guid="{4C3D16B8-C5C0-4B1C-8823-E29AE125A503}">
+                        <Component Id="bootstrap.css.map" Guid="{8A3ED72D-08AA-4F5B-AF20-23C817E1B155}">
                             <File Id="bootstrap.css.map" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\twitter-bootstrap\css\bootstrap.css.map" />
                         </Component>
-                        <Component Id="bootstrap.min.css" Guid="{8484BDE3-BB2C-44DC-A872-C14AD27EE7D8}">
+                        <Component Id="bootstrap.min.css" Guid="{C67D0741-DCE8-4FEE-80B4-65C97248C2C6}">
                             <File Id="bootstrap.min.css" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\twitter-bootstrap\css\bootstrap.min.css" />
                         </Component>
-                        <Component Id="bootstrap.min.css.map" Guid="{93E47245-6FCA-4144-8F0B-34D5C69343D6}">
+                        <Component Id="bootstrap.min.css.map" Guid="{6A83864C-7FD1-42EA-80C1-C719EE9760C3}">
                             <File Id="bootstrap.min.css.map" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\twitter-bootstrap\css\bootstrap.min.css.map" />
                         </Component>
                     </Directory>
-                    <Directory Id="js" Name="js">
-                        <Component Id="bootstrap.bundle.js" Guid="{723C2427-4EE4-4E7D-B6FC-F69EB9A2CB7A}">
+                    <Directory Id="js_1" Name="js">
+                        <Component Id="bootstrap.bundle.js" Guid="{F5C0439E-F649-42E9-8431-ACCFA67D5029}">
                             <File Id="bootstrap.bundle.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\twitter-bootstrap\js\bootstrap.bundle.js" />
                         </Component>
-                        <Component Id="bootstrap.bundle.js.map" Guid="{6BB7B865-9E69-45A4-88D6-E7FE4EE92510}">
+                        <Component Id="bootstrap.bundle.js.map" Guid="{0CF2EA95-57D2-4A13-BA80-32B6163F3A65}">
                             <File Id="bootstrap.bundle.js.map" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\twitter-bootstrap\js\bootstrap.bundle.js.map" />
                         </Component>
-                        <Component Id="bootstrap.bundle.min.js" Guid="{41B7CF26-2437-4655-A9A5-D11EA103B151}">
+                        <Component Id="bootstrap.bundle.min.js" Guid="{BE62B9AE-0488-44A3-AD4F-1162FD59502E}">
                             <File Id="bootstrap.bundle.min.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\twitter-bootstrap\js\bootstrap.bundle.min.js" />
                         </Component>
-                        <Component Id="bootstrap.bundle.min.js.map" Guid="{BAAA4AB7-DA95-4272-92AF-9B8851B4C2B1}">
+                        <Component Id="bootstrap.bundle.min.js.map" Guid="{936FB4BF-0A31-4494-9975-17EB30D2ADAB}">
                             <File Id="bootstrap.bundle.min.js.map" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\twitter-bootstrap\js\bootstrap.bundle.min.js.map" />
                         </Component>
-                        <Component Id="bootstrap.js" Guid="{F8F39FBF-33FD-4853-B014-FA0DDFF235E3}">
+                        <Component Id="bootstrap.js" Guid="{60301E33-4EF0-4076-BC17-4E024907A8C0}">
                             <File Id="bootstrap.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\twitter-bootstrap\js\bootstrap.js" />
                         </Component>
-                        <Component Id="bootstrap.js.map" Guid="{67D2B74D-6770-409A-B58C-4D43B647A188}">
+                        <Component Id="bootstrap.js.map" Guid="{9608ED5D-3798-4A59-8812-F7F4E17D5089}">
                             <File Id="bootstrap.js.map" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\twitter-bootstrap\js\bootstrap.js.map" />
                         </Component>
-                        <Component Id="bootstrap.min.js" Guid="{8FE816CB-C669-49D0-8EBA-B3293687700E}">
+                        <Component Id="bootstrap.min.js" Guid="{479B25A0-6596-4FE2-91C3-0ED33B173E4F}">
                             <File Id="bootstrap.min.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\twitter-bootstrap\js\bootstrap.min.js" />
                         </Component>
-                        <Component Id="bootstrap.min.js.map" Guid="{D5547D1B-BC78-45A6-8E84-D5B1F9711B77}">
+                        <Component Id="bootstrap.min.js.map" Guid="{D2610F0C-2082-45E5-895C-04DFC0426338}">
                             <File Id="bootstrap.min.js.map" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\twitter-bootstrap\js\bootstrap.min.js.map" />
                         </Component>
                     </Directory>
                 </Directory>
                 <Directory Id="twitter_bootstrap_wizard" Name="twitter-bootstrap-wizard">
-                    <Component Id="jquery.bootstrap.wizard.js" Guid="{B96CD06B-6B38-4E81-B41B-4F3A89A23BCC}">
+                    <Component Id="jquery.bootstrap.wizard.js" Guid="{662DA7AC-0727-4EFC-9C7A-91F07D5A8E8F}">
                         <File Id="jquery.bootstrap.wizard.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\twitter-bootstrap-wizard\jquery.bootstrap.wizard.js" />
                     </Component>
-                    <Component Id="jquery.bootstrap.wizard.min.js" Guid="{378FAD69-4A6A-4D36-A4F6-0604ED4874DD}">
+                    <Component Id="jquery.bootstrap.wizard.min.js" Guid="{2448EA59-E46F-41B5-8B73-C8FF37DC7E89}">
                         <File Id="jquery.bootstrap.wizard.min.js" KeyPath="yes" Source="$(var.PublishPath)\ClientLibraries\twitter-bootstrap-wizard\jquery.bootstrap.wizard.min.js" />
                     </Component>
                 </Directory>
             </Directory>
             <Directory Id="Content" Name="Content">
                 <Directory Id="Images" Name="Images">
-                    <Component Id="icon.ico" Guid="{66035286-D7FE-40A5-BD12-40D4ACC461BD}">
+                    <Component Id="icon.ico" Guid="{9B328EEF-DEDA-4633-AC13-319401E58B53}">
                         <File Id="icon.ico" KeyPath="yes" Source="$(var.PublishPath)\Content\Images\icon.ico" />
                     </Component>
                 </Directory>
                 <Directory Id="Styles" Name="Styles">
-                    <Component Id="loading_button.css" Guid="{2BB88337-2F52-4FEB-B891-9EDA86873221}">
+                    <Component Id="loading_button.css" Guid="{F9482905-8C88-4CBA-8775-26641196904A}">
                         <File Id="loading_button.css" KeyPath="yes" Source="$(var.PublishPath)\Content\Styles\loading-button.css" />
                     </Component>
-                    <Component Id="site.css" Guid="{4EA05AA9-8B69-4236-953C-ED06058E36FD}">
+                    <Component Id="site.css" Guid="{8A531185-704A-46ED-948F-46DA62ECA408}">
                         <File Id="site.css" KeyPath="yes" Source="$(var.PublishPath)\Content\Styles\site.css" />
                     </Component>
                 </Directory>
             </Directory>
             <Directory Id="Views" Name="Views">
-                <Component Id="Web.config_1" Guid="{80271D88-91D5-4431-911C-5CD5F785086D}">
+                <Component Id="Web.config_1" Guid="{2C101907-600B-41AE-9D1A-1A13BEB162C0}">
                     <File Id="Web.config_1" KeyPath="yes" Source="$(var.PublishPath)\Views\Web.config" />
                 </Component>
-                <Component Id="_ViewStart.cshtml" Guid="{05A9CD8B-0665-432C-B451-CF92951B699C}">
+                <Component Id="_ViewStart.cshtml" Guid="{0C9F823D-BD01-427A-858D-3FF50427CA13}">
                     <File Id="_ViewStart.cshtml" KeyPath="yes" Source="$(var.PublishPath)\Views\_ViewStart.cshtml" />
                 </Component>
-                <Directory Id="Home" Name="Home">
-                    <Component Id="Index.cshtml" Guid="{41F13D07-8287-47E4-9172-5CE78376BE49}">
-                        <File Id="Index.cshtml" KeyPath="yes" Source="$(var.PublishPath)\Views\Home\Index.cshtml" />
+                <Directory Id="Account" Name="Account">
+                    <Component Id="Login.cshtml" Guid="{0E9AD4F1-9FAE-4F5A-9BD9-90D59E4711B0}">
+                        <File Id="Login.cshtml" KeyPath="yes" Source="$(var.PublishPath)\Views\Account\Login.cshtml" />
                     </Component>
-                    <Component Id="Manage.cshtml" Guid="{B763E9C4-E2D4-4349-AC2A-A4514B7D90D1}">
-                        <File Id="Manage.cshtml" KeyPath="yes" Source="$(var.PublishPath)\Views\Home\Manage.cshtml" />
+                    <Component Id="Register.cshtml" Guid="{D1FC47F1-9EA5-418C-8BF7-D1F3621E6532}">
+                        <File Id="Register.cshtml" KeyPath="yes" Source="$(var.PublishPath)\Views\Account\Register.cshtml" />
                     </Component>
-                    <Component Id="Settings.cshtml" Guid="{D04DBE82-BCA6-4B7A-A558-0D5D9AD613AB}">
-                        <File Id="Settings.cshtml" KeyPath="yes" Source="$(var.PublishPath)\Views\Home\Settings.cshtml" />
+                </Directory>
+                <Directory Id="Administration" Name="Administration">
+                    <Component Id="Import.cshtml" Guid="{68767E88-22BB-4AA7-BB2B-C08260BFD978}">
+                        <File Id="Import.cshtml" KeyPath="yes" Source="$(var.PublishPath)\Views\Administration\Import.cshtml" />
+                    </Component>
+                    <Component Id="Review.cshtml" Guid="{285D3200-5AF8-4645-ACE0-680DA0963498}">
+                        <File Id="Review.cshtml" KeyPath="yes" Source="$(var.PublishPath)\Views\Administration\Review.cshtml" />
+                    </Component>
+                    <Component Id="Settings.cshtml" Guid="{7B8463D3-2E8D-4D50-B6BE-C88CA02B8A22}">
+                        <File Id="Settings.cshtml" KeyPath="yes" Source="$(var.PublishPath)\Views\Administration\Settings.cshtml" />
                     </Component>
                     <Directory Id="Partial" Name="Partial">
-                        <Component Id="HardwareListPreview.cshtml" Guid="{10BFCF19-FA6D-4FD6-8726-915CAD560732}">
-                            <File Id="HardwareListPreview.cshtml" KeyPath="yes" Source="$(var.PublishPath)\Views\Home\Partial\HardwareListPreview.cshtml" />
+                        <Component Id="HardwareAdd.cshtml" Guid="{F8815B2A-4FCD-4169-B8C3-DC57911748B4}">
+                            <File Id="HardwareAdd.cshtml" KeyPath="yes" Source="$(var.PublishPath)\Views\Administration\Partial\HardwareAdd.cshtml" />
+                        </Component>
+                        <Component Id="HardwareDelete.cshtml" Guid="{4B3812F2-CBCD-4544-8625-99334852EA44}">
+                            <File Id="HardwareDelete.cshtml" KeyPath="yes" Source="$(var.PublishPath)\Views\Administration\Partial\HardwareDelete.cshtml" />
+                        </Component>
+                        <Component Id="HardwareListPreview.cshtml" Guid="{AE053805-612D-4BB7-8C57-894608C701AC}">
+                            <File Id="HardwareListPreview.cshtml" KeyPath="yes" Source="$(var.PublishPath)\Views\Administration\Partial\HardwareListPreview.cshtml" />
+                        </Component>
+                        <Component Id="HardwareUpdate.cshtml" Guid="{FDEF6885-B751-4572-9C85-D72D0EF2C63E}">
+                            <File Id="HardwareUpdate.cshtml" KeyPath="yes" Source="$(var.PublishPath)\Views\Administration\Partial\HardwareUpdate.cshtml" />
                         </Component>
                     </Directory>
                 </Directory>
+                <Directory Id="Home" Name="Home">
+                    <Component Id="Index.cshtml" Guid="{DBB757F1-417B-4CFC-8878-CEC219B9ADDB}">
+                        <File Id="Index.cshtml" KeyPath="yes" Source="$(var.PublishPath)\Views\Home\Index.cshtml" />
+                    </Component>
+                    <Component Id="Info.cshtml" Guid="{C5F60CB9-56CC-4B03-9E46-77D1E5E70F6F}">
+                        <File Id="Info.cshtml" KeyPath="yes" Source="$(var.PublishPath)\Views\Home\Info.cshtml" />
+                    </Component>
+                </Directory>
                 <Directory Id="Shared" Name="Shared">
-                    <Component Id="_Layout.cshtml" Guid="{C87A3CA3-8E6D-42F2-8B47-7DF44E6C7A0A}">
+                    <Component Id="_Layout.cshtml" Guid="{C4DE6DE5-4070-4204-B5CE-750AE54DA3DA}">
                         <File Id="_Layout.cshtml" KeyPath="yes" Source="$(var.PublishPath)\Views\Shared\_Layout.cshtml" />
                     </Component>
                 </Directory>
@@ -452,10 +660,19 @@
             <ComponentRef Id="ExcelDataReader.DataSet.pdb" />
             <ComponentRef Id="ExcelDataReader.dll" />
             <ComponentRef Id="ExcelDataReader.pdb" />
+            <ComponentRef Id="Microsoft.AspNet.Identity.Core.dll" />
+            <ComponentRef Id="Microsoft.AspNet.Identity.EntityFramework.dll" />
+            <ComponentRef Id="Microsoft.AspNet.Identity.Owin.dll" />
             <ComponentRef Id="Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" />
+            <ComponentRef Id="Microsoft.Owin.dll" />
+            <ComponentRef Id="Microsoft.Owin.Host.SystemWeb.dll" />
+            <ComponentRef Id="Microsoft.Owin.Security.Cookies.dll" />
+            <ComponentRef Id="Microsoft.Owin.Security.dll" />
+            <ComponentRef Id="Microsoft.Owin.Security.OAuth.dll" />
             <ComponentRef Id="Microsoft.Web.Infrastructure.dll" />
             <ComponentRef Id="Newtonsoft.Json.dll" />
             <ComponentRef Id="NLog.dll" />
+            <ComponentRef Id="Owin.dll" />
             <ComponentRef Id="System.Net.Http.Formatting.dll" />
             <ComponentRef Id="System.Runtime.CompilerServices.Unsafe.dll" />
             <ComponentRef Id="System.Web.Helpers.dll" />
@@ -521,6 +738,52 @@
             <ComponentRef Id="vbc.rsp" />
             <ComponentRef Id="VBCSCompiler.exe" />
             <ComponentRef Id="VBCSCompiler.exe.config" />
+            <ComponentRef Id="all.css" />
+            <ComponentRef Id="all.min.css" />
+            <ComponentRef Id="brands.css" />
+            <ComponentRef Id="brands.min.css" />
+            <ComponentRef Id="fontawesome.css" />
+            <ComponentRef Id="fontawesome.min.css" />
+            <ComponentRef Id="regular.css" />
+            <ComponentRef Id="regular.min.css" />
+            <ComponentRef Id="solid.css" />
+            <ComponentRef Id="solid.min.css" />
+            <ComponentRef Id="svg_with_js.css" />
+            <ComponentRef Id="svg_with_js.min.css" />
+            <ComponentRef Id="v4_shims.css" />
+            <ComponentRef Id="v4_shims.min.css" />
+            <ComponentRef Id="all.js" />
+            <ComponentRef Id="all.min.js" />
+            <ComponentRef Id="brands.js" />
+            <ComponentRef Id="brands.min.js" />
+            <ComponentRef Id="conflict_detection.js" />
+            <ComponentRef Id="conflict_detection.min.js" />
+            <ComponentRef Id="fontawesome.js" />
+            <ComponentRef Id="fontawesome.min.js" />
+            <ComponentRef Id="regular.js" />
+            <ComponentRef Id="regular.min.js" />
+            <ComponentRef Id="solid.js" />
+            <ComponentRef Id="solid.min.js" />
+            <ComponentRef Id="v4_shims.js" />
+            <ComponentRef Id="v4_shims.min.js" />
+            <ComponentRef Id="brands.svg" />
+            <ComponentRef Id="regular.svg" />
+            <ComponentRef Id="solid.svg" />
+            <ComponentRef Id="fa_brands_400.eot" />
+            <ComponentRef Id="fa_brands_400.svg" />
+            <ComponentRef Id="fa_brands_400.ttf" />
+            <ComponentRef Id="fa_brands_400.woff" />
+            <ComponentRef Id="fa_brands_400.woff2" />
+            <ComponentRef Id="fa_regular_400.eot" />
+            <ComponentRef Id="fa_regular_400.svg" />
+            <ComponentRef Id="fa_regular_400.ttf" />
+            <ComponentRef Id="fa_regular_400.woff" />
+            <ComponentRef Id="fa_regular_400.woff2" />
+            <ComponentRef Id="fa_solid_900.eot" />
+            <ComponentRef Id="fa_solid_900.svg" />
+            <ComponentRef Id="fa_solid_900.ttf" />
+            <ComponentRef Id="fa_solid_900.woff" />
+            <ComponentRef Id="fa_solid_900.woff2" />
             <ComponentRef Id="core.js" />
             <ComponentRef Id="jquery.js" />
             <ComponentRef Id="jquery.min.js" />
@@ -528,6 +791,8 @@
             <ComponentRef Id="jquery.slim.js" />
             <ComponentRef Id="jquery.slim.min.js" />
             <ComponentRef Id="jquery.slim.min.map" />
+            <ComponentRef Id="jquery.unobtrusive_ajax.js" />
+            <ComponentRef Id="jquery.unobtrusive_ajax.min.js" />
             <ComponentRef Id="modernizr.js" />
             <ComponentRef Id="modernizr.min.js" />
             <ComponentRef Id="bootstrap_grid.css" />
@@ -557,10 +822,17 @@
             <ComponentRef Id="site.css" />
             <ComponentRef Id="Web.config_1" />
             <ComponentRef Id="_ViewStart.cshtml" />
-            <ComponentRef Id="Index.cshtml" />
-            <ComponentRef Id="Manage.cshtml" />
+            <ComponentRef Id="Login.cshtml" />
+            <ComponentRef Id="Register.cshtml" />
+            <ComponentRef Id="Import.cshtml" />
+            <ComponentRef Id="Review.cshtml" />
             <ComponentRef Id="Settings.cshtml" />
+            <ComponentRef Id="HardwareAdd.cshtml" />
+            <ComponentRef Id="HardwareDelete.cshtml" />
             <ComponentRef Id="HardwareListPreview.cshtml" />
+            <ComponentRef Id="HardwareUpdate.cshtml" />
+            <ComponentRef Id="Index.cshtml" />
+            <ComponentRef Id="Info.cshtml" />
             <ComponentRef Id="_Layout.cshtml" />
         </ComponentGroup>
     </Fragment>

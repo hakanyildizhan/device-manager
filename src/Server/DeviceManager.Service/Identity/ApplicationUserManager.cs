@@ -28,7 +28,7 @@ namespace DeviceManager.Service.Identity
             // Configure validation logic for passwords
             this.PasswordValidator = new PasswordValidator
             {
-                RequiredLength = 5,
+                RequiredLength = IdentityConstants.MIN_PASSWORD_LENGTH,
                 RequireNonLetterOrDigit = false,
                 RequireDigit = false,
                 RequireLowercase = false,

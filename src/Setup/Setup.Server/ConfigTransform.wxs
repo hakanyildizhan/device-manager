@@ -4,31 +4,19 @@
 	<Fragment>
 
     <ComponentGroup Id="TransformWebConfig" >
-      <ComponentRef Id="TransformWebConfigWinUser" />
-      <ComponentRef Id="TransformWebConfigSAUser" />
+      <ComponentRef Id="TransformWebConfigComponent" />
     </ComponentGroup>
 
     <!-- Default: C:\inetpub\wwwroot\DeviceManager-->
     <DirectoryRef Id="INSTALLFOLDER">
 
       <!-- Web.config transform - Windows authentication -->
-      <Component Id="TransformWebConfigWinUser" KeyPath="yes" Guid="{3C3DA7D7-C280-4E8E-ABD0-4CA06F427D9B}">
-        <Condition><![CDATA[DB_AUTHENTICATIONMODE = "0"]]></Condition>
-        <util:XmlFile Id="webconfigsa" 
+      <Component Id="TransformWebConfigComponent" KeyPath="yes" Guid="{3C3DA7D7-C280-4E8E-ABD0-4CA06F427D9B}">
+        <util:XmlFile Id="webconfigtransform" 
                       File="[INSTALLFOLDER]Web.config" 
                       Action="setValue" 
                       ElementPath="/configuration/connectionStrings/add[\[]@name='DeviceManagerContext'[\]]/@connectionString"
                       Value="Data Source=[DB_SERVER];Initial Catalog=DeviceManager;Integrated Security=SSPI;MultipleActiveResultSets=true;" Permanent="yes" />
-      </Component>
-
-      <!-- Web.config transform - Windows authentication -->
-      <Component Id="TransformWebConfigSAUser" KeyPath="yes" Guid="{34FFA3E9-8D41-4B2D-86A3-F63FC71999A0}">
-        <Condition><![CDATA[DB_AUTHENTICATIONMODE = "1"]]></Condition>
-        <util:XmlFile Id="webconfigwin"
-                      File="[INSTALLFOLDER]Web.config"
-                      Action="setValue"
-                      ElementPath="/configuration/connectionStrings/add[\[]@name='DeviceManagerContext'[\]]/@connectionString"
-                      Value="Data Source=[DB_SERVER];Initial Catalog=DeviceManager;User Id=[DB_USER];Password=[DB_PASSWORD];MultipleActiveResultSets=true;" Permanent="yes" />
       </Component>
       
     </DirectoryRef>

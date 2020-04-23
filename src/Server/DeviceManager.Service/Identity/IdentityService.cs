@@ -96,6 +96,31 @@ namespace DeviceManager.Service.Identity
             }
         }
 
+        public async Task<RegisterAccountResult> RegisterWithRoleAsync(RegisterModel userInfo, string role)
+        {
+            var user = new UserAccount { UserName = userInfo.UserName };
+            var result = await _userManager.CreateAsync(user, userInfo.Password);
+
+            if (result.Succeeded)
+            {
+                var userAccount = await _userManager.FindByNameAsync(userInfo.UserName);
+                bool addRoleSuccess = await AddUserToRoleAsync(userAccount.Id, role);
+
+                if (!addRoleSuccess)
+                {
+                    await RemoveUserAsync(userAccount.Id);
+                    return new RegisterAccountResult { Succeeded = false };
+                }
+
+                await _securityManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                return new RegisterAccountResult { Succeeded = true, UserId = userAccount.Id };
+            }
+            else
+            {
+                return new RegisterAccountResult { Succeeded = false };
+            }
+        }
+
         public bool IsUserInRole(string userId, string role)
         {
             return _userManager.IsInRole(userId, role);
