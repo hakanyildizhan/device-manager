@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" InitialTargets="EnsureWixToolsetInstalled" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>3.10</ProductVersion>
+    <ProjectGuid>e7ae6893-d08c-4e7a-8ef1-5946f1e5c028</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>Setup.Server</OutputName>
+    <OutputType>Package</OutputType>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <Name>DeviceManager.Setup.Server</Name>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="ConfigTransform.wxs" />
+    <Compile Include="DatabaseConfiguration.wxs" />
+    <Compile Include="DatabaseSettingsDlg.wxs" />
+    <Compile Include="Directories.wxs" />
+    <Compile Include="GeneratedComponents.wxs" />
+    <Compile Include="IISConfiguration.wxs" />
+    <Compile Include="IISSettingsDlg.wxs" />
+    <Compile Include="Product.wxs" />
+    <Compile Include="WixUI_DeviceManager_Server.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixSqlExtension">
+      <HintPath>$(WixExtDir)\WixSqlExtension.dll</HintPath>
+      <Name>WixSqlExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixIIsExtension">
+      <HintPath>$(WixExtDir)\WixIIsExtension.dll</HintPath>
+      <Name>WixIIsExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixNetFxExtension">
+      <HintPath>$(WixExtDir)\WixNetFxExtension.dll</HintPath>
+      <Name>WixNetFxExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="license.rtf" />
+    <Content Include="Scripts\OnInstall\Data_v1.0.0.0.sql" />
+    <Content Include="Scripts\OnInstall\Tables_v1.0.0.0.sql" />
+    <Content Include="Scripts\OnUninstall\DropDatabase.sql" />
+    <Content Include="Scripts\OnUninstall\DropLogin.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Scripts" />
+    <Folder Include="Scripts\OnInstall" />
+    <Folder Include="Scripts\OnUninstall" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Setup.Server.CustomActions\DeviceManager.Setup.Server.CustomActions.csproj">
+      <Name>DeviceManager.Setup.Server.CustomActions</Name>
+      <Project>{70559861-3fc9-4cfe-a72c-60d0e842e619}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
+  <Target Name="EnsureWixToolsetInstalled" Condition=" '$(WixTargetsImported)' != 'true' ">
+    <Error Text="The WiX Toolset v3.11 (or newer) build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
+  </Target>
+  <PropertyGroup>
+    <WebProjectName>DeviceManager.Api</WebProjectName>
+    <WebProjectPath>..\..\Server\$(WebProjectName)</WebProjectPath>
+    <PublishPath>$(WebProjectPath)\bin\$(Configuration)\Publish</PublishPath>
+    <PublishBinPath>$(PublishPath)\bin</PublishBinPath>
+  </PropertyGroup>
+  <Target Name="BeforeBuild">
+    <!-- Build all necessary projects -->
+    <MSBuild Projects="..\..\Server\DeviceManager.Entity\DeviceManager.Entity.csproj;&#xD;&#xA;                       ..\..\Server\DeviceManager.FileParsing\DeviceManager.FileParsing.csproj;&#xD;&#xA;                       ..\..\Server\DeviceManager.Service\DeviceManager.Service.csproj;&#xD;&#xA;                       $(WebProjectPath)\$(WebProjectName).csproj" Properties="Configuration=$(Configuration);Platform=AnyCPU;" Targets="Clean;Build" ContinueOnError="false" />
+    <!-- Publish main project -->
+    <MSBuild Projects="$(WebProjectPath)\$(WebProjectName).csproj"
+             Properties="Configuration=$(Configuration);Platform=AnyCPU;WebPublishMethod=FileSystem;DeleteExistingFiles=True;publishUrl=$(PublishPath);" Targets="WebPublish"
+             ContinueOnError="false" />
+    <!-- Get assembly version -->
+    <GetAssemblyIdentity AssemblyFiles="$(PublishBinPath)\DeviceManager.Api.dll">
+      <Output TaskParameter="Assemblies" ItemName="AssemblyVersion" />
+    </GetAssemblyIdentity>
+    <!-- Constants -->
+    <PropertyGroup>
+      <DefineConstants>
+        BuildVersion=%(AssemblyVersion.Version);
+        PublishPath=..\..\Server\DeviceManager.Api\bin\$(Configuration)\Publish;
+      </DefineConstants>
+    </PropertyGroup>
+    <!-- Harvest file components from bin\$(Configuration) folder -->
+    <HeatDirectory OutputFile="GeneratedComponents.wxs" DirectoryRefId="INSTALLFOLDER" ComponentGroupName="PublishedComponents" SuppressCom="true" SuppressUniqueIds="true" Directory="$(PublishPath)" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" AutoGenerateGuids="false" GenerateGuidsNow="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.PublishPath" />
+  </Target>
+  <Target Name="AfterBuild">
+    <!-- Get assembly version -->
+    <GetAssemblyIdentity AssemblyFiles="$(PublishBinPath)\$(WebProjectName).dll">
+      <Output TaskParameter="Assemblies" ItemName="AssemblyVersion" />
+    </GetAssemblyIdentity>
+    <!-- Rename and move final MSI -->
+    <Exec Command="move bin\$(Configuration)\$(OutputName).msi bin\$(Configuration)\DeviceManager_server_%(AssemblyVersion.Version).msi" />
+  </Target>
+</Project>
