@@ -11,6 +11,12 @@ This is a Windows desktop application that lets you and your team track the avai
 *  Customizable hardware groups & items, through "Device Manager Server" web interface
 *  Continuous synchronization of hardware status
 
+## Installing
+
+*  Download the server application setup [from here](https://code.siemens.com/hakan.yildizhan/device-manager/-/raw/master/releases/server/DeviceManager_server_1.0.0.0.msi). Follow the instructions here to get the server up and running: [Installation of server application](https://code.siemens.com/hakan.yildizhan/device-manager/-/wikis/Documentation%20Server/1.%20Installation%20of%20server%20application)
+
+*  Once server application is installed, download the client application setup [from here](https://code.siemens.com/hakan.yildizhan/device-manager/-/raw/master/releases/client/DeviceManager_client_1.0.1.0.msi). Instructions on how to install & use the application can be found here: [Installation of client application](https://code.siemens.com/hakan.yildizhan/device-manager/-/wikis/Documentation-Client/1.-Installation-of-client-application)
+
 ## Requirements
 
 **Server:**
