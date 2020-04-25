@@ -37,6 +37,7 @@
                         <th scope="col">#</th>
                         <th scope="col">Hardware Group</th>
                         <th scope="col">Hardware Name</th>
+                        <th scope="col">Hardware Info</th>
                         <th scope="col">Hardware Address</th>
                         <th scope="col">Connected Module Info</th>
                     </tr>
@@ -48,6 +49,7 @@
                             <th scope="row">@(i+1)</th>
                             <td>@Model.HardwareList[i].DeviceGroup</td>
                             <td>@Model.HardwareList[i].Name</td>
+                            <td>@Model.HardwareList[i].HardwareInfo</td>
                             <td>@Model.HardwareList[i].Address</td>
                             <td>@Model.HardwareList[i].ConnectedModuleInfo</td>
                         </tr>
