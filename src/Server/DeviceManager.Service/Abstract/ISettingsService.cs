@@ -28,6 +28,6 @@ namespace DeviceManager.Service
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        Task<bool> AddOrUpdate(string name, string value);
+        Task<bool> AddOrUpdateAsync(string name, string value);
     }
 }

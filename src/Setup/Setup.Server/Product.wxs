@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+	<Product Id="*"
+           UpgradeCode="4AD49979-E74E-4BEE-9930-1389557CF69C"
+           Name="Device Manager Server" 
+           Language="1033" 
+           Version="1.0.0.0" 
+           Manufacturer="Hakan Yildizhan" >
+    
+		<Package Id="*"
+             Description="Server Installer for Device Manager"
+             Keywords="Installer"
+             Manufacturer="Hakan Yildizhan"
+             Platform="x64"
+             InstallerVersion="200" 
+             Compressed="yes" 
+             InstallScope="perMachine" />
+
+    <!-- For Minor Updates: Comment this. -->
+    <!-- For Major Upgrade: Uncomment this, comment Upgrade tag -->
+    <!-- It will remove all previous versions from Add\Remove Programs & install this new version -->
+    <!-- Beware: It will also reinstall IIS site & Database, removing all data! -->
+    <!-- Then in order to deliver minor updates again: -->
+    <!-- - Uncomment RemoveExistingProducts tag -->
+    <!-- - Up the UpgradeVersions below accordingly -->
+		<!--<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed. Setup will now exit." />-->
+
+    <!-- This is for minor updates to get installed side by side -->
+    <!-- Always up these versions to the Current product version -->
+    <!-- Comment it when delivering a major upgrade -->
+    <Upgrade Id='4AD49979-E74E-4BEE-9930-1389557CF69C'>
+      <UpgradeVersion OnlyDetect='yes' Property='SELFFOUND'
+          Minimum='1.0.0.0' IncludeMinimum='yes'
+          Maximum='1.0.0.0' IncludeMaximum='yes' />
+      <UpgradeVersion OnlyDetect='yes' Property='NEWERFOUND'
+          Minimum='1.0.0.0' IncludeMinimum='no' />
+      <UpgradeVersion OnlyDetect='yes' Property='OLDERFOUND'
+          Maximum='1.0.0.0' IncludeMaximum='no' />
+    </Upgrade>
+
+    <CustomAction Id='AlreadyUpdated' Error='[ProductName] has already been updated to 1.0.1 or newer.' />
+    <CustomAction Id='NoDowngrade' Error='A later version of [ProductName] is already installed.' />
+
+    <InstallExecuteSequence>
+      <Custom Action='AlreadyUpdated' After='FindRelatedProducts'>SELFFOUND</Custom>
+      <Custom Action='NoDowngrade' After='FindRelatedProducts'>NEWERFOUND</Custom>
+    </InstallExecuteSequence>
+
+    <!-- Include .cab file into .msi file -->
+    <MediaTemplate EmbedCab="yes" />
+
+    <!-- Feature for application files -->
+    <Feature Id="ApplicationFilesFeature" 
+             Title="Application files"
+             Description="Installs required files for the application."
+             Display='expand'
+             ConfigurableDirectory='INSTALLFOLDER'
+             >
+
+      <ComponentGroupRef Id="PublishedComponents" />
+      <ComponentGroupRef Id="TransformWebConfig" />
+    </Feature>
+
+    <!-- Feature for IIS configuration -->
+    <Feature Id="IISConfigurationFeature"
+             Title="Server IIS configuration"
+             Description="Configures the web site on Internet Information Services (IIS)."
+             Display='expand' >
+
+      <ComponentGroupRef Id="DeviceManagerIISConfiguration" />
+    </Feature>
+
+    <!-- Feature for database configuration -->
+    <Feature Id="DatabaseConfigurationFeature"
+             Title="Database configuration"
+             Description="Configures the database."
+             Display='expand'>
+
+      <ComponentGroupRef Id="DeviceManagerDatabaseConfiguration" />
+    </Feature>
+
+    <!-- Define main app icon -->
+    <Icon Id="icon.ico" SourceFile="$(var.PublishPath)\Content\Images\icon.ico" />
+    <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+
+    <!-- App license -->
+    <WixVariable Id="WixUILicenseRtf" Value="license.rtf"/>
+
+    <!-- Setup UI -->
+    <UIRef Id="WixUI_DeviceManager_Server" />
+
+    <!-- Binary definition for custom actions -->
+    <Binary Id='DeviceManager.Setup.Server.CustomActions.CA.dll' SourceFile='..\Setup.Server.CustomActions\bin\$(var.Configuration)\DeviceManager.Setup.Server.CustomActions.CA.dll'/>
+
+    <!-- Checks if the given port is available -->
+    <!-- If it is valid, sets IIS_PORT_AVAILABLE to "1"  -->
+    <CustomAction Id='CustomAction_TestPort'
+                  BinaryKey='DeviceManager.Setup.Server.CustomActions.CA.dll'
+                  DllEntry='TestPort'
+                  Execute='immediate'
+                  Return='check'/>
+
+    <!-- Checks the database connection -->
+    <!-- If it is valid, sets DB_SERVER_OK to "1"  -->
+    <CustomAction Id='CustomAction_TestConnection'
+                  BinaryKey='DeviceManager.Setup.Server.CustomActions.CA.dll'
+                  DllEntry='TestConnection'
+                  Execute='immediate'
+                  Return='check'/>
+
+    <!-- Gives the App Pool necessary DB permissions -->
+    <CustomAction Id='CustomAction_GrantDatabasePermissions'
+                  BinaryKey='DeviceManager.Setup.Server.CustomActions.CA.dll'
+                  DllEntry='GrantDatabasePermissions'
+                  Return='check'/>
+    <!-- Run after setup is finalized -->
+    <InstallExecuteSequence>
+      <Custom Action='CustomAction_GrantDatabasePermissions' After='InstallFinalize' >NOT Installed</Custom>
+    </InstallExecuteSequence>
+
+    <!-- Check if .Net Framework 4.6.1 is installed -->
+    <PropertyRef Id="WIX_IS_NETFRAMEWORK_461_OR_LATER_INSTALLED" />
+    <Condition Message="[ProductName] requires .NET Framework 4.6.1 or higher.">
+      <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_461_OR_LATER_INSTALLED]]>
+    </Condition>
+
+    <!-- Check to see if IIS is installed. It it's not, error out. -->
+    <Property Id="IIS_MAJOR_VERSION">
+      <RegistrySearch Id="CheckIISVersion"
+                      Root="HKLM"
+                      Key="SOFTWARE\Microsoft\InetStp"
+                      Name="MajorVersion"
+                      Type="raw" />
+    </Property>
+
+    <Condition Message="IIS must be installed">
+      Installed OR IIS_MAJOR_VERSION
+    </Condition>
+    
+    <!-- Go find the IIS root directory from the registry. On most machines
+         that defaults to C:\inetpub\wwwroot. This will be the directory we
+         install into. -->
+    <Property Id="IISROOT">
+      <RegistrySearch Id="IISROOT"
+                                 Type="directory"
+                                 Root="HKLM"
+                                 Key="Software\Microsoft\InetStp"
+                                 Name="PathWWWRoot" />
+    </Property>
+    
+    <Condition Message="IIS does not appear to be installed correctly, the root directory is not set.">
+      Installed OR IISROOT
+    </Condition>
+    
+	</Product>
+
+</Wix>

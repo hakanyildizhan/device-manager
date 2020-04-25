@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DeviceManager.Service.Identity
+{
+    /// <summary>
+    /// Constants for identity stuff.
+    /// </summary>
+    public static class IdentityConstants
+    {
+        /// <summary>
+        /// This is set in <see cref="RegisterModel"/> and <see cref="ApplicationUserManager"/>.
+        /// </summary>
+        public const int MIN_PASSWORD_LENGTH = 5;
+
+        /// <summary>
+        /// This is set in <see cref="RegisterModel"/>.
+        /// </summary>
+        public const int MIN_USERNAME_LENGTH = 3;
+    }
+}

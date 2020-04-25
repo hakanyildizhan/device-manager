@@ -3,11 +3,13 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
+    <link rel="shortcut icon" href="~/Content/Images/icon.ico" />
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jquery-unobtrusive")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/bootstrap-wizard")
 </head>
@@ -23,12 +25,36 @@
                     <li class="nav-item active @(ViewBag.ActivePage == "Index" ? "current-page" : "")">
                         <a class="nav-link" href="@Url.Action("Index", "Home")">Server status<span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item active @(ViewBag.ActivePage == "Manage" ? "current-page" : "")">
-                        <a class="nav-link" href="@Url.Action("Manage", "Home")">Manage hardware list</a>
-                    </li>
-                    <li class="nav-item active @(ViewBag.ActivePage == "Settings" ? "current-page" : "")">
-                        <a class="nav-link" href="@Url.Action("Settings", "Home")">Server settings</a>
-                    </li>
+                    @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item active @(ViewBag.ActivePage == "Settings" ? "current-page" : "")">
+                            <a class="nav-link" href="@Url.Action("Settings", "Administration")">Server settings</a>
+                        </li>
+                        <li class="nav-item active @(ViewBag.ActivePage == "Import" ? "current-page" : "")">
+                            <a class="nav-link" href="@Url.Action("Import", "Administration")">Import hardware list</a>
+                        </li>
+                        <li class="nav-item active @(ViewBag.ActivePage == "Review" ? "current-page" : "")">
+                            <a class="nav-link" href="@Url.Action("Review", "Administration")">Add/update/remove hardware</a>
+                        </li>
+                        <li class="nav-item active">
+                            @using (Html.BeginForm("Logout", "Account", FormMethod.Post, new { id = "logout-form" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <li class="nav-item active">
+                                    <a class="nav-link" href="#" onclick="$('#logout-form').submit();">Logout</a>
+                                </li>
+                            }
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item active @(ViewBag.ActivePage == "Info" ? "current-page" : "")">
+                            <a class="nav-link" href="@Url.Action("Info", "Home")">Info</a>
+                        </li>
+                        <li class="nav-item active @(ViewBag.ActivePage == "Manage" ? "current-page" : "")">
+                            <a class="nav-link" href="@Url.Action("Index", "Account")">Manage</a>
+                        </li>
+                    }
                 </ul>
             </div>
         </nav>
@@ -40,7 +66,5 @@
     </div>
 
     @RenderSection("scripts", required: false)
-    
-    
 </body>
 </html>

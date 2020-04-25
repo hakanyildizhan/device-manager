@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+
+    <!-- Will default to C:\ if that is the main disk-->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+
+      <!-- Default: C:\inetpub\wwwroot-->
+      <Directory Id="IISROOT" Name='WebDir'>
+
+        <!-- Default: C:\inetpub\wwwroot\DeviceManager-->
+        <Directory Id="INSTALLFOLDER" Name="DeviceManager" />
+
+      </Directory>
+    </Directory>
+
+    <!-- Installed files -->
+    <DirectoryRef Id="INSTALLFOLDER" FileSource="..\..\Server\DeviceManager.Api\bin\$(var.Configuration)\Publish\"/>
+
+  </Fragment>
+</Wix>

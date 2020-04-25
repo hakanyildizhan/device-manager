@@ -21,7 +21,7 @@ namespace DeviceManager.Api
             var container = new UnityContainer();
             container.RegisterType<IDeviceService, DeviceService>(new TransientLifetimeManager());
             container.RegisterType<ISessionService, SessionService>(new TransientLifetimeManager());
-            container.RegisterType<IUserService, UserService>(new TransientLifetimeManager());
+            container.RegisterType<IClientService, ClientService>(new TransientLifetimeManager());
             container.RegisterType<ISettingsService, SettingsService>(new TransientLifetimeManager());
             container.RegisterType(typeof(ILogService<>), typeof(NLogLogger<>));
             config.DependencyResolver = new UnityResolverWebApi(container);

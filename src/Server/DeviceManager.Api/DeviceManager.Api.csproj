@@ -58,10 +58,34 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.3\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.3\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.4.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.4.1.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -144,10 +168,12 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\IoCMVCConfig.cs" />
+    <Compile Include="App_Start\MvcConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Api\DeviceController.cs" />
+    <Compile Include="Controllers\Mvc\AccountController.cs" />
+    <Compile Include="Controllers\Mvc\AdministrationController.cs" />
     <Compile Include="Controllers\Mvc\HomeController.cs" />
     <Compile Include="Controllers\Api\RefreshController.cs" />
     <Compile Include="Controllers\Api\SessionController.cs" />
@@ -166,11 +192,49 @@
     <Compile Include="Model\SessionRequest.cs" />
     <Compile Include="Model\SetFriendlyNameRequest.cs" />
     <Compile Include="Model\View\HardwareInfo.cs" />
+    <Compile Include="Model\View\SettingsOverview.cs" />
+    <Compile Include="Model\View\ServerStats.cs" />
     <Compile Include="Model\View\StatusPageViewModel.cs" />
     <Compile Include="Model\View\UploadViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ClientLibraries\font-awesome\css\all.css" />
+    <Content Include="ClientLibraries\font-awesome\css\all.min.css" />
+    <Content Include="ClientLibraries\font-awesome\css\brands.css" />
+    <Content Include="ClientLibraries\font-awesome\css\brands.min.css" />
+    <Content Include="ClientLibraries\font-awesome\css\fontawesome.css" />
+    <Content Include="ClientLibraries\font-awesome\css\fontawesome.min.css" />
+    <Content Include="ClientLibraries\font-awesome\css\regular.css" />
+    <Content Include="ClientLibraries\font-awesome\css\regular.min.css" />
+    <Content Include="ClientLibraries\font-awesome\css\solid.css" />
+    <Content Include="ClientLibraries\font-awesome\css\solid.min.css" />
+    <Content Include="ClientLibraries\font-awesome\css\svg-with-js.css" />
+    <Content Include="ClientLibraries\font-awesome\css\svg-with-js.min.css" />
+    <Content Include="ClientLibraries\font-awesome\css\v4-shims.css" />
+    <Content Include="ClientLibraries\font-awesome\css\v4-shims.min.css" />
+    <Content Include="ClientLibraries\font-awesome\js\all.js" />
+    <Content Include="ClientLibraries\font-awesome\js\all.min.js" />
+    <Content Include="ClientLibraries\font-awesome\js\brands.js" />
+    <Content Include="ClientLibraries\font-awesome\js\brands.min.js" />
+    <Content Include="ClientLibraries\font-awesome\js\conflict-detection.js" />
+    <Content Include="ClientLibraries\font-awesome\js\conflict-detection.min.js" />
+    <Content Include="ClientLibraries\font-awesome\js\fontawesome.js" />
+    <Content Include="ClientLibraries\font-awesome\js\fontawesome.min.js" />
+    <Content Include="ClientLibraries\font-awesome\js\regular.js" />
+    <Content Include="ClientLibraries\font-awesome\js\regular.min.js" />
+    <Content Include="ClientLibraries\font-awesome\js\solid.js" />
+    <Content Include="ClientLibraries\font-awesome\js\solid.min.js" />
+    <Content Include="ClientLibraries\font-awesome\js\v4-shims.js" />
+    <Content Include="ClientLibraries\font-awesome\js\v4-shims.min.js" />
+    <Content Include="ClientLibraries\font-awesome\sprites\brands.svg" />
+    <Content Include="ClientLibraries\font-awesome\sprites\regular.svg" />
+    <Content Include="ClientLibraries\font-awesome\sprites\solid.svg" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-brands-400.svg" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-regular-400.svg" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-solid-900.svg" />
+    <Content Include="ClientLibraries\jquery-ajax-unobtrusive\jquery.unobtrusive-ajax.js" />
+    <Content Include="ClientLibraries\jquery-ajax-unobtrusive\jquery.unobtrusive-ajax.min.js" />
     <Content Include="ClientLibraries\jquery\core.js" />
     <Content Include="ClientLibraries\jquery\jquery.js" />
     <Content Include="ClientLibraries\jquery\jquery.min.js" />
@@ -192,6 +256,7 @@
     <Content Include="ClientLibraries\twitter-bootstrap\js\bootstrap.min.js" />
     <Content Include="Content\Styles\loading-button.css" />
     <Content Include="Content\Styles\site.css" />
+    <Content Include="Content\Images\icon.ico" />
     <Content Include="Global.asax" />
     <Content Include="libman.json" />
     <Content Include="ClientLibraries\jquery\jquery.min.map" />
@@ -216,20 +281,38 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Home\Settings.cshtml" />
-    <Content Include="Views\Home\Manage.cshtml" />
+    <Content Include="Views\Home\Info.cshtml" />
+    <Content Include="Views\Administration\Import.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-brands-400.eot" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-brands-400.ttf" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-brands-400.woff" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-brands-400.woff2" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-regular-400.eot" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-regular-400.ttf" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-regular-400.woff" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-regular-400.woff2" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-solid-900.eot" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-solid-900.ttf" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-solid-900.woff" />
+    <Content Include="ClientLibraries\font-awesome\webfonts\fa-solid-900.woff2" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
-    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\LocalProfile.pubxml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\Partial\HardwareListPreview.cshtml" />
+    <Content Include="Views\Administration\Partial\HardwareListPreview.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Administration\Review.cshtml" />
+    <Content Include="Views\Administration\Partial\HardwareAdd.cshtml" />
+    <Content Include="Views\Administration\Partial\HardwareUpdate.cshtml" />
+    <Content Include="Views\Administration\Partial\HardwareDelete.cshtml" />
+    <Content Include="Views\Administration\Settings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DeviceManager.FileParsing\DeviceManager.FileParsing.csproj">

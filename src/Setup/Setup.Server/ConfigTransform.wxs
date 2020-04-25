@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+	<Fragment>
+
+    <ComponentGroup Id="TransformWebConfig" >
+      <ComponentRef Id="TransformWebConfigComponent" />
+    </ComponentGroup>
+
+    <!-- Default: C:\inetpub\wwwroot\DeviceManager-->
+    <DirectoryRef Id="INSTALLFOLDER">
+
+      <!-- Web.config transform - Windows authentication -->
+      <Component Id="TransformWebConfigComponent" KeyPath="yes" Guid="{3C3DA7D7-C280-4E8E-ABD0-4CA06F427D9B}">
+        <util:XmlFile Id="webconfigtransform" 
+                      File="[INSTALLFOLDER]Web.config" 
+                      Action="setValue" 
+                      ElementPath="/configuration/connectionStrings/add[\[]@name='DeviceManagerContext'[\]]/@connectionString"
+                      Value="Data Source=[DB_SERVER];Initial Catalog=DeviceManager;Integrated Security=SSPI;MultipleActiveResultSets=true;" Permanent="yes" />
+      </Component>
+      
+    </DirectoryRef>
+	</Fragment>
+</Wix>

@@ -8,7 +8,7 @@ namespace DeviceManager.Service.Model
 {
     public class RegisterResult
     {
-        public UserInfo User { get; set; }
+        public ClientInfo User { get; set; }
         public RegisterUserResult Result { get; set; }
     }
 }

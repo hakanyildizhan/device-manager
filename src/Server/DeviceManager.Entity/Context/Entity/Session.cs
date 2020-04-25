@@ -15,7 +15,7 @@ namespace DeviceManager.Entity.Context.Entity
         public int Id { get; set; }
 
         [Required]
-        public virtual User User { get; set; }
+        public virtual Client Client { get; set; }
 
         [Required]
         public virtual Device Device { get; set; }

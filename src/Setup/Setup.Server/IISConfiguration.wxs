@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension">
+	<Fragment>
+
+    <!-- Properties -->
+    <Property Id="IIS_SITE" Value="0">
+      <RegistrySearch Id="IIS_SITE_RegistrySearch"
+                      Root="HKLM"
+                      Key="Software\Hakan Yildizhan\DeviceManager"
+                      Name="IIS_SITE"
+                      Type="raw"/>
+    </Property>
+
+    <Property Id="IIS_PORT" >
+      <RegistrySearch Id="IIS_PORT_RegistrySearch"
+                      Root="HKLM"
+                      Key="Software\Hakan Yildizhan\DeviceManager"
+                      Name="IIS_PORT"
+                      Type="raw"/>
+    </Property>
+
+    <Property Id="IIS_PORT_AVAILABLE" Value="0" />
+    
+    <Property Id="IIS_SITE_DIRECTORY" >
+      <RegistrySearch Id="IIS_SITE_DIRECTORY_RegistrySearch"
+                      Root="HKLM"
+                      Key="Software\Hakan Yildizhan\DeviceManager"
+                      Name="IIS_SITE_DIRECTORY"
+                      Type="raw"/>
+    </Property>
+    
+    <!-- Components -->
+    <ComponentGroup Id="DeviceManagerIISConfiguration" >
+      <ComponentRef Id="InstallWebsiteAsVirtualDirectory" />
+      <ComponentRef Id="InstallWebsiteAsNewSite" />
+      <ComponentRef Id="DeviceManagerAppPoolComponent" />
+      <ComponentRef Id="IISComponentRegistryEntries" />
+    </ComponentGroup>
+
+    <!-- Locator for "Default Web Site" -->
+    <iis:WebSite Id="DefaultWebSite"
+                 Description="Default Web Site"
+                 Directory="INSTALLFOLDER">
+      
+      <!-- This element has to be here or WiX does not compile. It’s ignored in this case. -->
+      <iis:WebAddress Id="AllUnassigned" Port="80" />
+    </iis:WebSite>
+
+    <!-- Locator for Web Application definition -->
+    <!-- Turns the Virtual Directory into a web application -->
+    <iis:WebApplication Id="DeviceManagerWebApplication"
+                        Name="[DeviceManager][WEBSITE_ID]"
+                        WebAppPool="DeviceManagerAppPool"/>
+    
+    <!-- Default: C:\inetpub\wwwroot\DeviceManager-->
+    <DirectoryRef Id="INSTALLFOLDER">
+
+      <!-- App Pool for the IIS site -->
+      <Component Id="DeviceManagerAppPoolComponent" KeyPath="yes" Guid="{FE1C4C87-E33B-4070-BD1B-0D0E150AA45C}" >
+
+        <iis:WebAppPool Id="DeviceManagerAppPool"
+                        Name="DeviceManager"
+                        Identity="applicationPoolIdentity"
+                        ManagedPipelineMode="Integrated"
+                        ManagedRuntimeVersion="v4.0" />
+      </Component>
+
+      <!-- Site installed as a virtual directory under Default Web Site -->
+      <Component Id="InstallWebsiteAsVirtualDirectory" KeyPath="yes" Guid="{492DAEED-BAB6-43CE-AD3F-717AF584DFB9}">
+        <Condition><![CDATA[IIS_SITE = "0"]]></Condition>
+
+        <!-- The Alias attribute is the name that will be put into IIS -->
+        
+        <!-- The Directory attribute is the "Physical Path" property in
+                  IIS and needs to tie to an ID specified in the setup -->
+
+        <!-- The WebSite attribute ties to the "Default Web Site" defined
+             outside any component, in order to find it only -->
+
+        <iis:WebVirtualDir Id="DeviceManagerVirtualDirectory"
+                           Alias="DeviceManager"
+                           Directory="INSTALLFOLDER"
+                           WebSite="DefaultWebSite"
+                           WebApplication="DeviceManagerWebApplication"/>
+        
+      </Component>
+
+      <!-- IIS site -->
+      <Component Id="InstallWebsiteAsNewSite" KeyPath="yes" Guid="{BB80DBCA-521F-456E-BB6E-56DB876492D4}">
+        <Condition><![CDATA[IIS_SITE = "1"]]></Condition>
+
+        <!-- Install to new web site -->
+        <iis:WebSite Id="DeviceManagerWebsite"
+                     Description="DeviceManager" 
+                     Directory="INSTALLFOLDER" 
+                     WebApplication="DeviceManagerWebApplication"
+                     AutoStart="yes" 
+                     StartOnInstall="yes">
+
+          <!-- TODO: Check if port is being used! -->
+          <iis:WebAddress Id="WebsiteAllUnassigned"
+                          Port="[IIS_PORT]" 
+                          IP="*"  /> 
+          
+        </iis:WebSite>
+
+      </Component>
+
+      <Component Id="IISComponentRegistryEntries" Guid="{854A7D57-B120-4F93-B15B-9E1227A582D1}">
+
+        <RegistryKey Root="HKLM"
+                     Key="Software\Hakan Yildizhan\DeviceManager">
+          <RegistryValue Type="string" Name="IIS_SITE" Value="[IIS_SITE]" />
+        </RegistryKey>
+
+        <RegistryKey Root="HKLM"
+                     Key="Software\Hakan Yildizhan\DeviceManager">
+          <RegistryValue Type="string" Name="IIS_PORT" Value="[IIS_PORT]" />
+        </RegistryKey>
+
+        <RegistryKey Root="HKLM"
+                     Key="Software\Hakan Yildizhan\DeviceManager">
+          <RegistryValue Type="string" Name="IIS_SITE_DIRECTORY" Value="[INSTALLFOLDER]" />
+        </RegistryKey>
+
+      </Component>
+
+    </DirectoryRef>
+    
+	</Fragment>
+</Wix>

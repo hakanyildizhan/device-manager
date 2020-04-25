@@ -1,0 +1,174 @@
+﻿@using DeviceManager.Service.Model
+
+@{
+    ViewBag.Title = "Review";
+}
+
+@model List<Device>
+
+<div class="row">
+    <div class="col-lg-12 content">
+        <h2>Add, update or remove hardware</h2>
+
+        <table id="hardwareTable" class="table table-bordered table-condensed table-striped">
+            <thead>
+                <tr>
+                    <th scope="col" hidden="hidden">Id</th>
+                    <th scope="col">Hardware Group</th>
+                    <th scope="col">Hardware Name</th>
+                    <th scope="col">Hardware Info</th>
+                    <th scope="col">Hardware Address</th>
+                    <th scope="col">Connected Module Info</th>
+                    <th scope="col">Update / Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    <tr>
+                        <td hidden="hidden">@Html.HiddenFor(d => Model[i].Id)</td>
+                        <td>@Model[i].DeviceGroup</td>
+                        <td>@Model[i].Name</td>
+                        <td>@Model[i].HardwareInfo</td>
+                        <td>@Model[i].Address</td>
+                        <td>@Model[i].ConnectedModuleInfo</td>
+                        <td>
+                            <button type='button' class='btn btn-default edit-item'>
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button type='button' class='btn btn-default delete-item'>
+                                <i class="fa fa-trash"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="row">
+            <button type='button' id="add-item" class='btn btn-default'>
+                <i class="fas fa-plus"></i> Add new hardware item
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="hardware-edit" role="dialog" aria-labelledby="updateHardwareModalTitle"></div>
+<div class="modal fade" id="hardware-add" role="dialog" aria-labelledby="addHardwareModalTitle"></div>
+<div class="modal fade" id="hardware-delete" role="dialog" aria-labelledby="deleteHardwareModalTitle"></div>
+
+<script type="text/javascript">
+
+    $('.edit-item').on('click', function (e) {
+        e.preventDefault();
+        var itemId = $('td:first input', $(this).parents('tr')).val();
+        var targetUrl = "@Url.Action("UpdateHardwarePopup", "Administration")";
+
+        $.ajax({
+            type: "POST",
+            url: targetUrl,
+            data: { itemId: itemId },
+            dataType: 'html',
+            success: function (data) {
+                $('#hardware-edit').html(data);
+                $('#hardware-edit').modal('show');
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                // error occured
+            }
+        });
+    });
+
+    function onUpdateSuccess(data) {
+        $("#update-error").attr('hidden', 'hidden');
+        if (data.success) {
+            $("#hardware-edit").modal('hide');
+            window.location.href = "@Url.Action("Review", "Administration")";
+        }
+        else {
+            if (data.formErrors) { // validation errors occured
+                $.each(data.formErrors, function() {
+                    $("[data-valmsg-for=" + this.key + "]").html(this.errors.join());
+                });
+            }
+            else { // server error occured
+                $("#update-error").removeAttr('hidden');
+                $("#update-error").text("Update failed due to an unknown error.");
+            }
+        }
+    }
+
+    $('#add-item').on('click', function (e) {
+        e.preventDefault();
+        var targetUrl = "@Url.Action("AddHardwarePopup", "Administration")";
+
+        $.ajax({
+            type: "POST",
+            url: targetUrl,
+            data: null,
+            dataType: 'html',
+            success: function (data) {
+                $('#hardware-add').html(data);
+                $('#hardware-add').modal('show');
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                // error occured
+            }
+        });
+    });
+
+    function onAddSuccess(data) {
+        $("#add-error").attr('hidden', 'hidden');
+        if (data.success) {
+            $("#hardware-add").modal('hide');
+            window.location.href = "@Url.Action("Review", "Administration")";
+        }
+        else {
+            if (data.formErrors) { // validation errors occured
+                $.each(data.formErrors, function() {
+                    $("[data-valmsg-for=" + this.key + "]").html(this.errors.join());
+                });
+            }
+            else { // server error occured
+                $("#add-error").removeAttr('hidden');
+                $("#add-error").text("Operation failed due to an unknown error.");
+            }
+        }
+    }
+
+    $('.delete-item').on('click', function (e) {
+        e.preventDefault();
+        var itemId = $('td:first input', $(this).parents('tr')).val();
+        var targetUrl = "@Url.Action("DeleteHardwarePopup", "Administration")";
+
+        $.ajax({
+            type: "POST",
+            url: targetUrl,
+            data: { itemId: itemId },
+            dataType: 'html',
+            success: function (data) {
+                $('#hardware-delete').html(data);
+                $('#hardware-delete').modal('show');
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                // error occured
+            }
+        });
+    });
+
+    function onDeleteSuccess(data) {
+        $("#delete-error").attr('hidden', 'hidden');
+        if (data.success) {
+            $("#hardware-delete").modal('hide');
+            window.location.href = "@Url.Action("Review", "Administration")";
+        }
+        else { // server error occured
+            $("#delete-error").removeAttr('hidden');
+            $("#delete-error").text("Delete failed due to an unknown error.");
+        }
+    }
+
+</script>
+
+

@@ -14,7 +14,13 @@ namespace DeviceManager.Service
         {
             var config = new NLog.Config.LoggingConfiguration();
             string logfilePath = Path.Combine(Utility.GetAppRoamingFolder(), "server.log");
-            var logfile = new NLog.Targets.FileTarget("logfile") { FileName = logfilePath };
+            
+            var logfile = new NLog.Targets.FileTarget("logfile")
+            {
+                FileName = logfilePath,
+                Layout = "${longdate}|${level:uppercase=true}|${logger}|${message}${onexception:inner=${newline}${exception:format=tostring}}"
+            };
+
             config.AddRule(LogLevel.Info, LogLevel.Fatal, logfile);
             NLog.LogManager.Configuration = config;
         }
