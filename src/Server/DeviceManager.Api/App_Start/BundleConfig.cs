@@ -28,11 +28,13 @@ namespace DeviceManager.Api
             bundles.Add(new ScriptBundle("~/bundles/bootstrap-wizard").Include(
                         "~/ClientLibraries/twitter-bootstrap-wizard/jquery.bootstrap.wizard.min.js"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include(
+            bundles.Add(new StyleBundle("~/bundles/css").Include(
                         "~/ClientLibraries/twitter-bootstrap/css/bootstrap.min.css",
                         "~/Content/Styles/site.css",
-                        "~/Content/Styles/loading-button.css",
-                        "~/ClientLibraries/font-awesome/css/all.min.css"));
+                        "~/Content/Styles/loading-button.css"));
+
+            bundles.Add(new StyleBundle("~/bundles/css-fontawesome").Include(
+                        "~/ClientLibraries/font-awesome/css/all.min.css", new CssRewriteUrlWebRoot()));
         }
     }
 }
