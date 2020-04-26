@@ -33,6 +33,8 @@ namespace DeviceManager.Api
                         "~/Content/Styles/site.css",
                         "~/Content/Styles/loading-button.css",
                         "~/ClientLibraries/font-awesome/css/all.min.css"));
+
+            BundleTable.EnableOptimizations = false;
         }
     }
 }
