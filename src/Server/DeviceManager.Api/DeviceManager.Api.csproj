@@ -184,6 +184,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\BoolActionResult.cs" />
+    <Compile Include="Helper\CssRewriteUrlWebRoot.cs" />
     <Compile Include="Helper\QueryObjects\HardwareInfoSelect.cs" />
     <Compile Include="IoC\UnityResolverMVC.cs" />
     <Compile Include="IoC\UnityResolverWebApi.cs" />
