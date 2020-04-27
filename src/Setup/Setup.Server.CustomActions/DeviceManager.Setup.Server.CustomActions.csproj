@@ -42,13 +42,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomAction.cs" />
+    <Compile Include="GrantDatabasePermissions.cs" />
+    <Compile Include="TestConnection.cs" />
+    <Compile Include="Utility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="TestPort.cs" />
     <Content Include="CustomAction.config" />
     <EmbeddedResource Include="Resources\UserPermissions.sql" />
   </ItemGroup>
