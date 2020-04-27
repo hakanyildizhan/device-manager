@@ -119,6 +119,18 @@
       <Custom Action='CustomAction_GrantDatabasePermissions' After='InstallFinalize' >NOT Installed</Custom>
     </InstallExecuteSequence>
 
+    <!-- Load user profile for the App Pool -->
+    <CustomAction Id='CustomAction_LoadUserProfileForAppPool'
+                  Execute='deferred'
+                  Impersonate='no'
+                  Directory='INSTALLFOLDER'
+                  ExeCommand='C:\Windows\System32\inetsrv\appcmd.exe set apppool "DeviceManager" -processmodel.loaduserprofile:"true" -processmodel.setProfileEnvironment:"true"'
+                  Return='check'/>
+    <!-- Run after installation, before setup is finalized -->
+    <InstallExecuteSequence>
+      <Custom Action='CustomAction_LoadUserProfileForAppPool' Before='InstallFinalize'>NOT Installed</Custom>
+    </InstallExecuteSequence>
+
     <!-- Check if .Net Framework 4.6.1 is installed -->
     <PropertyRef Id="WIX_IS_NETFRAMEWORK_461_OR_LATER_INSTALLED" />
     <Condition Message="[ProductName] requires .NET Framework 4.6.1 or higher.">

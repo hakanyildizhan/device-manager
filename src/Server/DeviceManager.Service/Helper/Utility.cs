@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -17,12 +18,34 @@ namespace DeviceManager.Service
         {
             string roamingFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
-            // SpecialFolder.ApplicationData can be empty if the user profile environment is not set
-            // it should be set in applicationHost.config, i.e. setProfileEnvironment="true"
-            // TODO: should be tested more extensively
+            /* SpecialFolder.ApplicationData can be empty if 
+             *  - user profile is not loaded
+             *  - profile environment is not set
+             * 
+             * For logging to work correctly, 
+             * this tag should exist for "DeviceManager" App Pool on applicationHost.config:
+             *    <processModel setProfileEnvironment="true" loadUserProfile="true" />
+             * 
+             * This is normally done by the installer.
+            */ 
+
             if (string.IsNullOrEmpty(roamingFolder))
             {
-                roamingFolder = Path.Combine(Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile), "AppData", "Roaming");
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine(@"DeviceManager App Pool does not seem to have ""setProfileEnvironment"" and ""loadUserProfile"" settings set to true. This prevents the web server from initializing.");
+                sb.AppendLine(@"Make sure that the part below exists for ""DeviceManager"" App Pool on file C:\Windows\System32\inetsrv\config\applicationHost.config.");
+                sb.AppendLine();
+                sb.AppendLine(@"<add name=""DeviceManager"" autoStart=""true"" enable32BitAppOnWin64=""true"" managedRuntimeVersion=""v4.0"" managedPipelineMode=""Integrated"">");
+                sb.AppendLine(@"    <processModel identityType=""ApplicationPoolIdentity"" setProfileEnvironment=""true"" loadUserProfile=""true"" />");
+                sb.AppendLine("</add>");
+
+                using (EventLog eventLog = new EventLog("Application"))
+                {
+                    eventLog.Source = "DeviceManager";
+                    eventLog.WriteEntry(sb.ToString(), EventLogEntryType.Error, 4022, 1);
+                }
+
+                throw new Exception("DeviceManager App Pool does not have setProfileEnvironment and loadUserProfile settings set to true!");
             }
 
             string appRoamingFolder = Path.Combine(roamingFolder, "DeviceManager");
