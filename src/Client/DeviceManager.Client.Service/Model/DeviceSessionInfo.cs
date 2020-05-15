@@ -15,5 +15,6 @@ namespace DeviceManager.Client.Service.Model
         public bool IsAvailable { get; set; }
         public string UsedBy { get; set; }
         public string UsedByFriendly { get; set; }
+        public DateTime? CheckoutDate { get; set; }
     }
 }

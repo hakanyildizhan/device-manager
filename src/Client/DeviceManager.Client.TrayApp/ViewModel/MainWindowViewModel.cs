@@ -229,6 +229,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                             deviceItemViewModel.IsAvailable = sessionInfo.IsAvailable;
                             deviceItemViewModel.UsedBy = sessionInfo.UsedBy;
                             deviceItemViewModel.UsedByFriendly = sessionInfo.UsedByFriendly;
+                            deviceItemViewModel.CheckoutDate = sessionInfo.CheckoutDate;
                         }
                     }
                     await _configService.LogSuccessfulRefresh();

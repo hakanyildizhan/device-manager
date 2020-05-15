@@ -143,12 +143,14 @@ namespace DeviceManager.Service
                     bool isBusy = DbContext.Sessions.Any(s => s.IsActive && s.Device.Id == device.Id);
                     string usedBy = string.Empty;
                     string usedByFriendly = string.Empty;
+                    DateTime? checkoutDate = null;
 
                     if (isBusy)
                     {
                         Session session = DbContext.Sessions.Where(s => s.IsActive && s.Device.Id == device.Id).FirstOrDefault();
                         usedBy = session.Client.DomainUsername;
                         usedByFriendly = session.Client.FriendlyName;
+                        checkoutDate = session.StartedAt;
                     }
 
                     deviceSessions.Add(new DeviceSessionInfo
@@ -156,7 +158,8 @@ namespace DeviceManager.Service
                         DeviceId = device.Id,
                         IsAvailable = !isBusy,
                         UsedBy = usedBy,
-                        UsedByFriendly = usedByFriendly
+                        UsedByFriendly = usedByFriendly,
+                        CheckoutDate = checkoutDate
                     });
                 }
                 return deviceSessions;
