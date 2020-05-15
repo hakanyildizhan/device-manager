@@ -69,6 +69,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 {
                     _usedByFriendly = value;
                     OnPropertyChanged(nameof(UsedByFriendly));
+                    OnPropertyChanged(nameof(Tooltip));
                 }
             }
         }
