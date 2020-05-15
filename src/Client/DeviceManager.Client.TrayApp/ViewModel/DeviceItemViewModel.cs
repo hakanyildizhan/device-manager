@@ -255,7 +255,11 @@ namespace DeviceManager.Client.TrayApp.ViewModel
 
             if (!this.IsAvailable)
             {
-                sbTooltip.AppendLine();
+                if (!string.IsNullOrEmpty(this.ConnectedModuleInfo))
+                {
+                    sbTooltip.AppendLine();
+                }
+                
                 sbTooltip.Append("Checked out by: ");
 
                 if (this.UsedBy == Utility.GetCurrentUserName())
