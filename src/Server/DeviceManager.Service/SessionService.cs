@@ -92,8 +92,9 @@ namespace DeviceManager.Service
                     s.Client.DomainUsername == userName &&
                     s.IsActive).FirstOrDefault();
 
+                // Either device ID is invalid, or the device is already checked in
                 if (activeSession == null)
-                    return true;
+                    return false;
 
                 activeSession.FinishedAt = DateTime.UtcNow;
                 activeSession.IsActive = false;

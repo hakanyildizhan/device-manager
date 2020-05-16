@@ -10,9 +10,6 @@ namespace DeviceManager.Api.Model
 {
     public class SettingsOverview
     {
-        //public ServerStats ServerStats { get; set; }
-        //public SettingsUpdate Settings { get; set; }
-
         [DisplayName("Server version")]
         public string ServerVersion { get; set; }
 
