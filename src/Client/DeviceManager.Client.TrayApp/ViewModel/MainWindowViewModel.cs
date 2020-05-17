@@ -153,6 +153,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         private async Task<bool> GetDevicesAsync()
         {
             bool success = false;
+            await _configService.LogRefresh();
             await RunCommandAsync(() => this.ExecutingCommand, async () =>
             {
                 IEnumerable<Device> devices = await _dataService.GetDevicesAsync();
@@ -166,6 +167,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                     });
                     success = true;
                     _logService.LogInformation("Got device list successfully");
+                    await _configService.LogSuccessfulRefresh();
                 }
             });
             return success;
