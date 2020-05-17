@@ -105,6 +105,7 @@
     <Compile Include="Service\NLogLogger.cs" />
     <Compile Include="ValueConverters\BaseMultiValueConverter.cs" />
     <Compile Include="ValueConverters\BooleanOrBooleanConverter.cs" />
+    <Compile Include="ValueConverters\BooleanReversalConverter.cs" />
     <Compile Include="ValueConverters\UserNameOrFriendlyNameConverter.cs" />
     <Compile Include="ViewModel\DeviceListViewModel.cs" />
     <Compile Include="Service\BasicToastFeedbackService.cs" />
@@ -113,9 +114,14 @@
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\DeviceItemViewModel.cs" />
+    <Compile Include="ViewModel\Enum\ReminderResponse.cs" />
     <Compile Include="ViewModel\Enum\TimerEvent.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\QueryObjects\DeviceListSelect.cs" />
+    <Compile Include="ViewModel\ReminderWindowViewModel.cs" />
+    <Compile Include="Windows\ReminderWindow.xaml.cs">
+      <DependentUpon>ReminderWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Controls\DeviceItemControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -143,15 +149,27 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Styles\Color.xaml">
+    <Page Include="Styles\Button.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Color.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\Menu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\TaskbarIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\Text.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ReminderWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -224,6 +242,9 @@
     <Resource Include="Icons\Animation\icon_loading_7.ico" />
     <Resource Include="Icons\Animation\icon_loading_8.ico" />
     <Resource Include="Icons\Animation\icon_loading_9.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\questionmark.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
