@@ -68,6 +68,11 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         public double Height => 180;
 
         /// <summary>
+        /// Window caption height.
+        /// </summary>
+        public double CaptionHeight => 30;
+
+        /// <summary>
         /// Duration in seconds for the prompt to be active on screen.
         /// </summary>
         public int PromptTimeout => 60;

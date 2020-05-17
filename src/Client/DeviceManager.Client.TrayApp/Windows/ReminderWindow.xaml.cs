@@ -23,15 +23,5 @@ namespace DeviceManager.Client.TrayApp.Windows
         {
             InitializeComponent();
         }
-
-        /// <summary>
-        /// Adds the ability to drag the window.
-        /// </summary>
-        /// <param name="e"></param>
-        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-        {
-            base.OnMouseLeftButtonDown(e);
-            this.DragMove();
-        }
     }
 }

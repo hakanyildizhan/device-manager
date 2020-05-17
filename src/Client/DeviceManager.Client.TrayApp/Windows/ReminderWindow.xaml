@@ -12,10 +12,15 @@
         MinHeight="{Binding Height, FallbackValue=180}"
         MinWidth="{Binding Width, FallbackValue=400}"
         Height="180" Width="400">
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="{Binding CaptionHeight}"/>
+    </WindowChrome.WindowChrome>
+
     <Grid>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*" />
+            <RowDefinition Height="{Binding CaptionHeight, FallbackValue=30}" />
             <RowDefinition Height="7*" />
             <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
@@ -48,7 +53,7 @@
             </StackPanel>
 
         </Grid>
-        
+
         <Grid Grid.Row="1">
 
             <Grid.ColumnDefinitions>
@@ -63,12 +68,12 @@
                        Height="60"
                        Margin="10 20 10 30"/>
             </StackPanel>
-            
+
             <StackPanel 
                 Grid.Column="1"
                 Background="White"
                 Margin="10 30 10 15">
-                
+
                 <TextBlock 
                     Text="{Binding PromptMessage, FallbackValue='Do you still need to use&#x0a;starter_pn_hf_1?'}"
                    >
@@ -76,7 +81,7 @@
             </StackPanel>
 
         </Grid>
-        
+
         <Grid Background="{x:Static SystemColors.ControlLightBrush}"
               Grid.Row="2">
 
@@ -84,17 +89,24 @@
                 Orientation="Horizontal" 
                 HorizontalAlignment="Center">
 
-                <Button x:Name="KeepUsing" 
+                <Button x:Name="KeepUsing"
                     Content="Yes, keep using" 
                     Margin="140 8 5 8"
+                    Padding="4 2 0 0"
                     Width="95"
-                    Command="{Binding CloseCommand}"/>
+                    Command="{Binding CloseCommand}"
+                    Style="{DynamicResource ReminderButtonStyle}"
+                    IsEnabled="{Binding ExecutingCommand, Converter={local:BooleanReversalConverter}}"
+                    />
 
                 <Button x:Name="Release" 
                     Content="No, I'm done" 
                     Margin="5 8 5 8"
+                    Padding="9 2 0 0"
                     Width="95"
-                    Command="{Binding ReleaseCommand}"/>
+                    Command="{Binding ReleaseCommand}"
+                    Style="{DynamicResource ReminderButtonStyle}"
+                    local:IsBusyProperty.Value="{Binding ExecutingCommand}"/>
             </StackPanel>
 
         </Grid>
