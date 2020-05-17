@@ -197,6 +197,9 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         /// <returns></returns>
         private async Task RefreshAsync()
         {
+#if DEBUG
+            await _feedbackService.ShowMessageAsync("Refresh started.");
+#endif
             await _configService.LogRefresh();
             bool fullUpdateRequired = false;
 
@@ -226,6 +229,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                             deviceItemViewModel.IsAvailable = sessionInfo.IsAvailable;
                             deviceItemViewModel.UsedBy = sessionInfo.UsedBy;
                             deviceItemViewModel.UsedByFriendly = sessionInfo.UsedByFriendly;
+                            deviceItemViewModel.CheckoutDate = sessionInfo.CheckoutDate;
                         }
                     }
                     await _configService.LogSuccessfulRefresh();

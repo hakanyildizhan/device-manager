@@ -2,6 +2,7 @@
 using DeviceManager.Client.Service.Model;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         private bool _usedByMe;
         private string _usedByFriendly;
         private string _connectedModuleInfo;
+        private DateTime? _checkoutDate;
         private Timer _usageTimer;
         private bool _promptActive = false;
 
@@ -69,6 +71,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 {
                     _usedByFriendly = value;
                     OnPropertyChanged(nameof(UsedByFriendly));
+                    OnPropertyChanged(nameof(Tooltip));
                 }
             }
         }
@@ -106,6 +109,24 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 }
             }
         }
+
+        /// <summary>
+        /// Date and time when this device item was checked out.
+        /// If the device item is currently available, this value will be null.
+        /// </summary>
+        public DateTime? CheckoutDate
+        {
+            get { return _checkoutDate; }
+            set
+            {
+                if (_checkoutDate != value)
+                {
+                    _checkoutDate = value;
+                    OnPropertyChanged(nameof(Tooltip));
+                }
+            }
+        }
+
         public string Tooltip { get { return this.GenerateTooltip(); } }
 
         public bool ExecutingCommand { get; set; }
@@ -247,6 +268,8 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         private string GenerateTooltip()
         {
             StringBuilder sbTooltip = new StringBuilder();
+
+            // Connected module info (if exists)
             if (!string.IsNullOrEmpty(this.ConnectedModuleInfo))
             {
                 sbTooltip.Append("Connected modules: ");
@@ -255,7 +278,12 @@ namespace DeviceManager.Client.TrayApp.ViewModel
 
             if (!this.IsAvailable)
             {
-                sbTooltip.AppendLine();
+                if (!string.IsNullOrEmpty(this.ConnectedModuleInfo))
+                {
+                    sbTooltip.AppendLine();
+                }
+                
+                // Info about user that has the item checked out
                 sbTooltip.Append("Checked out by: ");
 
                 if (this.UsedBy == Utility.GetCurrentUserName())
@@ -269,6 +297,12 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 else
                 {
                     sbTooltip.Append(this.UsedBy);
+                }
+
+                // Checkout date
+                if (this.CheckoutDate != null)
+                {
+                    sbTooltip.Append($" (at {this.CheckoutDate.Value.ToShortDateString()} {this.CheckoutDate.Value.ToString("HH:mm")})");
                 }
             }
 

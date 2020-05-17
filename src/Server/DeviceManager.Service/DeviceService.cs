@@ -46,7 +46,8 @@ namespace DeviceManager.Service
                         Name = d.Name,
                         DeviceGroup = d.Group,
                         UsedBy = activeSession?.Client?.DomainUsername,
-                        UsedByFriendly = activeSession?.Client?.FriendlyName
+                        UsedByFriendly = activeSession?.Client?.FriendlyName,
+                        CheckoutDate = activeSession?.StartedAt
                     });
                 }
                 return devices;
