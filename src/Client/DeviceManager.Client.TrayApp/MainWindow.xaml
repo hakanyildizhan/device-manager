@@ -7,97 +7,15 @@
         xmlns:vm="clr-namespace:DeviceManager.Client.TrayApp.ViewModel"
         xmlns:tb="http://www.hardcodet.net/taskbar"
         mc:Ignorable="d"
-        Title="MainWindow" Height="0" Width="0"
-        ShowInTaskbar="True" Visibility="Hidden">
+        WindowStyle="None" Height="0" Width="0"
+        Title="MainWindow">
 
     <tb:TaskbarIcon x:Name="trayIcon"
         IconSource="/Icons/icon.ico"
         ToolTipText="Device Manager"
         local:IsBusyProperty.Value="{Binding ExecutingCommand}"
-        >
+        Style="{StaticResource TaskbarIconStyle}">
 
-        <tb:TaskbarIcon.Style>
-            <Style TargetType="{x:Type tb:TaskbarIcon}">
-                <Style.Triggers>
-                    <Trigger Property="local:IsBusyProperty.Value"  Value="true">
-                        <Trigger.EnterActions>
-                            <BeginStoryboard Name="loadingStoryboard">
-                                <Storyboard RepeatBehavior="Forever">
-                                    <ObjectAnimationUsingKeyFrames 
-                                        Storyboard.TargetProperty="IconSource">
-
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.1">
-                                            <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_1.ico" />
-                                            </DiscreteObjectKeyFrame.Value>
-                                        </DiscreteObjectKeyFrame>
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.2">
-                                            <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_2.ico" />
-                                            </DiscreteObjectKeyFrame.Value>
-                                        </DiscreteObjectKeyFrame>
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.3">
-                                            <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_3.ico" />
-                                            </DiscreteObjectKeyFrame.Value>
-                                        </DiscreteObjectKeyFrame>
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.4">
-                                            <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_4.ico" />
-                                            </DiscreteObjectKeyFrame.Value>
-                                        </DiscreteObjectKeyFrame>
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.5">
-                                            <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_5.ico" />
-                                            </DiscreteObjectKeyFrame.Value>
-                                        </DiscreteObjectKeyFrame>
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.6">
-                                            <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_6.ico" />
-                                            </DiscreteObjectKeyFrame.Value>
-                                        </DiscreteObjectKeyFrame>
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.7">
-                                            <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_7.ico" />
-                                            </DiscreteObjectKeyFrame.Value>
-                                        </DiscreteObjectKeyFrame>
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.8">
-                                            <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_8.ico" />
-                                            </DiscreteObjectKeyFrame.Value>
-                                        </DiscreteObjectKeyFrame>
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:0.9">
-                                            <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_9.ico" />
-                                            </DiscreteObjectKeyFrame.Value>
-                                        </DiscreteObjectKeyFrame>
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:1">
-                                            <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_10.ico" />
-                                            </DiscreteObjectKeyFrame.Value>
-                                        </DiscreteObjectKeyFrame>
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:1.1">
-                                            <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_11.ico" />
-                                            </DiscreteObjectKeyFrame.Value>
-                                        </DiscreteObjectKeyFrame>
-                                        <DiscreteObjectKeyFrame KeyTime="0:0:1.2">
-                                            <DiscreteObjectKeyFrame.Value>
-                                                <BitmapImage UriSource="/Icons/Animation/icon_loading_12.ico" />
-                                            </DiscreteObjectKeyFrame.Value>
-                                        </DiscreteObjectKeyFrame>
-                                    </ObjectAnimationUsingKeyFrames>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </Trigger.EnterActions>
-                        <Trigger.ExitActions>
-                            <StopStoryboard BeginStoryboardName="loadingStoryboard"/>
-                        </Trigger.ExitActions>
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-        </tb:TaskbarIcon.Style>
-        
         <tb:TaskbarIcon.ContextMenu>
 
             <ContextMenu Name="ctxMenu" UsesItemContainerTemplate="True">
