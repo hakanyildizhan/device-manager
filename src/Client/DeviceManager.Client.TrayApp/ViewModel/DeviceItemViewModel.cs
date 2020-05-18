@@ -24,6 +24,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         public int Id { get; set; }
         public string Name { get; set; }
         public int UsagePromptInterval => _configService.GetUsagePromptInterval();
+        public int UsagePromptDuration => _configService.GetUsagePromptDuration();
 
         private bool _isAvailable;
         private string _usedBy;

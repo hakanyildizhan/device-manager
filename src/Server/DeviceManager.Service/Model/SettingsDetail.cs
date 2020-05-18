@@ -1,15 +1,13 @@
-﻿using DeviceManager.Service.Model;
+﻿using DeviceManager.Service.Model.Setting;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Web;
-using DeviceManager.Service.Model.Setting;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace DeviceManager.Api.Model
+namespace DeviceManager.Service.Model
 {
-    public class SettingsOverview
+    public class SettingsDetail
     {
         public ServerVersion ServerVersion { get; set; }
 

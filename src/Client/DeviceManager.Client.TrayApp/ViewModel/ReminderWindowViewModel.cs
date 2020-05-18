@@ -21,9 +21,8 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         private Window _window;
 
         private string _deviceNameOnPrompt => DeviceItem?.Name.Replace("\t", "  ");
-
-        private Timer _promptTimeout;
-
+        private Timer _promptActiveTimer;
+        private int _promptTimeout;
         private DeviceItemViewModel _deviceItem;
 
         /// <summary>
@@ -75,7 +74,24 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         /// <summary>
         /// Duration in seconds for the prompt to be active on screen.
         /// </summary>
-        public int PromptTimeout => 60;
+        public int PromptTimeout
+        {
+            get
+            {
+                if (_promptTimeout < ServiceConstants.Settings.USAGE_PROMPT_INTERVAL_MINIMUM)
+                {
+                    return ServiceConstants.Settings.USAGE_PROMPT_INTERVAL_DEFAULT;
+                }
+                else
+                {
+                    return _promptTimeout;
+                }
+            }
+            set
+            {
+                _promptTimeout = value;
+            }
+        }
 
         /// <summary>
         /// A flag indicating that the check-in command is currently being executed.
@@ -101,6 +117,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         public void Subscribe(DeviceItemViewModel deviceItem)
         {
             DeviceItem = deviceItem;
+            this.PromptTimeout = DeviceItem.UsagePromptDuration;
             this.CheckinPerformed += DeviceItem.HandleCheckinOnReminder;
             this.ReminderClosed += DeviceItem.HandleReminderClose;
         }
@@ -134,19 +151,19 @@ namespace DeviceManager.Client.TrayApp.ViewModel
 
         private void StartAutoCloseCountdown()
         {
-            _promptTimeout = new Timer();
-            _promptTimeout.Elapsed += Timeout_Reached;
-            _promptTimeout.Interval = TimeSpan.FromSeconds(this.PromptTimeout).TotalMilliseconds;
-            _promptTimeout.Enabled = true;
-            _promptTimeout.Start();
+            _promptActiveTimer = new Timer();
+            _promptActiveTimer.Elapsed += Timeout_Reached;
+            _promptActiveTimer.Interval = TimeSpan.FromSeconds(this.PromptTimeout).TotalMilliseconds;
+            _promptActiveTimer.Enabled = true;
+            _promptActiveTimer.Start();
         }
 
         private void DisposeTimer()
         {
-            if (_promptTimeout != null)
+            if (_promptActiveTimer != null)
             {
-                _promptTimeout.Stop();
-                _promptTimeout.Dispose();
+                _promptActiveTimer.Stop();
+                _promptActiveTimer.Dispose();
             }
         }
 

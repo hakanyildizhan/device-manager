@@ -1,18 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Deployment.WindowsInstaller;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace DeviceManager.Setup.CustomActions
 {
-    public class CustomActions
+    public partial class CustomActions
     {
-        static HttpClient _client = new HttpClient();
         static object _lockObject = new object();
         private static string _configFile = Path.Combine(GetAppRoamingFolder(), "appsettings.json");
         private static string _serverAddressSetting = "serverAddress";
@@ -37,13 +32,22 @@ namespace DeviceManager.Setup.CustomActions
                 address = "http://" + address;
             }
 
+            // if address points to Default Web Site (port 80)
+            // and does not include "/DeviceManager", handle it
+            Uri uri = new Uri(address);
+            if (uri.Port == 80 && !address.Contains("DeviceManager"))
+            {
+                address = uri.Scheme + Uri.SchemeDelimiter + uri.Host + "/" + "DeviceManager";
+                session["SERVERADDRESS"] = address;
+            }
+
             // if address does not end with '/', add it
             if (!address.EndsWith("/"))
             {
                 address = address + '/';
             }
 
-            var serverValidityResult = TestServerValidity(address);
+            var serverValidityResult = Utility.TestServerValidity(address);
             session.Log(serverValidityResult.Message);
 
             if (serverValidityResult.Success)
@@ -58,69 +62,6 @@ namespace DeviceManager.Setup.CustomActions
             }
 
             return ActionResult.Success;
-        }
-
-        /// <summary>
-        /// Checks if the user already has a config file that contains a valid server URL.
-        /// If so, sets TESTRESULT to "1" and sets the SERVERADDRESS property.
-        /// </summary>
-        /// <param name="session"></param>
-        /// <returns></returns>
-        [CustomAction]
-        public static ActionResult CheckServerConfig(Session session)
-        {
-            //System.Diagnostics.Debugger.Launch();
-            session.Log("CheckServerConfig CustomAction started");
-
-            // if file does not exist, do nothing
-            if (!File.Exists(_configFile))
-            {
-                return ActionResult.Success;
-            }
-
-            var getServerSettingResult = GetServerSetting();
-            session.Log(getServerSettingResult.Message);
-
-            string serverAddress = getServerSettingResult.Result;
-
-            // server setting does not exist. return
-            if (string.IsNullOrEmpty(serverAddress))
-            {
-                session["TESTRESULT"] = "0";
-                return ActionResult.Success;
-            }
-
-            // test the server validity
-            var serverValidityResult = TestServerValidity(serverAddress);
-            session.Log(serverValidityResult.Message);
-            session["TESTRESULT"] = serverValidityResult.Success ? "1" : "0";
-            session["SERVERADDRESS"] = serverValidityResult.Success ? serverAddress : "";
-            return ActionResult.Success;
-        }
-
-        private static ServerValidityTestResult TestServerValidity(string address)
-        {
-            // send a request to <address>/api/user/register
-            UriBuilder builder = new UriBuilder($"{address}api/");
-            Uri uri = new Uri(builder.Uri, "user/register");
-            ServerValidityTestResult result = new ServerValidityTestResult();
-
-            try
-            {
-                string domainUserName = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-                HttpResponseMessage response = Task.Run(async () => await _client.PostAsJsonAsync(uri, domainUserName)).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    result.Message = "Server check was successful";
-                    result.Success = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                result.Message = $"Error occured while checking server validity. Error type {ex.GetType().Name}, message: {ex.Message}";
-            }
-
-            return result;
         }
 
         /// <summary>

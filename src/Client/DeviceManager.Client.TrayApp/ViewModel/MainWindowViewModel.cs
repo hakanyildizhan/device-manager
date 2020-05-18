@@ -86,7 +86,22 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             }
         }
 
-        public int RefreshInterval => _configService.GetRefreshInterval();
+        public int RefreshInterval
+        {
+            get
+            {
+                int refreshInterval = _configService.GetRefreshInterval();
+                if (refreshInterval > ServiceConstants.Settings.REFRESH_INTERVAL_MAXIMUM ||
+                    refreshInterval < ServiceConstants.Settings.REFRESH_INTERVAL_MINIMUM)
+                {
+                    return ServiceConstants.Settings.REFRESH_INTERVAL_DEFAULT;
+                }
+                else
+                {
+                    return refreshInterval;
+                }
+            }
+        }
 
         public ICommand SetNameCommand { get; set; }
         public ICommand EnterEditModeCommand { get; set; }

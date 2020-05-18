@@ -10,10 +10,22 @@ namespace DeviceManager.Service
     public interface ISettingsService
     {
         /// <summary>
-        /// Gets server settings.
+        /// Gets server settings in key-value pairs.
         /// </summary>
         /// <returns></returns>
         Dictionary<string,string> Get();
+
+        /// <summary>
+        /// Gets server settings in full detail, including descriptions.
+        /// </summary>
+        /// <returns></returns>
+        Task<SettingsDetail> GetDetailedAsync();
+
+        /// <summary>
+        /// Updates server settings as entered on administration page.
+        /// </summary>
+        /// <returns></returns>
+        Task UpdateAsync(SettingsDetail settings);
 
         /// <summary>
         /// Gets a specific setting value.

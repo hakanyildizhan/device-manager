@@ -1,10 +1,10 @@
-﻿@using DeviceManager.Api.Model
+﻿@using DeviceManager.Service.Model
 
 @{
     ViewBag.Title = "Settings";
 }
 
-@model SettingsOverview
+@model SettingsDetail
 
 <div class="row">
     <div class="col-lg-10 content">
@@ -14,46 +14,71 @@
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group row">
-                <div class="col-lg-4">
-                    @Html.LabelFor(m => m.ServerVersion, new { @class = "col-form-label" })
+                <div class="col-lg-5">
+                    @Html.LabelFor(m => m.ServerVersion.Value, new { @class = "col-form-label" })
                 </div>
-                <div class="col-lg-8">
-                    @Html.TextBoxFor(m => m.ServerVersion, new { @class = "form-control", disabled = "disabled" })
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-lg-4">
-                    @Html.LabelFor(m => m.LastDeviceListUpdate, new { @class = "col-form-label" })
-                </div>
-                <div class="col-lg-8">
-                    @Html.TextBoxFor(m => m.LastDeviceListUpdate, new { @class = "form-control", disabled = "disabled" })
+                <div class="col-lg-7">
+                    @Html.TextBoxFor(m => m.ServerVersion.Value, new { @class = "form-control", @readonly="readonly" })
                 </div>
             </div>
             <div class="form-group row">
-                <div class="col-lg-4">
-                    @Html.LabelFor(m => m.RefreshInterval, new { @class = "col-form-label" })
+                <div class="col-lg-5">
+                    @Html.LabelFor(m => m.LastDeviceListUpdate.Value, new { @class = "col-form-label" })
                 </div>
-                <div class="col-lg-8">
-                    @Html.TextBoxFor(m => m.RefreshInterval, new { @class = "form-control" })
-                </div>
-                <div class="col-lg-4"></div>
-                <div class="col-lg-8">
-                    @Html.ValidationMessageFor(m => m.RefreshInterval, "", new { @class = "text-danger" })
+                <div class="col-lg-7">
+                    @Html.TextBoxFor(m => m.LastDeviceListUpdate.Value, new { @class = "form-control", @readonly="readonly" })
                 </div>
             </div>
-            <div class="form-group row">
-                <div class="col-lg-4">
-                    @Html.LabelFor(m => m.UsagePromptInterval, new { @class = "col-form-label" })
+            if (@Model.RefreshInterval != null)
+            {
+                <div class="form-group row">
+                    <div class="col-lg-5">
+                        @Html.HiddenFor(m => m.RefreshInterval.Description)
+                        @Html.LabelFor(m => m.RefreshInterval.Value, new { @class = "col-form-label" }) <i class="fas fa-info-circle" title="@Html.DisplayFor(m => m.RefreshInterval.Description)"></i>
+                    </div>
+                    <div class="col-lg-7">
+                        @Html.TextBoxFor(m => m.RefreshInterval.Value, new { @class = "form-control" })
+                    </div>
+                    <div class="col-lg-5"></div>
+                    <div class="col-lg-7">
+                        @Html.ValidationMessageFor(m => m.RefreshInterval.Value, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-                <div class="col-lg-8">
-                    @Html.TextBoxFor(m => m.UsagePromptInterval, new { @class = "form-control" })
+            }
+            if (@Model.UsagePromptInterval != null)
+            {
+                <div class="form-group row">
+                    <div class="col-lg-5">
+                        @Html.HiddenFor(m => m.UsagePromptInterval.Description)
+                        @Html.LabelFor(m => m.UsagePromptInterval.Value, new { @class = "col-form-label" }) <i class="fas fa-info-circle" title="@Html.DisplayFor(m => m.UsagePromptInterval.Description)"></i>
+                    </div>
+                    <div class="col-lg-7">
+                        @Html.TextBoxFor(m => m.UsagePromptInterval.Value, new { @class = "form-control" })
+                    </div>
+                    <div class="col-lg-5"></div>
+                    <div class="col-lg-7">
+                        @Html.ValidationMessageFor(m => m.UsagePromptInterval.Value, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-                <div class="col-lg-4"></div>
-                <div class="col-lg-8">
-                    @Html.ValidationMessageFor(m => m.UsagePromptInterval, "", new { @class = "text-danger" })
+            }
+            if (@Model.UsagePromptDuration != null)
+            {
+                <div class="form-group row">
+                    <div class="col-lg-5">
+                        @Html.HiddenFor(m => m.UsagePromptDuration.Description)
+                        @Html.LabelFor(m => m.UsagePromptDuration.Value, new { @class = "col-form-label" }) <i class="fas fa-info-circle" title="@Html.DisplayFor(m => m.UsagePromptDuration.Description)"></i>
+                    </div>
+                    <div class="col-lg-7">
+                        @Html.TextBoxFor(m => m.UsagePromptDuration.Value, new { @class = "form-control" })
+                    </div>
+                    <div class="col-lg-5"></div>
+                    <div class="col-lg-7">
+                        @Html.ValidationMessageFor(m => m.UsagePromptDuration.Value, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
-             <div class="form-group single-button-container">
+            }
+
+            <div class="form-group single-button-container">
                 <input type="submit" value="Update Settings" class="form-control btn btn-primary" />
             </div>
         }
