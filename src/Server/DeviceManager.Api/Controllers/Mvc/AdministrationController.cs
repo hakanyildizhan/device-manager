@@ -39,18 +39,12 @@ namespace DeviceManager.Api.Controllers
         }
 
         // GET: Settings
-        public ActionResult Settings()
+        public async Task<ActionResult> Settings()
         {
             ViewBag.ActivePage = "Settings";
 
-            Dictionary<string, string> settings = _settingsService.Get();
-            return View(new SettingsOverview 
-            { 
-                LastDeviceListUpdate = settings[ServiceConstants.Settings.LAST_DEVICE_LIST_UPDATE],
-                RefreshInterval = int.Parse(settings[ServiceConstants.Settings.REFRESH_INTERVAL]),
-                ServerVersion = settings[ServiceConstants.Settings.VERSION],
-                UsagePromptInterval = int.Parse(settings[ServiceConstants.Settings.USAGE_PROMPT_INTERVAL])
-            });
+            var settings = await _settingsService.GetDetailedAsync();
+            return View(settings);
         }
 
         // GET: Import
@@ -76,7 +70,7 @@ namespace DeviceManager.Api.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> UpdateSettings(SettingsOverview settings)
+        public async Task<ActionResult> UpdateSettings(SettingsDetail settings)
         {
             if (!ModelState.IsValid)
             {
@@ -84,9 +78,7 @@ namespace DeviceManager.Api.Controllers
                 return View("Settings", settings);
             }
 
-            await _settingsService.AddOrUpdateAsync(ServiceConstants.Settings.REFRESH_INTERVAL, settings.RefreshInterval.ToString());
-            await _settingsService.AddOrUpdateAsync(ServiceConstants.Settings.USAGE_PROMPT_INTERVAL, settings.UsagePromptInterval.ToString());
-
+            await _settingsService.UpdateAsync(settings);
             return RedirectToAction("Settings");
         }
 

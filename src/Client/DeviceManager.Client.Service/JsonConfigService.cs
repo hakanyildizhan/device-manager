@@ -132,6 +132,12 @@ namespace DeviceManager.Client.Service
             return !string.IsNullOrEmpty(value) ? int.Parse(value) : ServiceConstants.Settings.USAGE_PROMPT_INTERVAL_DEFAULT;
         }
 
+        public int GetUsagePromptDuration()
+        {
+            string value = Get(ServiceConstants.Settings.USAGE_PROMPT_DURATION);
+            return !string.IsNullOrEmpty(value) ? int.Parse(value) : ServiceConstants.Settings.USAGE_PROMPT_DURATION_DEFAULT;
+        }
+
         public string GetServerAddress()
         {
             return Get(ServiceConstants.Settings.SERVER_ADDRESS);
