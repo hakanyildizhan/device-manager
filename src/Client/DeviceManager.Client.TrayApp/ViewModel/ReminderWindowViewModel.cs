@@ -78,14 +78,18 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         {
             get
             {
-                if (_promptTimeout < ServiceConstants.Settings.USAGE_PROMPT_INTERVAL_MINIMUM)
+#if DEBUG
+                return _promptTimeout;
+#else
+                if (_promptTimeout < ServiceConstants.Settings.USAGE_PROMPT_DURATION_MINIMUM)
                 {
-                    return ServiceConstants.Settings.USAGE_PROMPT_INTERVAL_DEFAULT;
+                    return ServiceConstants.Settings.USAGE_PROMPT_DURATION_DEFAULT;
                 }
                 else
                 {
                     return _promptTimeout;
                 }
+#endif
             }
             set
             {

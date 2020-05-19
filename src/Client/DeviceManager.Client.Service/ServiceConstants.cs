@@ -19,7 +19,9 @@ namespace DeviceManager.Client.Service
             public const string USAGE_PROMPT_INTERVAL = "usagePromptInterval";
             public const int USAGE_PROMPT_INTERVAL_DEFAULT = 3600;
             public const int USAGE_PROMPT_INTERVAL_MINIMUM = 1800;
+            public const int USAGE_PROMPT_INTERVAL_MAXIMUM = 28800;
             public const string USAGE_PROMPT_DURATION = "usagePromptDuration";
+            public const int USAGE_PROMPT_DURATION_MINIMUM = 10;
             public const int USAGE_PROMPT_DURATION_DEFAULT = 60;
             public const string SERVER_ADDRESS = "serverAddress";
         }

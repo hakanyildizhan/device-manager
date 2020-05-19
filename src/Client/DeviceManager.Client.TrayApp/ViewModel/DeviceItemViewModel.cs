@@ -23,7 +23,34 @@ namespace DeviceManager.Client.TrayApp.ViewModel
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public int UsagePromptInterval => _configService.GetUsagePromptInterval();
+
+        /// <summary>
+        /// Frequency at which the reminder popup will be displayed if this device item is being used by the current user.
+        /// </summary>
+        public int UsagePromptInterval
+        {
+            get
+            {
+                int usagePromptInterval = _configService.GetUsagePromptInterval();
+#if DEBUG
+                return usagePromptInterval;
+#else
+                if (usagePromptInterval > ServiceConstants.Settings.USAGE_PROMPT_INTERVAL_MAXIMUM ||
+                    usagePromptInterval < ServiceConstants.Settings.USAGE_PROMPT_INTERVAL_MINIMUM)
+                {
+                    return ServiceConstants.Settings.USAGE_PROMPT_INTERVAL_DEFAULT;
+                }
+                else
+                {
+                    return usagePromptInterval;
+                }
+#endif
+            }
+        }
+
+        /// <summary>
+        /// The duration of the reminder popup to stay on the screen.
+        /// </summary>
         public int UsagePromptDuration => _configService.GetUsagePromptDuration();
 
         private bool _isAvailable;
