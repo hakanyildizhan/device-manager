@@ -402,7 +402,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 // Checkout date
                 if (this.CheckoutDate != null)
                 {
-                    sbTooltip.Append($" (at {this.CheckoutDate.Value.ToShortDateString()} {this.CheckoutDate.Value.ToString("HH:mm")})");
+                    sbTooltip.Append($" (at {this.CheckoutDate.Value.ToLocalTime().ToShortDateString()} {this.CheckoutDate.Value.ToLocalTime().ToString("HH:mm")})");
                 }
             }
 
