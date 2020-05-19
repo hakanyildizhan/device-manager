@@ -5,7 +5,7 @@
            UpgradeCode="4AD49979-E74E-4BEE-9930-1389557CF69C"
            Name="Device Manager Server" 
            Language="1033" 
-           Version="1.0.0.0" 
+           Version="$(var.BuildVersion)" 
            Manufacturer="Hakan Yildizhan" >
     
 		<Package Id="*"
@@ -31,21 +31,21 @@
     <!-- Comment it when delivering a major upgrade -->
     <Upgrade Id='4AD49979-E74E-4BEE-9930-1389557CF69C'>
       <UpgradeVersion OnlyDetect='yes' Property='SELFFOUND'
-          Minimum='1.0.0.0' IncludeMinimum='yes'
-          Maximum='1.0.0.0' IncludeMaximum='yes' />
+          Minimum='$(var.BuildVersion)' IncludeMinimum='yes'
+          Maximum='$(var.BuildVersion)' IncludeMaximum='yes' />
       <UpgradeVersion OnlyDetect='yes' Property='NEWERFOUND'
-          Minimum='1.0.0.0' IncludeMinimum='no' />
+          Minimum='$(var.BuildVersion)' IncludeMinimum='no' />
       <UpgradeVersion OnlyDetect='yes' Property='OLDERFOUND'
-          Maximum='1.0.0.0' IncludeMaximum='no' />
+          Maximum='$(var.BuildVersion)' IncludeMaximum='no' />
     </Upgrade>
-
-    <CustomAction Id='AlreadyUpdated' Error='[ProductName] has already been updated to 1.0.1 or newer.' />
-    <CustomAction Id='NoDowngrade' Error='A later version of [ProductName] is already installed.' />
 
     <InstallExecuteSequence>
       <Custom Action='AlreadyUpdated' After='FindRelatedProducts'>SELFFOUND</Custom>
       <Custom Action='NoDowngrade' After='FindRelatedProducts'>NEWERFOUND</Custom>
     </InstallExecuteSequence>
+
+    <CustomAction Id='AlreadyUpdated' Error='[ProductName] has already been updated to $(var.BuildVersion) or newer.' />
+    <CustomAction Id='NoDowngrade' Error='A later version of [ProductName] is already installed.' />
 
     <!-- Include .cab file into .msi file -->
     <MediaTemplate EmbedCab="yes" />
@@ -78,6 +78,15 @@
              Display='expand'>
 
       <ComponentGroupRef Id="DeviceManagerDatabaseConfiguration" />
+    </Feature>
+    
+    <!-- Version 1.1.0 features -->
+    <Feature Id="Version110Feature"
+             Title="Version 1.1.0"
+             Description="Installs necessary components for Device Manager Server v1.1.0."
+             Display='expand'>
+
+      <ComponentGroupRef Id="Version110DatabaseConfiguration" />
     </Feature>
 
     <!-- Define main app icon -->
