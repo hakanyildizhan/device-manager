@@ -24,6 +24,8 @@ namespace DeviceManager.Client.Service
             public const int USAGE_PROMPT_DURATION_MINIMUM = 10;
             public const int USAGE_PROMPT_DURATION_DEFAULT = 60;
             public const string SERVER_ADDRESS = "serverAddress";
+            public const string SERVER_VERSION = "serverVersion";
+            public const string LAST_DEVICELIST_UPDATE = "lastDeviceListUpdate";
         }
     }
 }

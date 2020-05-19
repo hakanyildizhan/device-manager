@@ -27,6 +27,11 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         private int _consecutiveFailedInitializeCount = 0;
         private bool _initialized;
 
+        /// <summary>
+        /// Invoked when there is a change in any setting that has an impact on application behavior.
+        /// </summary>
+        public EventHandler<List<string>> SettingsChanged { get; set; }
+
         public bool ExecutingCommand { get; set; }
         public ObservableCollection<DeviceListViewModel> Devices { get; set; }
 
@@ -91,6 +96,9 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             get
             {
                 int refreshInterval = _configService.GetRefreshInterval();
+#if DEBUG
+                return refreshInterval;
+#else
                 if (refreshInterval > ServiceConstants.Settings.REFRESH_INTERVAL_MAXIMUM ||
                     refreshInterval < ServiceConstants.Settings.REFRESH_INTERVAL_MINIMUM)
                 {
@@ -100,6 +108,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 {
                     return refreshInterval;
                 }
+#endif
             }
         }
 
@@ -177,8 +186,12 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 {
                     App.Current.Dispatcher.Invoke((Action)delegate
                     {
-                        Devices.Clear();
-                        devices.MapDeviceToViewModel().ToList().ForEach(d => Devices.Add(d));
+                        TeardownDeviceList();
+                        devices.MapDeviceToViewModel().ToList().ForEach(d => 
+                        {
+                            d.DeviceList.ToList().ForEach(di => { this.SettingsChanged += di.HandleSettingsChanged; });
+                            Devices.Add(d);
+                        });
                     });
                     success = true;
                     _logService.LogInformation("Got device list successfully");
@@ -186,6 +199,26 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 }
             });
             return success;
+        }
+
+        /// <summary>
+        /// Disposes all resources associated with device items that are about to be removed.
+        /// </summary>
+        private void TeardownDeviceList()
+        {
+            // unsubscribe all SettingsChanged event handlers
+            var clientList = this.SettingsChanged?.GetInvocationList();
+            if (clientList != null && clientList.Any())
+            {
+                foreach (var d in clientList)
+                {
+                    this.SettingsChanged -= (d as EventHandler<List<string>>);
+                }
+            }
+
+            // dispose and clear all device items
+            Devices.ToList().ForEach(d => d.DeviceList.ToList().ForEach(di => di.Dispose()));
+            Devices.Clear();
         }
 
         private async Task<bool> GetSettingsAsync()
@@ -321,12 +354,58 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             }
         }
 
+        /// <summary>
+        /// Saves settings into config file. 
+        /// If there has been a change on any interval/duration setting, restarts corresponding timers with new interval values.
+        /// </summary>
+        /// <param name="settings"></param>
+        /// <returns></returns>
         private async Task SaveSettings(Dictionary<string,string> settings)
         {
+            List<string> changedSettings = new List<string>();
+
             foreach (var setting in settings)
             {
+                if (setting.Key != ServiceConstants.Settings.LAST_DEVICELIST_UPDATE &&
+                    setting.Key != ServiceConstants.Settings.SERVER_VERSION)
+                {
+                    string previousValue = _configService.Get(setting.Key);
+
+                    if (previousValue != setting.Value)
+                    {
+                        changedSettings.Add(setting.Key);
+                    }
+                }
+                
                 await _configService.SetAsync(setting.Key, setting.Value);
+
+                if (changedSettings.Any())
+                {
+                    HandleSettingsChanged(changedSettings);
+                }
             }
+        }
+
+        /// <summary>
+        /// Handles the changes in settings.
+        /// </summary>
+        /// <param name="changedSettings"></param>
+        private void HandleSettingsChanged(List<string> changedSettings)
+        {
+            // If refresh interval has changed, restart the corresponding timer
+            if (changedSettings.Contains(ServiceConstants.Settings.REFRESH_INTERVAL))
+            {
+                EnableTimer(TimerEvent.Refresh);
+            }
+
+            // if device item specific intervals/durations have changed
+            // invoke SettingsChanged event to alert device items
+            if (changedSettings.Contains(ServiceConstants.Settings.USAGE_PROMPT_INTERVAL) ||
+                changedSettings.Contains(ServiceConstants.Settings.USAGE_PROMPT_DURATION))
+            {
+                this.SettingsChanged.Invoke(this, changedSettings);
+            }
+            
         }
 
         private async Task SetName(object parameter)

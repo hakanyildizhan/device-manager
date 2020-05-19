@@ -14,15 +14,28 @@ using System.Windows.Media.Imaging;
 
 namespace DeviceManager.Client.TrayApp.ViewModel
 {
-    public class DeviceItemViewModel : BaseViewModel
+    public class DeviceItemViewModel : BaseViewModel, IDisposable
     {
         private IDataService _dataService => (IDataService)ServiceProvider.GetService<IDataService>();
         private IFeedbackService _feedbackService => (IFeedbackService)ServiceProvider.GetService<IFeedbackService>();
         private ILogService<DeviceItemViewModel> _logService => (ILogService<DeviceItemViewModel>)ServiceProvider.GetService<ILogService<DeviceItemViewModel>>();
         private IConfigurationService _configService => (IConfigurationService)ServiceProvider.GetService<IConfigurationService>();
 
+        private string _name;
+        private bool _isAvailable;
+        private string _usedBy;
+        private bool _usedByMe;
+        private string _usedByFriendly;
+        private string _connectedModuleInfo;
+        private DateTime? _checkoutDate;
+        private Timer _usageTimer;
+
+        /// <summary>
+        /// Reminder prompt window associated with this device item.
+        /// </summary>
+        private Window _reminderWindow;
+
         public int Id { get; set; }
-        public string Name { get; set; }
 
         /// <summary>
         /// Frequency at which the reminder popup will be displayed if this device item is being used by the current user.
@@ -53,18 +66,18 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         /// </summary>
         public int UsagePromptDuration => _configService.GetUsagePromptDuration();
 
-        private bool _isAvailable;
-        private string _usedBy;
-        private bool _usedByMe;
-        private string _usedByFriendly;
-        private string _connectedModuleInfo;
-        private DateTime? _checkoutDate;
-        private Timer _usageTimer;
-
-        /// <summary>
-        /// Reminder prompt window associated with this device item.
-        /// </summary>
-        private Window _reminderWindow;
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                if (_name != value)
+                {
+                    _name = value;
+                    OnPropertyChanged(nameof(Name));
+                }
+            }
+        }
 
         public bool IsAvailable
         {
@@ -319,6 +332,20 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             }
         }
 
+        /// <summary>
+        /// Called whenever there is a change on application settings that could have an impact on device items (time until reminder prompts show up etc.).
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="changedSettings"></param>
+        internal void HandleSettingsChanged(object sender, List<string> changedSettings)
+        {
+            // restart timer if reminder interval has changed & this item is already being used by current user
+            if (changedSettings.Contains(ServiceConstants.Settings.USAGE_PROMPT_INTERVAL) && UsedByMe)
+            {
+                EnableTimer();
+            }
+        }
+
         private void DisableTimer()
         {
             if (_usageTimer != null)
@@ -380,6 +407,15 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             }
 
             return sbTooltip.ToString();
+        }
+
+        /// <summary>
+        /// Tears down any resources associated with this device item.
+        /// </summary>
+        public void Dispose()
+        {
+            DisableTimer();
+            _reminderWindow = null;
         }
     }
 }
