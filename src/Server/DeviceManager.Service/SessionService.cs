@@ -92,8 +92,9 @@ namespace DeviceManager.Service
                     s.Client.DomainUsername == userName &&
                     s.IsActive).FirstOrDefault();
 
+                // Either device ID is invalid, or the device is already checked in
                 if (activeSession == null)
-                    return true;
+                    return false;
 
                 activeSession.FinishedAt = DateTime.UtcNow;
                 activeSession.IsActive = false;
@@ -143,12 +144,14 @@ namespace DeviceManager.Service
                     bool isBusy = DbContext.Sessions.Any(s => s.IsActive && s.Device.Id == device.Id);
                     string usedBy = string.Empty;
                     string usedByFriendly = string.Empty;
+                    DateTime? checkoutDate = null;
 
                     if (isBusy)
                     {
                         Session session = DbContext.Sessions.Where(s => s.IsActive && s.Device.Id == device.Id).FirstOrDefault();
                         usedBy = session.Client.DomainUsername;
                         usedByFriendly = session.Client.FriendlyName;
+                        checkoutDate = session.StartedAt;
                     }
 
                     deviceSessions.Add(new DeviceSessionInfo
@@ -156,7 +159,8 @@ namespace DeviceManager.Service
                         DeviceId = device.Id,
                         IsAvailable = !isBusy,
                         UsedBy = usedBy,
-                        UsedByFriendly = usedByFriendly
+                        UsedByFriendly = usedByFriendly,
+                        CheckoutDate = checkoutDate
                     });
                 }
                 return deviceSessions;

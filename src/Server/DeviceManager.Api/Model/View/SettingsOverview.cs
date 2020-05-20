@@ -5,28 +5,20 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using DeviceManager.Service.Model.Setting;
 
 namespace DeviceManager.Api.Model
 {
     public class SettingsOverview
     {
-        //public ServerStats ServerStats { get; set; }
-        //public SettingsUpdate Settings { get; set; }
+        public ServerVersion ServerVersion { get; set; }
 
-        [DisplayName("Server version")]
-        public string ServerVersion { get; set; }
+        public LastDeviceListUpdate LastDeviceListUpdate { get; set; }
 
-        [DisplayName("Last hardware list update")]
-        public string LastDeviceListUpdate { get; set; }
+        public RefreshInterval RefreshInterval { get; set; }
 
-        [Required]
-        [Range(30, 600, ErrorMessage = "{0} must be between {1} and {2} seconds.")]
-        [DisplayName("Refresh interval (seconds)")]
-        public int RefreshInterval { get; set; }
+        public UsagePromptInterval UsagePromptInterval { get; set; }
 
-        [Required]
-        [Range(300, 28800, ErrorMessage = "{0} must be between {1} (5 minutes) and {2} (8 hours)")]
-        [DisplayName("Hardware usage prompt interval (seconds)")]
-        public int UsagePromptInterval { get; set; }
+        public UsagePromptDuration UsagePromptDuration { get; set; }
     }
 }

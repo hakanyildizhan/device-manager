@@ -22,7 +22,8 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                     ConnectedModuleInfo = i.ConnectedModuleInfo,
                     IsAvailable = i.IsAvailable,
                     UsedBy = i.UsedBy,
-                    UsedByFriendly = i.UsedByFriendly
+                    UsedByFriendly = i.UsedByFriendly,
+                    CheckoutDate = i.CheckoutDate
                 }))
             });
         }

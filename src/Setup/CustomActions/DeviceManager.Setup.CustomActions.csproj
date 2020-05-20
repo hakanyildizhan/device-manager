@@ -68,10 +68,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomAction.cs" />
+    <Compile Include="CheckServerConfig.cs" />
+    <Compile Include="TestServer.cs" />
     <Compile Include="GetServerSettingResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerValidityTestResult.cs" />
+    <Compile Include="Utility.cs" />
     <Compile Include="WriteServerSettingResult.cs" />
     <Content Include="CustomAction.config" />
   </ItemGroup>

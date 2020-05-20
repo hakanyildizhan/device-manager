@@ -32,6 +32,7 @@
     <Compile Include="IISConfiguration.wxs" />
     <Compile Include="IISSettingsDlg.wxs" />
     <Compile Include="Product.wxs" />
+    <Compile Include="Update\1.1.0\DatabaseConfiguration.wxs" />
     <Compile Include="WixUI_DeviceManager_Server.wxs" />
   </ItemGroup>
   <ItemGroup>
@@ -58,15 +59,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="license.rtf" />
+    <Content Include="Scripts\OnInstall\Data_v1.1.0.sql" />
     <Content Include="Scripts\OnInstall\Data_v1.0.0.0.sql" />
     <Content Include="Scripts\OnInstall\Tables_v1.0.0.0.sql" />
     <Content Include="Scripts\OnUninstall\DropDatabase.sql" />
     <Content Include="Scripts\OnUninstall\DropLogin.sql" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Update" />
     <Folder Include="Scripts" />
     <Folder Include="Scripts\OnInstall" />
     <Folder Include="Scripts\OnUninstall" />
+    <Folder Include="Update\1.1.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Setup.Server.CustomActions\DeviceManager.Setup.Server.CustomActions.csproj">
@@ -93,17 +97,20 @@
     <!-- Build all necessary projects -->
     <MSBuild Projects="..\..\Server\DeviceManager.Entity\DeviceManager.Entity.csproj;&#xD;&#xA;                       ..\..\Server\DeviceManager.FileParsing\DeviceManager.FileParsing.csproj;&#xD;&#xA;                       ..\..\Server\DeviceManager.Service\DeviceManager.Service.csproj;&#xD;&#xA;                       $(WebProjectPath)\$(WebProjectName).csproj" Properties="Configuration=$(Configuration);Platform=AnyCPU;" Targets="Clean;Build" ContinueOnError="false" />
     <!-- Publish main project -->
-    <MSBuild Projects="$(WebProjectPath)\$(WebProjectName).csproj"
-             Properties="Configuration=$(Configuration);Platform=AnyCPU;WebPublishMethod=FileSystem;DeleteExistingFiles=True;publishUrl=$(PublishPath);" Targets="WebPublish"
-             ContinueOnError="false" />
+    <MSBuild Projects="$(WebProjectPath)\$(WebProjectName).csproj" Properties="Configuration=$(Configuration);Platform=AnyCPU;WebPublishMethod=FileSystem;DeleteExistingFiles=True;publishUrl=$(PublishPath);" Targets="WebPublish" ContinueOnError="false" />
     <!-- Get assembly version -->
     <GetAssemblyIdentity AssemblyFiles="$(PublishBinPath)\DeviceManager.Api.dll">
       <Output TaskParameter="Assemblies" ItemName="AssemblyVersion" />
     </GetAssemblyIdentity>
     <!-- Constants -->
     <PropertyGroup>
+      <AssemblyVer>%(AssemblyVersion.Version)</AssemblyVer>
+      <MajorVersion>$(AssemblyVer.Split('.')[0])</MajorVersion>
+      <MinorVersion>$(AssemblyVer.Split('.')[1])</MinorVersion>
+      <PatchVersion>$(AssemblyVer.Split('.')[2])</PatchVersion>
+      <ApplicationVersion>$(MajorVersion).$(MinorVersion).$(PatchVersion)</ApplicationVersion>
       <DefineConstants>
-        BuildVersion=%(AssemblyVersion.Version);
+        BuildVersion=$(ApplicationVersion);
         PublishPath=..\..\Server\DeviceManager.Api\bin\$(Configuration)\Publish;
       </DefineConstants>
     </PropertyGroup>
@@ -115,7 +122,14 @@
     <GetAssemblyIdentity AssemblyFiles="$(PublishBinPath)\$(WebProjectName).dll">
       <Output TaskParameter="Assemblies" ItemName="AssemblyVersion" />
     </GetAssemblyIdentity>
+    <PropertyGroup>
+      <AssemblyVer>%(AssemblyVersion.Version)</AssemblyVer>
+      <MajorVersion>$(AssemblyVer.Split('.')[0])</MajorVersion>
+      <MinorVersion>$(AssemblyVer.Split('.')[1])</MinorVersion>
+      <PatchVersion>$(AssemblyVer.Split('.')[2])</PatchVersion>
+      <ApplicationVersion>$(MajorVersion).$(MinorVersion).$(PatchVersion)</ApplicationVersion>
+    </PropertyGroup>
     <!-- Rename and move final MSI -->
-    <Exec Command="move bin\$(Configuration)\$(OutputName).msi bin\$(Configuration)\DeviceManager_server_%(AssemblyVersion.Version).msi" />
+    <Exec Command="move bin\$(Configuration)\$(OutputName).msi bin\$(Configuration)\DeviceManager_server_$(ApplicationVersion).msi" />
   </Target>
 </Project>

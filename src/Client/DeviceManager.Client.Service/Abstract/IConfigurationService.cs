@@ -54,6 +54,12 @@ namespace DeviceManager.Client.Service
         int GetUsagePromptInterval();
 
         /// <summary>
+        /// Gets the duration in seconds for which users will see a prompt on whether they are still using a device.
+        /// </summary>
+        /// <returns></returns>
+        int GetUsagePromptDuration();
+
+        /// <summary>
         /// Gets the server address which the API calls will be based on. This configuration is set during setup process.
         /// </summary>
         /// <returns></returns>

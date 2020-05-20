@@ -43,8 +43,24 @@
     <WixVariable Id="WixUILicenseRtf" Value="license.rtf"/>
     
     <!-- Installer UI -->
-    <UIRef Id="WixUI_DeviceManager_Client_UI" />
-    <!--<UIRef Id="WixUI_ErrorProgressText" />-->
+    <UI>
+      <UIRef Id="WixUI_DeviceManager_Client_UI" />
+      
+      <!-- Launch application if relevant checkbox is checked -->
+      <Publish Dialog="ExitDialog"
+               Control="Finish"
+               Event="DoAction"
+               Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed
+      </Publish>
+    </UI>
+    
+    
+    <!-- Option to run the application when setup completes -->
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch $(var.AppName)" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" />
+
+    <Property Id="WixShellExecTarget" Value="[#fil517045D2D9EBFBBE9EC58DAC7BDD4FDD]" />
+    <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
     
     <!-- Binary definition for custom actions -->
     <Binary Id='DeviceManager.Setup.CustomActions.CA.dll' SourceFile='..\CustomActions\bin\$(var.Configuration)\DeviceManager.Setup.CustomActions.CA.dll'/>
