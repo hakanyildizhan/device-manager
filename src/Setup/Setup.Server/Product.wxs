@@ -78,14 +78,8 @@
              Display='expand'>
 
       <ComponentGroupRef Id="DeviceManagerDatabaseConfiguration" />
-    </Feature>
-    
-    <!-- Version 1.1.0 features -->
-    <Feature Id="Version110Feature"
-             Title="Version 1.1.0"
-             Description="Installs necessary components for Device Manager Server v1.1.0."
-             Display='expand'>
-
+      
+      <!-- Version 1.1.0 -->
       <ComponentGroupRef Id="Version110DatabaseConfiguration" />
     </Feature>
 
