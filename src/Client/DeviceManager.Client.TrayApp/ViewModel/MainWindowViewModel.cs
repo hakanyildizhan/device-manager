@@ -28,6 +28,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         private int _consecutiveFailedRefreshCount = 0;
         private int _consecutiveFailedInitializeCount = 0;
         private bool _initialized;
+        private bool _isOffline;
 
         /// <summary>
         /// Invoked when there is a change in any setting that has an impact on application behavior.
@@ -93,6 +94,22 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             }
         }
 
+        /// <summary>
+        /// Indicates whether a certain number of previous initialization/refresh attemps have failed.
+        /// </summary>
+        public bool IsOffline 
+        {
+            get { return _isOffline; }
+            set
+            {
+                if (_isOffline != value)
+                {
+                    _isOffline = value;
+                    OnPropertyChanged(nameof(IsOffline));
+                }
+            }
+        }
+
         public int RefreshInterval
         {
             get
@@ -141,9 +158,9 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             {
                 if (++_consecutiveFailedInitializeCount == AppConstants.FAILED_OPERATION_RETRIES)
                 {
-                    await _feedbackService.ShowMessageAsync(MessageType.Error, "Cannot contact the server right now.");
+                    await HandleGoingOffline();
                 }
-                
+
                 _logService.LogError("Could not initialize, will retry");
                 EnableTimer(TimerEvent.Initialize);
             }
@@ -151,7 +168,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             {
                 if (++_consecutiveFailedInitializeCount >= AppConstants.FAILED_OPERATION_RETRIES)
                 {
-                    await _feedbackService.ShowMessageAsync(MessageType.Information, "Connection to the server has been established successfuly.");
+                    await HandleGoingOnline();
                 }
                 _consecutiveFailedInitializeCount = 0;
                 Initialized = true;
@@ -265,7 +282,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                     _logService.LogError("Refresh failed");
                     if (++_consecutiveFailedRefreshCount == AppConstants.FAILED_OPERATION_RETRIES)
                     {
-                        await _feedbackService.ShowMessageAsync(MessageType.Error, "Cannot contact the server right now.");
+                        await HandleGoingOffline();
                     }
                 }
                 else if (!refreshData.FullUpdateRequired)
@@ -289,8 +306,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                     // has the connection been re-established?
                     if (_consecutiveFailedRefreshCount >= AppConstants.FAILED_OPERATION_RETRIES)
                     {
-                        await _feedbackService.ShowMessageAsync(MessageType.Information, "Connection to the server has been established successfuly.");
-                        _logService.LogInformation("Connection re-established");
+                        await HandleGoingOnline();
                     }
 
                     _consecutiveFailedRefreshCount = 0;
@@ -306,6 +322,27 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 _logService.LogInformation("Initializing full device update");
                 await InitiateFullHardwareListUpdate();
             }
+        }
+
+        /// <summary>
+        /// Performs necessary operations to indicate to the user that the connection to the server has been established after a certain period of time.
+        /// </summary>
+        /// <returns></returns>
+        private async Task HandleGoingOnline()
+        {
+            await _feedbackService.ShowMessageAsync(MessageType.Information, "Connection to the server has been established successfuly.");
+            _logService.LogInformation("Connection re-established");
+            IsOffline = false;
+        }
+
+        /// <summary>
+        /// Performs necessary operations to indicate to the user that the application is having issues establishing connection to the server.
+        /// </summary>
+        /// <returns></returns>
+        private async Task HandleGoingOffline()
+        {
+            await _feedbackService.ShowMessageAsync(MessageType.Error, "Cannot contact the server right now.");
+            IsOffline = true;
         }
 
         /// <summary>

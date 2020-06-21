@@ -1,0 +1,35 @@
+﻿<!-- 
+This file is part of Device Manager project released under GNU General Public License v3.0.
+See file LICENSE.md or go to https://www.gnu.org/licenses/gpl-3.0.html for full license details.
+Copyright © Hakan Yildizhan 2020.
+-->
+
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Images for animation during refresh -->
+    <BitmapImage x:Key="LoadingAnimationIcon1" UriSource="/Resources/Icons/Animation/icon_loading_1.ico" />
+    <BitmapImage x:Key="LoadingAnimationIcon2" UriSource="/Resources/Icons/Animation/icon_loading_2.ico" />
+    <BitmapImage x:Key="LoadingAnimationIcon3" UriSource="/Resources/Icons/Animation/icon_loading_3.ico" />
+    <BitmapImage x:Key="LoadingAnimationIcon4" UriSource="/Resources/Icons/Animation/icon_loading_4.ico" />
+    <BitmapImage x:Key="LoadingAnimationIcon5" UriSource="/Resources/Icons/Animation/icon_loading_5.ico" />
+    <BitmapImage x:Key="LoadingAnimationIcon6" UriSource="/Resources/Icons/Animation/icon_loading_6.ico" />
+    <BitmapImage x:Key="LoadingAnimationIcon7" UriSource="/Resources/Icons/Animation/icon_loading_7.ico" />
+    <BitmapImage x:Key="LoadingAnimationIcon8" UriSource="/Resources/Icons/Animation/icon_loading_8.ico" />
+    <BitmapImage x:Key="LoadingAnimationIcon9" UriSource="/Resources/Icons/Animation/icon_loading_9.ico" />
+    <BitmapImage x:Key="LoadingAnimationIcon10" UriSource="/Resources/Icons/Animation/icon_loading_10.ico" />
+    <BitmapImage x:Key="LoadingAnimationIcon11" UriSource="/Resources/Icons/Animation/icon_loading_11.ico" />
+    <BitmapImage x:Key="LoadingAnimationIcon12" UriSource="/Resources/Icons/Animation/icon_loading_12.ico" />
+
+    <!-- Main App images -->
+    <BitmapImage x:Key="AppIcon" UriSource="/Resources/Icons/icon.ico" />
+    <BitmapImage x:Key="AppOfflineIcon" UriSource="/Resources/Icons/icon_offline.ico" />
+    <BitmapImage x:Key="EditImage" UriSource="/Resources/Images/edit.png" />
+    <BitmapImage x:Key="TickImage" UriSource="/Resources/Images/tick.png" />
+    <BitmapImage x:Key="LockedImage" UriSource="/Resources/Images/locked.png" />
+    <BitmapImage x:Key="UnlockedImage" UriSource="/Resources/Images/unlocked.png" />
+
+    <!-- Reminder window images -->
+    <BitmapImage x:Key="QuestionMarkImage" UriSource="/Resources/Images/questionmark.png" />
+
+</ResourceDictionary>

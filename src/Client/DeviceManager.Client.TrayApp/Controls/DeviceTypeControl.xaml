@@ -12,6 +12,7 @@ Copyright © Hakan Yildizhan 2020.
           xmlns:local="clr-namespace:DeviceManager.Client.TrayApp"
           xmlns:vm="clr-namespace:DeviceManager.Client.TrayApp.ViewModel"
           mc:Ignorable="d"
+          UsesItemContainerTemplate="True"
           Header="{Binding Type}"
           ItemsSource="{Binding DeviceList}">
 

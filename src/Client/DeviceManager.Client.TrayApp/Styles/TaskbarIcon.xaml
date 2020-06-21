@@ -11,81 +11,39 @@ Copyright © Hakan Yildizhan 2020.
 
     <Style x:Key="TaskbarIconStyle" TargetType="{x:Type tb:TaskbarIcon}">
         <Style.Triggers>
-            <Trigger Property="local:IsBusyProperty.Value"  Value="true">
-                <Trigger.EnterActions>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="local:IsBusyProperty.Value" Value="true"/>
+                    <Condition Property="local:IsOfflineProperty.Value" Value="false"/>
+                </MultiTrigger.Conditions>
+
+                <MultiTrigger.EnterActions>
                     <BeginStoryboard Name="loadingStoryboard">
                         <Storyboard RepeatBehavior="Forever">
-                            <ObjectAnimationUsingKeyFrames 
-                                        Storyboard.TargetProperty="IconSource">
+                            <ObjectAnimationUsingKeyFrames
+                                 Storyboard.TargetProperty="IconSource">
 
-                                <DiscreteObjectKeyFrame KeyTime="0:0:0.1">
-                                    <DiscreteObjectKeyFrame.Value>
-                                        <BitmapImage UriSource="/Icons/Animation/icon_loading_1.ico" />
-                                    </DiscreteObjectKeyFrame.Value>
-                                </DiscreteObjectKeyFrame>
-                                <DiscreteObjectKeyFrame KeyTime="0:0:0.2">
-                                    <DiscreteObjectKeyFrame.Value>
-                                        <BitmapImage UriSource="/Icons/Animation/icon_loading_2.ico" />
-                                    </DiscreteObjectKeyFrame.Value>
-                                </DiscreteObjectKeyFrame>
-                                <DiscreteObjectKeyFrame KeyTime="0:0:0.3">
-                                    <DiscreteObjectKeyFrame.Value>
-                                        <BitmapImage UriSource="/Icons/Animation/icon_loading_3.ico" />
-                                    </DiscreteObjectKeyFrame.Value>
-                                </DiscreteObjectKeyFrame>
-                                <DiscreteObjectKeyFrame KeyTime="0:0:0.4">
-                                    <DiscreteObjectKeyFrame.Value>
-                                        <BitmapImage UriSource="/Icons/Animation/icon_loading_4.ico" />
-                                    </DiscreteObjectKeyFrame.Value>
-                                </DiscreteObjectKeyFrame>
-                                <DiscreteObjectKeyFrame KeyTime="0:0:0.5">
-                                    <DiscreteObjectKeyFrame.Value>
-                                        <BitmapImage UriSource="/Icons/Animation/icon_loading_5.ico" />
-                                    </DiscreteObjectKeyFrame.Value>
-                                </DiscreteObjectKeyFrame>
-                                <DiscreteObjectKeyFrame KeyTime="0:0:0.6">
-                                    <DiscreteObjectKeyFrame.Value>
-                                        <BitmapImage UriSource="/Icons/Animation/icon_loading_6.ico" />
-                                    </DiscreteObjectKeyFrame.Value>
-                                </DiscreteObjectKeyFrame>
-                                <DiscreteObjectKeyFrame KeyTime="0:0:0.7">
-                                    <DiscreteObjectKeyFrame.Value>
-                                        <BitmapImage UriSource="/Icons/Animation/icon_loading_7.ico" />
-                                    </DiscreteObjectKeyFrame.Value>
-                                </DiscreteObjectKeyFrame>
-                                <DiscreteObjectKeyFrame KeyTime="0:0:0.8">
-                                    <DiscreteObjectKeyFrame.Value>
-                                        <BitmapImage UriSource="/Icons/Animation/icon_loading_8.ico" />
-                                    </DiscreteObjectKeyFrame.Value>
-                                </DiscreteObjectKeyFrame>
-                                <DiscreteObjectKeyFrame KeyTime="0:0:0.9">
-                                    <DiscreteObjectKeyFrame.Value>
-                                        <BitmapImage UriSource="/Icons/Animation/icon_loading_9.ico" />
-                                    </DiscreteObjectKeyFrame.Value>
-                                </DiscreteObjectKeyFrame>
-                                <DiscreteObjectKeyFrame KeyTime="0:0:1">
-                                    <DiscreteObjectKeyFrame.Value>
-                                        <BitmapImage UriSource="/Icons/Animation/icon_loading_10.ico" />
-                                    </DiscreteObjectKeyFrame.Value>
-                                </DiscreteObjectKeyFrame>
-                                <DiscreteObjectKeyFrame KeyTime="0:0:1.1">
-                                    <DiscreteObjectKeyFrame.Value>
-                                        <BitmapImage UriSource="/Icons/Animation/icon_loading_11.ico" />
-                                    </DiscreteObjectKeyFrame.Value>
-                                </DiscreteObjectKeyFrame>
-                                <DiscreteObjectKeyFrame KeyTime="0:0:1.2">
-                                    <DiscreteObjectKeyFrame.Value>
-                                        <BitmapImage UriSource="/Icons/Animation/icon_loading_12.ico" />
-                                    </DiscreteObjectKeyFrame.Value>
-                                </DiscreteObjectKeyFrame>
+                                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{StaticResource LoadingAnimationIcon1}"/>
+                                <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{StaticResource LoadingAnimationIcon2}"/>
+                                <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{StaticResource LoadingAnimationIcon3}"/>
+                                <DiscreteObjectKeyFrame KeyTime="0:0:0.4" Value="{StaticResource LoadingAnimationIcon4}"/>
+                                <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{StaticResource LoadingAnimationIcon5}"/>
+                                <DiscreteObjectKeyFrame KeyTime="0:0:0.6" Value="{StaticResource LoadingAnimationIcon6}"/>
+                                <DiscreteObjectKeyFrame KeyTime="0:0:0.7" Value="{StaticResource LoadingAnimationIcon7}"/>
+                                <DiscreteObjectKeyFrame KeyTime="0:0:0.8" Value="{StaticResource LoadingAnimationIcon8}"/>
+                                <DiscreteObjectKeyFrame KeyTime="0:0:0.9" Value="{StaticResource LoadingAnimationIcon9}"/>
+                                <DiscreteObjectKeyFrame KeyTime="0:0:1"   Value="{StaticResource LoadingAnimationIcon10}"/>
+                                <DiscreteObjectKeyFrame KeyTime="0:0:1.1" Value="{StaticResource LoadingAnimationIcon11}"/>
+                                <DiscreteObjectKeyFrame KeyTime="0:0:1.2" Value="{StaticResource LoadingAnimationIcon12}"/>
+
                             </ObjectAnimationUsingKeyFrames>
                         </Storyboard>
                     </BeginStoryboard>
-                </Trigger.EnterActions>
-                <Trigger.ExitActions>
+                </MultiTrigger.EnterActions>
+                <MultiTrigger.ExitActions>
                     <StopStoryboard BeginStoryboardName="loadingStoryboard"/>
-                </Trigger.ExitActions>
-            </Trigger>
+                </MultiTrigger.ExitActions>
+            </MultiTrigger>
         </Style.Triggers>
     </Style>
 
