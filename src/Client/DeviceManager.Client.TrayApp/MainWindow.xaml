@@ -45,6 +45,7 @@ Copyright © Hakan Yildizhan 2020.
 
                         <local:SetNameControl ToolTip="{Binding UserName}"
                                               local:IsVisibleProperty.Value="{Binding Initialized}"
+                                              local:IsOfflineProperty.Value="{Binding IsOffline}"
                                               Visibility="{TemplateBinding local:IsVisibleProperty.Value, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=True}">
 
                             <local:SetNameControl.Header>

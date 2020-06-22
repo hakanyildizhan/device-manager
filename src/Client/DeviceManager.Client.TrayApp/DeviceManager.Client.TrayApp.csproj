@@ -104,6 +104,7 @@
     <Compile Include="IoC\IAppServiceProvider.cs" />
     <Compile Include="IoC\UnityServiceProvider.cs" />
     <Compile Include="Service\NLogLogger.cs" />
+    <Compile Include="ValueConverters\OnlineStateToSetNameTextConverter.cs" />
     <Compile Include="ValueConverters\OnlineStateToIconConverter.cs" />
     <Compile Include="ValueConverters\BaseMultiValueConverter.cs" />
     <Compile Include="ValueConverters\BooleanOrBooleanConverter.cs" />
