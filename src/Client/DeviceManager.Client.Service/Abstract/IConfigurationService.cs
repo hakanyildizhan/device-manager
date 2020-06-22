@@ -63,6 +63,11 @@ namespace DeviceManager.Client.Service
         /// Gets the server address which the API calls will be based on. This configuration is set during setup process.
         /// </summary>
         /// <returns></returns>
-        string GetServerAddress();
+        Task<string> GetServerAddressAsync();
+
+        /// <summary>
+        /// Completely removes all data stored by the service, then attempts to recreate them.
+        /// </summary>
+        Task Recreate();
     }
 }

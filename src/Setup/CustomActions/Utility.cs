@@ -2,6 +2,7 @@
 // See file LICENSE.md or go to https://www.gnu.org/licenses/gpl-3.0.html for full license details.
 // Copyright © Hakan Yildizhan 2020.
 
+using Microsoft.Win32;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -36,6 +37,32 @@ namespace DeviceManager.Setup.CustomActions
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Writes Device Manager server address to the registry.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public static bool SaveServerURLToRegistry(string url)
+        {
+            if (string.IsNullOrEmpty(url))
+            {
+                return false;
+            }
+
+            RegistryKey regKey = Registry.CurrentUser;
+            try
+            {
+                regKey = regKey.CreateSubKey("SOFTWARE\\Hakan Yildizhan\\DeviceManager", true);
+                regKey.SetValue("ServerAddress", url, RegistryValueKind.String);
+                regKey.Close();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

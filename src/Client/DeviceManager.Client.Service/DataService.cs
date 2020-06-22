@@ -23,13 +23,19 @@ namespace DeviceManager.Client.Service
         {
             _logService = logService;
             _configService = configService;
+            
+            Task<string> getServerAddressTask = Task.Run(async () => await GetApiAddress());
+            _baseApiAddress = Url.Combine(getServerAddressTask.Result, "api");
+        }
 
+        private async Task<string> GetApiAddress()
+        {
 #if DEBUG
             string serverAddress = "http://localhost:8070/";
 #else
-            string serverAddress = _configService.GetServerAddress();
+            string serverAddress = await _configService.GetServerAddressAsync();
 #endif
-            _baseApiAddress = Url.Combine(serverAddress, "api");
+            return serverAddress;
         }
 
         public async Task<ApiCallResult> CheckDeviceAvailabilityAsync(int deviceId)
