@@ -22,7 +22,8 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         private ILogService<DeviceItemViewModel> _logService => (ILogService<DeviceItemViewModel>)ServiceProvider.GetService<ILogService<DeviceItemViewModel>>();
         private IConfigurationService _configService => (IConfigurationService)ServiceProvider.GetService<IConfigurationService>();
 
-        private string _name;
+        private string _deviceName;
+        private string _header;
         private bool _isAvailable;
         private string _usedBy;
         private bool _usedByMe;
@@ -67,15 +68,34 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         /// </summary>
         public int UsagePromptDuration => _configService.GetUsagePromptDuration();
 
-        public string Name
+        /// <summary>
+        /// Only the hardware item name part of <see cref="Name"/> shown on the menu item.
+        /// </summary>
+        public string DeviceName
         {
-            get { return _name; }
+            get { return _deviceName; }
             set
             {
-                if (_name != value)
+                if (_deviceName != value)
                 {
-                    _name = value;
-                    OnPropertyChanged(nameof(Name));
+                    _deviceName = value;
+                    OnPropertyChanged(nameof(DeviceName));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Header that will be shown on the menu item. This will include name, hardware info as well as address information.
+        /// </summary>
+        public string Header
+        {
+            get { return _header; }
+            set
+            {
+                if (_header != value)
+                {
+                    _header = value;
+                    OnPropertyChanged(nameof(Header));
                 }
             }
         }
@@ -207,30 +227,30 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                     if (result == ApiCallResult.Success)
                     {
                         await _feedbackService.ShowMessageAsync(MessageType.Information, "Device checked out successfully.");
-                        _logService.LogInformation("Check-out successful");
+                        _logService.LogInformation($"Check-out of {DeviceName} successful");
                         IsAvailable = false;
                         UsedBy = Utility.GetCurrentUserName();
                     }
                     else if (result == ApiCallResult.NotReachable)
                     {
                         await _feedbackService.ShowMessageAsync(MessageType.Error, "Server unreachable", "Cannot reach the server right now. Please try again later.");
-                        _logService.LogError("Check-out failed");
+                        _logService.LogError($"Check-out of {DeviceName} failed");
                     }
                     else
                     {
                         await _feedbackService.ShowMessageAsync(MessageType.Error, "Operation failed", "Could not check out device. Please try again later.");
-                        _logService.LogError("Check-out failed");
+                        _logService.LogError($"Check-out of {DeviceName} failed");
                     }
                 }
                 else if (result == ApiCallResult.NotReachable)
                 {
                     await _feedbackService.ShowMessageAsync(MessageType.Error, "Server unreachable", "Cannot reach the server right now. Please try again later.");
-                    _logService.LogError("Could not check device availability. Server unreachable");
+                    _logService.LogError($"Could not check availability for {DeviceName}. Server unreachable");
                 }
                 else
                 {
                     await _feedbackService.ShowMessageAsync(MessageType.Warning, "Device unavailable", "This device is currently unavailable. Device status will be updated shortly.");
-                    _logService.LogError("Could not check device availability");
+                    _logService.LogError($"Could not check device availability for {DeviceName}");
                     // TODO: get latest status for this specific device
                 }
             });
@@ -246,19 +266,19 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                     if (result == ApiCallResult.Success)
                     {
                         await _feedbackService.ShowMessageAsync(MessageType.Information, "Device is released successfully.");
-                        _logService.LogInformation("Check-in succeeded");
+                        _logService.LogInformation($"Check-in of {DeviceName} succeeded");
                         IsAvailable = true;
                         UsedBy = null;
                     }
                     else if (result == ApiCallResult.NotReachable)
                     {
                         await _feedbackService.ShowMessageAsync(MessageType.Error, "Server unreachable", "Cannot reach the server right now. Please try again later.");
-                        _logService.LogError("Check-in failed. Server unreachable");
+                        _logService.LogError($"Check-in of {DeviceName} failed. Server unreachable");
                     }
                     else
                     {
                         await _feedbackService.ShowMessageAsync(MessageType.Error, "Operation failed", "Could not release device. Please try again later.");
-                        _logService.LogError("Check-in failed");
+                        _logService.LogError($"Check-in of {DeviceName} failed");
                     }
                 }
             });
@@ -298,19 +318,19 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             {
                 case ApiCallResult.Success:
                     await _feedbackService.ShowMessageAsync(MessageType.Information, "Device is released successfully.");
-                    _logService.LogInformation("Check-in succeeded");
+                    _logService.LogInformation($"Check-in of {DeviceName} succeeded via reminder");
                     IsAvailable = true;
                     UsedBy = null;
                     break;
                 case ApiCallResult.NotReachable:
                     await _feedbackService.ShowMessageAsync(MessageType.Error, "Server unreachable", "Cannot reach the server right now. Please try again later.");
-                    _logService.LogError("Check-in failed. Server unreachable");
+                    _logService.LogError($"Check-in of {DeviceName} failed via reminder. Server unreachable");
                     break;
                 case ApiCallResult.Failure:
                 case ApiCallResult.Unknown:
                 default:
                     await _feedbackService.ShowMessageAsync(MessageType.Error, "Operation failed", "Could not release device. Please try again later.");
-                    _logService.LogError("Check-in failed");
+                    _logService.LogError($"Check-in of {DeviceName} via reminder failed");
                     break;
             }
 

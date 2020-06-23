@@ -32,7 +32,10 @@ namespace DeviceManager.Client.TrayApp
             var logfile = new NLog.Targets.FileTarget("logfile") 
             { 
                 FileName = logFile,
-                Layout = "${longdate}|${level:uppercase=true}|${logger}|${message}${onexception:inner=${newline}${exception:format=tostring}}"
+                Layout = "${longdate}|${level:uppercase=true}|${logger}|${message}${onexception:inner=${newline}${exception:format=tostring}}",
+                ArchiveAboveSize = 5242880, // 5 MB
+                MaxArchiveFiles = 2,
+                ArchiveNumbering = NLog.Targets.ArchiveNumberingMode.DateAndSequence
             };
             var debugger = new NLog.Targets.DebuggerTarget("debugger");
             config.AddRule(LogLevel.Info, LogLevel.Fatal, logfile);

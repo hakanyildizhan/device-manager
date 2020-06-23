@@ -2,8 +2,8 @@
 // See file LICENSE.md or go to https://www.gnu.org/licenses/gpl-3.0.html for full license details.
 // Copyright © Hakan Yildizhan 2020.
 
+using DeviceManager.Client.Service;
 using System;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -21,7 +21,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         {
             get
             {
-                return GetApplicationVersion();
+                return Utility.GetApplicationVersion();
             }
         }
 
@@ -40,12 +40,6 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 _window?.Close();
                 _window = null;
             }), System.Windows.Threading.DispatcherPriority.Normal);
-        }
-
-        private string GetApplicationVersion()
-        {
-            var version = Assembly.GetExecutingAssembly().GetName().Version;
-            return $"v{version.Major}.{version.Minor}.{version.Revision}";
         }
     }
 }

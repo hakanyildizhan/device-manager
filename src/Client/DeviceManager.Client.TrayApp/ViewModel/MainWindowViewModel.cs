@@ -146,7 +146,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             EnterEditModeCommand = new RelayCommand(() => { EditMode = !EditMode; });
             SetNameCommand = new RelayParameterizedCommand(async (parameter) => await SetName(parameter));
             Task.Run(InitializeAsync);
-            _logService.LogInformation("App initialized");
+            _logService.LogInformation($"App initialized. Version: {Utility.GetApplicationVersion()}");
         }
 
         /// <summary>

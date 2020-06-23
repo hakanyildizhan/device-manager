@@ -43,8 +43,7 @@ Copyright © Hakan Yildizhan 2020.
             <StackPanel VerticalAlignment="Center"
                         Orientation="Vertical">
                 <TextBlock>
-                    <Run Text="Device Manager Client" FontWeight="Bold"/>
-                    <Run Text="{Binding ApplicationVersion, Mode=OneWay}" FontWeight="Bold"/>
+                    <Run Text="Device Manager Client v" FontWeight="Bold"/><Run Text="{Binding ApplicationVersion, Mode=OneWay}" FontWeight="Bold"/>
                 </TextBlock>
                 <TextBlock Text="Copyright © Hakan Yildizhan 2020." />
             </StackPanel>

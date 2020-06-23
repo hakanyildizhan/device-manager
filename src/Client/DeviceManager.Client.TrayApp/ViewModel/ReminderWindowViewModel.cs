@@ -15,13 +15,14 @@ namespace DeviceManager.Client.TrayApp.ViewModel
     public class ReminderWindowViewModel : BaseViewModel
     {
         private IDataService _dataService => (IDataService)ServiceProvider.GetService<IDataService>();
+        private ILogService<ReminderWindowViewModel> _logService => (ILogService<ReminderWindowViewModel>)ServiceProvider.GetService<ILogService<ReminderWindowViewModel>>();
 
         /// <summary>
         /// The window this view model controls.
         /// </summary>
         private Window _window;
 
-        private string _deviceNameOnPrompt => DeviceItem?.Name.Replace("\t", "  ");
+        private string _deviceNameOnPrompt => DeviceItem?.Header.Replace("\t", "  ");
         private Timer _promptActiveTimer;
         private int _promptTimeout;
         private DeviceItemViewModel _deviceItem;
@@ -116,6 +117,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
 
         private void OnWindowShown(object sender, EventArgs e)
         {
+            _logService.LogInformation($"Reminder popup for {DeviceItem.DeviceName} is shown");
             StartAutoCloseCountdown();
         }
 
@@ -129,6 +131,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
 
         private async Task Close(ReminderResponse reminderResult)
         {
+            _logService.LogInformation($"Closing reminder popup, reason: {reminderResult}");
             this.ReminderClosed?.Invoke(this, reminderResult);
             this.CheckinPerformed -= DeviceItem.HandleCheckinOnReminder;
             this.ReminderClosed -= DeviceItem.HandleReminderClose;

@@ -12,7 +12,7 @@ Copyright © Hakan Yildizhan 2020.
           xmlns:local="clr-namespace:DeviceManager.Client.TrayApp"
           xmlns:vm="clr-namespace:DeviceManager.Client.TrayApp.ViewModel"
           mc:Ignorable="d" 
-          Header="{Binding Name, FallbackValue=3RW55 V2.1}"
+          Header="{Binding Header, FallbackValue=3RW55 V2.1}"
           ToolTip="{Binding Tooltip}" 
           Style="{DynamicResource MenuItemControlTemplate}"
           >

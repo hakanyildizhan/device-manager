@@ -4,6 +4,7 @@
 
 using System;
 using System.IO;
+using System.Reflection;
 
 namespace DeviceManager.Client.Service
 {
@@ -23,6 +24,16 @@ namespace DeviceManager.Client.Service
             string appRoamingFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DeviceManager");
             Directory.CreateDirectory(appRoamingFolder);
             return appRoamingFolder;
+        }
+
+        /// <summary>
+        /// Gets the application version in the format of Major.Minor.Revision.
+        /// </summary>
+        /// <returns></returns>
+        public static string GetApplicationVersion()
+        {
+            Version version = Assembly.GetExecutingAssembly().GetName().Version;
+            return $"{version.Major}.{version.Minor}.{version.Revision}";
         }
     }
 }
