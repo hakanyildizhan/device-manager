@@ -57,6 +57,10 @@ Copyright © Hakan Yildizhan 2020.
                             
                         </local:SetNameControl>
 
+                        <MenuItem
+                            Header="About"
+                            Command="{Binding ShowAboutWindowCommand}"/>
+
                         <MenuItem 
                             Header="Exit" 
                             Command="{Binding ExitCommand}"/>
