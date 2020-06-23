@@ -4,18 +4,14 @@
 
 using System;
 using System.Globalization;
-using System.Windows;
-using System.Windows.Media;
 
 namespace DeviceManager.Client.TrayApp
 {
-    public class AvailabilityToIconConverter : BaseValueConverter<AvailabilityToIconConverter>
+    public class OnlineStateToSetNameTextConverter : BaseValueConverter<OnlineStateToSetNameTextConverter>
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (bool)value ?
-                (ImageSource)Application.Current.TryFindResource("UnlockedImage") :
-                (ImageSource)Application.Current.TryFindResource("LockedImage");
+            return (bool)value ? "Offline" : "Initializing";
         }
 
         public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

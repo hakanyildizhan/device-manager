@@ -42,7 +42,7 @@ Copyright © Hakan Yildizhan 2020.
                         VerticalAlignment="Center"
                         Margin="5 0 0 0">
                 <Image HorizontalAlignment="Center"
-                       Source="pack://application:,,,/Icons/icon.ico"
+                       Source="{StaticResource AppIcon}"
                        Width="25" Height="25"
                        />
             </StackPanel>
@@ -69,7 +69,7 @@ Copyright © Hakan Yildizhan 2020.
 
             <StackPanel Grid.Column="0" Orientation="Vertical">
                 <Image HorizontalAlignment="Center"
-                       Source="pack://application:,,,/Resources/Images/questionmark.png"
+                       Source="{StaticResource QuestionMarkImage}"
                        Width="60"
                        Height="60"
                        Margin="10 20 10 30"/>

@@ -17,9 +17,10 @@ Copyright © Hakan Yildizhan 2020.
         Title="Device Manager">
 
     <tb:TaskbarIcon x:Name="trayIcon"
-        IconSource="/Icons/icon.ico"
+        IconSource="{Binding IsOffline, Converter={local:OnlineStateToIconConverter}}"
         ToolTipText="Device Manager"
         local:IsBusyProperty.Value="{Binding ExecutingCommand}"
+        local:IsOfflineProperty.Value="{Binding IsOffline}"
         Style="{StaticResource TaskbarIconStyle}">
 
         <tb:TaskbarIcon.ContextMenu>
@@ -44,6 +45,7 @@ Copyright © Hakan Yildizhan 2020.
 
                         <local:SetNameControl ToolTip="{Binding UserName}"
                                               local:IsVisibleProperty.Value="{Binding Initialized}"
+                                              local:IsOfflineProperty.Value="{Binding IsOffline}"
                                               Visibility="{TemplateBinding local:IsVisibleProperty.Value, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=True}">
 
                             <local:SetNameControl.Header>

@@ -129,7 +129,7 @@ Copyright © Hakan Yildizhan 2020.
 
                                         <StackPanel HorizontalAlignment="Center">
                                             <Image 
-                                            Source="pack://application:,,,/Resources/Images/edit.png"
+                                            Source="{StaticResource EditImage}"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"/>
                                         </StackPanel>
@@ -152,7 +152,7 @@ Copyright © Hakan Yildizhan 2020.
 
                                         <StackPanel HorizontalAlignment="Center">
                                             <Image 
-                                            Source="pack://application:,,,/Resources/Images/tick.png"
+                                            Source="{StaticResource TickImage}"
                                             HorizontalAlignment="Center" 
                                             VerticalAlignment="Center"/>
                                         </StackPanel>
@@ -211,7 +211,7 @@ Copyright © Hakan Yildizhan 2020.
                                 <Grid Grid.Column="2"
                                       Visibility="{TemplateBinding local:IsVisibleProperty.Value, Converter={local:BooleanToVisibilityConverter}}">
                                     <ContentPresenter 
-                                        Content="Initializing"
+                                        Content="{TemplateBinding local:IsOfflineProperty.Value, Converter={local:OnlineStateToSetNameTextConverter}}"
                                         ContentStringFormat="{TemplateBinding HeaderStringFormat}" 
                                         ContentSource="Header"
                                         HorizontalAlignment="Left" 

@@ -12,6 +12,7 @@ Copyright © Hakan Yildizhan 2020.
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/Image.xaml" />
                 <ResourceDictionary Source="Styles/Color.xaml" />
                 <ResourceDictionary Source="Styles/TaskbarIcon.xaml" />
                 <ResourceDictionary Source="Styles/Text.xaml" />
