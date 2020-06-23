@@ -19,7 +19,8 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 DeviceList = new ObservableCollection<DeviceItemViewModel>(d.AsEnumerable().Select(i => new DeviceItemViewModel
                 {
                     Id = i.Id,
-                    Name = i.GenerateName(),
+                    DeviceName = i.Name,
+                    Header = i.GenerateHeader(),
                     ConnectedModuleInfo = i.ConnectedModuleInfo,
                     IsAvailable = i.IsAvailable,
                     UsedBy = i.UsedBy,
@@ -30,13 +31,13 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         }
 
         /// <summary>
-        /// Generates a name for <see cref="DeviceItemViewModel"/> from this <see cref="Device"/>, i.e.
+        /// Generates a header for <see cref="DeviceItemViewModel"/> from this <see cref="Device"/>, i.e.
         /// <para></para>
         /// [Name] [Mlfb] [Address]
         /// </summary>
         /// <param name="device"></param>
         /// <returns></returns>
-        public static string GenerateName(this Device device)
+        public static string GenerateHeader(this Device device)
         {
             return $"{device.Name}\t{device.HardwareInfo}\t[{device.Address}]";
         }
