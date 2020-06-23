@@ -27,13 +27,13 @@ namespace DeviceManager.Client.Service
         }
 
         /// <summary>
-        /// Gets the application version in the format of Major.Minor.Revision.
+        /// Gets the application version in the format of Major.Minor.Build.
         /// </summary>
         /// <returns></returns>
         public static string GetApplicationVersion()
         {
             Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            return $"{version.Major}.{version.Minor}.{version.Revision}";
+            return $"{version.Major}.{version.Minor}.{version.Build}";
         }
     }
 }
