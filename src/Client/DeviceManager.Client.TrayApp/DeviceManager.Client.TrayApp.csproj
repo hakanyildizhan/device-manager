@@ -89,6 +89,7 @@
     </ApplicationDefinition>
     <Compile Include="AppConstants.cs" />
     <Compile Include="AttachedProperties\BaseAttachedProperty.cs" />
+    <Compile Include="AttachedProperties\HyperlinkNavigateProperty.cs" />
     <Compile Include="AttachedProperties\IsBusyProperty.cs" />
     <Compile Include="AttachedProperties\IsVisibleProperty.cs" />
     <Compile Include="Controls\DeviceTypeControl.xaml.cs">
@@ -107,6 +108,7 @@
     <Compile Include="ValueConverters\BooleanOrBooleanConverter.cs" />
     <Compile Include="ValueConverters\BooleanReversalConverter.cs" />
     <Compile Include="ValueConverters\UserNameOrFriendlyNameConverter.cs" />
+    <Compile Include="ViewModel\AboutWindowViewModel.cs" />
     <Compile Include="ViewModel\DeviceListViewModel.cs" />
     <Compile Include="Service\BasicToastFeedbackService.cs" />
     <Compile Include="ValueConverters\AvailabilityToIconConverter.cs" />
@@ -119,6 +121,9 @@
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\QueryObjects\DeviceListSelect.cs" />
     <Compile Include="ViewModel\ReminderWindowViewModel.cs" />
+    <Compile Include="Windows\AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ReminderWindow.xaml.cs">
       <DependentUpon>ReminderWindow.xaml</DependentUpon>
     </Compile>
@@ -166,6 +171,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\Text.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

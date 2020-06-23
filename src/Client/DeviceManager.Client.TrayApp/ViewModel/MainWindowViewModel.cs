@@ -4,6 +4,7 @@
 
 using DeviceManager.Client.Service;
 using DeviceManager.Client.Service.Model;
+using DeviceManager.Client.TrayApp.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -28,6 +29,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         private int _consecutiveFailedRefreshCount = 0;
         private int _consecutiveFailedInitializeCount = 0;
         private bool _initialized;
+        private AboutWindow _aboutWindow;
 
         /// <summary>
         /// Invoked when there is a change in any setting that has an impact on application behavior.
@@ -49,7 +51,6 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 }
             }
         }
-        public ICommand ExitCommand { get; set; }
 
         public string FriendlyName
         {
@@ -115,12 +116,15 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         }
 
         public ICommand SetNameCommand { get; set; }
+        public ICommand ShowAboutWindowCommand { get; set; }
         public ICommand EnterEditModeCommand { get; set; }
-
+        public ICommand ExitCommand { get; set; }
+        
         public MainWindowViewModel()
         {
             Devices = new ObservableCollection<DeviceListViewModel>();
             ExitCommand = new RelayCommand(() => Exit());
+            ShowAboutWindowCommand = new RelayCommand(async () => await ShowAboutWindow());
             EnterEditModeCommand = new RelayCommand(() => { EditMode = !EditMode; });
             SetNameCommand = new RelayParameterizedCommand(async (parameter) => await SetName(parameter));
             Task.Run(InitializeAsync);
@@ -497,6 +501,32 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             DisableTimer();
             (System.Windows.Application.Current.MainWindow as MainWindow).trayIcon.Visibility = System.Windows.Visibility.Hidden;
             System.Windows.Application.Current.Shutdown();
+        }
+
+        /// <summary>
+        /// Shows the About window.
+        /// </summary>
+        /// <returns></returns>
+        private async Task ShowAboutWindow()
+        {
+            if (_aboutWindow != null) // do not show the window twice
+            {
+                return;
+            }
+
+            await App.Current.Dispatcher.BeginInvoke(new Action(delegate ()
+            {
+                _aboutWindow = new AboutWindow();
+                _aboutWindow.Closed += AboutWindow_Closed;
+                AboutWindowViewModel aboutWindowViewModel = new AboutWindowViewModel(_aboutWindow);
+                _aboutWindow.DataContext = aboutWindowViewModel;
+                _aboutWindow.ShowDialog();
+            }), System.Windows.Threading.DispatcherPriority.Normal);
+        }
+
+        private void AboutWindow_Closed(object sender, EventArgs e)
+        {
+            _aboutWindow = null;
         }
     }
 }
