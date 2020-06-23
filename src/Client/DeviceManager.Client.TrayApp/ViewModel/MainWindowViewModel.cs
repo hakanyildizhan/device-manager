@@ -1,11 +1,14 @@
-﻿using DeviceManager.Client.Service;
+﻿// This file is part of Device Manager project released under GNU General Public License v3.0.
+// See file LICENSE.md or go to https://www.gnu.org/licenses/gpl-3.0.html for full license details.
+// Copyright © Hakan Yildizhan 2020.
+
+using DeviceManager.Client.Service;
 using DeviceManager.Client.Service.Model;
+using DeviceManager.Client.TrayApp.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Input;
@@ -18,6 +21,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         private IFeedbackService _feedbackService => (IFeedbackService)ServiceProvider.GetService<IFeedbackService>();
         private IConfigurationService _configService => (IConfigurationService)ServiceProvider.GetService<IConfigurationService>();
         private ILogService<MainWindowViewModel> _logService => (ILogService<MainWindowViewModel>)ServiceProvider.GetService<ILogService<MainWindowViewModel>>();
+        private IRedundantConfigService _redundantConfigService => (IRedundantConfigService)ServiceProvider.GetService<IRedundantConfigService>();
 
         private Timer _timer;
         private string _userName;
@@ -26,6 +30,8 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         private int _consecutiveFailedRefreshCount = 0;
         private int _consecutiveFailedInitializeCount = 0;
         private bool _initialized;
+        private AboutWindow _aboutWindow;
+        private bool _isOffline;
 
         /// <summary>
         /// Invoked when there is a change in any setting that has an impact on application behavior.
@@ -47,7 +53,6 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 }
             }
         }
-        public ICommand ExitCommand { get; set; }
 
         public string FriendlyName
         {
@@ -91,6 +96,22 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             }
         }
 
+        /// <summary>
+        /// Indicates whether a certain number of previous initialization/refresh attemps have failed.
+        /// </summary>
+        public bool IsOffline 
+        {
+            get { return _isOffline; }
+            set
+            {
+                if (_isOffline != value)
+                {
+                    _isOffline = value;
+                    OnPropertyChanged(nameof(IsOffline));
+                }
+            }
+        }
+
         public int RefreshInterval
         {
             get
@@ -113,16 +134,19 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         }
 
         public ICommand SetNameCommand { get; set; }
+        public ICommand ShowAboutWindowCommand { get; set; }
         public ICommand EnterEditModeCommand { get; set; }
-
+        public ICommand ExitCommand { get; set; }
+        
         public MainWindowViewModel()
         {
             Devices = new ObservableCollection<DeviceListViewModel>();
             ExitCommand = new RelayCommand(() => Exit());
+            ShowAboutWindowCommand = new RelayCommand(async () => await ShowAboutWindow());
             EnterEditModeCommand = new RelayCommand(() => { EditMode = !EditMode; });
             SetNameCommand = new RelayParameterizedCommand(async (parameter) => await SetName(parameter));
             Task.Run(InitializeAsync);
-            _logService.LogInformation("App initialized");
+            _logService.LogInformation($"App initialized. Version: {Utility.GetApplicationVersion()}");
         }
 
         /// <summary>
@@ -139,9 +163,9 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             {
                 if (++_consecutiveFailedInitializeCount == AppConstants.FAILED_OPERATION_RETRIES)
                 {
-                    await _feedbackService.ShowMessageAsync(MessageType.Error, "Cannot contact the server right now.");
+                    await HandleGoingOffline();
                 }
-                
+
                 _logService.LogError("Could not initialize, will retry");
                 EnableTimer(TimerEvent.Initialize);
             }
@@ -149,10 +173,11 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             {
                 if (++_consecutiveFailedInitializeCount >= AppConstants.FAILED_OPERATION_RETRIES)
                 {
-                    await _feedbackService.ShowMessageAsync(MessageType.Information, "Connection to the server has been established successfuly.");
+                    await HandleGoingOnline();
                 }
                 _consecutiveFailedInitializeCount = 0;
                 Initialized = true;
+                _redundantConfigService.StoreServerURL(await _configService.GetServerAddressAsync());
                 EnableTimer(TimerEvent.Refresh);
             }
         }
@@ -263,7 +288,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                     _logService.LogError("Refresh failed");
                     if (++_consecutiveFailedRefreshCount == AppConstants.FAILED_OPERATION_RETRIES)
                     {
-                        await _feedbackService.ShowMessageAsync(MessageType.Error, "Cannot contact the server right now.");
+                        await HandleGoingOffline();
                     }
                 }
                 else if (!refreshData.FullUpdateRequired)
@@ -287,8 +312,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                     // has the connection been re-established?
                     if (_consecutiveFailedRefreshCount >= AppConstants.FAILED_OPERATION_RETRIES)
                     {
-                        await _feedbackService.ShowMessageAsync(MessageType.Information, "Connection to the server has been established successfuly.");
-                        _logService.LogInformation("Connection re-established");
+                        await HandleGoingOnline();
                     }
 
                     _consecutiveFailedRefreshCount = 0;
@@ -304,6 +328,27 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 _logService.LogInformation("Initializing full device update");
                 await InitiateFullHardwareListUpdate();
             }
+        }
+
+        /// <summary>
+        /// Performs necessary operations to indicate to the user that the connection to the server has been established after a certain period of time.
+        /// </summary>
+        /// <returns></returns>
+        private async Task HandleGoingOnline()
+        {
+            await _feedbackService.ShowMessageAsync(MessageType.Information, "Connection to the server has been established successfuly.");
+            _logService.LogInformation("Connection re-established");
+            IsOffline = false;
+        }
+
+        /// <summary>
+        /// Performs necessary operations to indicate to the user that the application is having issues establishing connection to the server.
+        /// </summary>
+        /// <returns></returns>
+        private async Task HandleGoingOffline()
+        {
+            await _feedbackService.ShowMessageAsync(MessageType.Error, "Cannot contact the server right now.");
+            IsOffline = true;
         }
 
         /// <summary>
@@ -495,6 +540,32 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             DisableTimer();
             (System.Windows.Application.Current.MainWindow as MainWindow).trayIcon.Visibility = System.Windows.Visibility.Hidden;
             System.Windows.Application.Current.Shutdown();
+        }
+
+        /// <summary>
+        /// Shows the About window.
+        /// </summary>
+        /// <returns></returns>
+        private async Task ShowAboutWindow()
+        {
+            if (_aboutWindow != null) // do not show the window twice
+            {
+                return;
+            }
+
+            await App.Current.Dispatcher.BeginInvoke(new Action(delegate ()
+            {
+                _aboutWindow = new AboutWindow();
+                _aboutWindow.Closed += AboutWindow_Closed;
+                AboutWindowViewModel aboutWindowViewModel = new AboutWindowViewModel(_aboutWindow);
+                _aboutWindow.DataContext = aboutWindowViewModel;
+                _aboutWindow.ShowDialog();
+            }), System.Windows.Threading.DispatcherPriority.Normal);
+        }
+
+        private void AboutWindow_Closed(object sender, EventArgs e)
+        {
+            _aboutWindow = null;
         }
     }
 }

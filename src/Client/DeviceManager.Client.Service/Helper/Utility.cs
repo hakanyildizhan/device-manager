@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// This file is part of Device Manager project released under GNU General Public License v3.0.
+// See file LICENSE.md or go to https://www.gnu.org/licenses/gpl-3.0.html for full license details.
+// Copyright © Hakan Yildizhan 2020.
+
+using System;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace DeviceManager.Client.Service
 {
@@ -23,6 +24,16 @@ namespace DeviceManager.Client.Service
             string appRoamingFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DeviceManager");
             Directory.CreateDirectory(appRoamingFolder);
             return appRoamingFolder;
+        }
+
+        /// <summary>
+        /// Gets the application version in the format of Major.Minor.Build.
+        /// </summary>
+        /// <returns></returns>
+        public static string GetApplicationVersion()
+        {
+            Version version = Assembly.GetExecutingAssembly().GetName().Version;
+            return $"{version.Major}.{version.Minor}.{version.Build}";
         }
     }
 }

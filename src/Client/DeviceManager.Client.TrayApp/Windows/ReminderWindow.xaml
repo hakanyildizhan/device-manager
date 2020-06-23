@@ -1,4 +1,10 @@
-﻿<Window x:Class="DeviceManager.Client.TrayApp.Windows.ReminderWindow"
+﻿<!-- 
+This file is part of Device Manager project released under GNU General Public License v3.0.
+See file LICENSE.md or go to https://www.gnu.org/licenses/gpl-3.0.html for full license details.
+Copyright © Hakan Yildizhan 2020.
+-->
+
+<Window x:Class="DeviceManager.Client.TrayApp.Windows.ReminderWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -36,7 +42,7 @@
                         VerticalAlignment="Center"
                         Margin="5 0 0 0">
                 <Image HorizontalAlignment="Center"
-                       Source="pack://application:,,,/Icons/icon.ico"
+                       Source="{StaticResource AppIcon}"
                        Width="25" Height="25"
                        />
             </StackPanel>
@@ -63,7 +69,7 @@
 
             <StackPanel Grid.Column="0" Orientation="Vertical">
                 <Image HorizontalAlignment="Center"
-                       Source="pack://application:,,,/Resources/Images/questionmark.png"
+                       Source="{StaticResource QuestionMarkImage}"
                        Width="60"
                        Height="60"
                        Margin="10 20 10 30"/>

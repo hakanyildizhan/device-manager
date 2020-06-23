@@ -1,12 +1,10 @@
-﻿using DeviceManager.Client.Service;
+﻿// This file is part of Device Manager project released under GNU General Public License v3.0.
+// See file LICENSE.md or go to https://www.gnu.org/licenses/gpl-3.0.html for full license details.
+// Copyright © Hakan Yildizhan 2020.
+
+using DeviceManager.Client.Service;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace DeviceManager.Client.TrayApp
@@ -34,7 +32,10 @@ namespace DeviceManager.Client.TrayApp
             var logfile = new NLog.Targets.FileTarget("logfile") 
             { 
                 FileName = logFile,
-                Layout = "${longdate}|${level:uppercase=true}|${logger}|${message}${onexception:inner=${newline}${exception:format=tostring}}"
+                Layout = "${longdate}|${level:uppercase=true}|${logger}|${message}${onexception:inner=${newline}${exception:format=tostring}}",
+                ArchiveAboveSize = 5242880, // 5 MB
+                MaxArchiveFiles = 2,
+                ArchiveNumbering = NLog.Targets.ArchiveNumberingMode.DateAndSequence
             };
             var debugger = new NLog.Targets.DebuggerTarget("debugger");
             config.AddRule(LogLevel.Info, LogLevel.Fatal, logfile);

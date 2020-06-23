@@ -1,9 +1,10 @@
-﻿using DeviceManager.Client.Service.Model;
-using System;
+﻿// This file is part of Device Manager project released under GNU General Public License v3.0.
+// See file LICENSE.md or go to https://www.gnu.org/licenses/gpl-3.0.html for full license details.
+// Copyright © Hakan Yildizhan 2020.
+
+using DeviceManager.Client.Service.Model;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 
 namespace DeviceManager.Client.TrayApp.ViewModel
@@ -18,7 +19,8 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 DeviceList = new ObservableCollection<DeviceItemViewModel>(d.AsEnumerable().Select(i => new DeviceItemViewModel
                 {
                     Id = i.Id,
-                    Name = i.GenerateName(),
+                    DeviceName = i.Name,
+                    Header = i.GenerateHeader(),
                     ConnectedModuleInfo = i.ConnectedModuleInfo,
                     IsAvailable = i.IsAvailable,
                     UsedBy = i.UsedBy,
@@ -29,13 +31,13 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         }
 
         /// <summary>
-        /// Generates a name for <see cref="DeviceItemViewModel"/> from this <see cref="Device"/>, i.e.
+        /// Generates a header for <see cref="DeviceItemViewModel"/> from this <see cref="Device"/>, i.e.
         /// <para></para>
         /// [Name] [Mlfb] [Address]
         /// </summary>
         /// <param name="device"></param>
         /// <returns></returns>
-        public static string GenerateName(this Device device)
+        public static string GenerateHeader(this Device device)
         {
             return $"{device.Name}\t{device.HardwareInfo}\t[{device.Address}]";
         }

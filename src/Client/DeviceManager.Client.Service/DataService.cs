@@ -1,13 +1,13 @@
-﻿using DeviceManager.Client.Service.Model;
+﻿// This file is part of Device Manager project released under GNU General Public License v3.0.
+// See file LICENSE.md or go to https://www.gnu.org/licenses/gpl-3.0.html for full license details.
+// Copyright © Hakan Yildizhan 2020.
+
+using DeviceManager.Client.Service.Model;
 using DeviceManager.Client.Service.Model.Api;
 using Flurl;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DeviceManager.Client.Service
@@ -23,13 +23,19 @@ namespace DeviceManager.Client.Service
         {
             _logService = logService;
             _configService = configService;
+            
+            Task<string> getServerAddressTask = Task.Run(async () => await GetApiAddress());
+            _baseApiAddress = Url.Combine(getServerAddressTask.Result, "api");
+        }
 
+        private async Task<string> GetApiAddress()
+        {
 #if DEBUG
             string serverAddress = "http://localhost:8070/";
 #else
-            string serverAddress = _configService.GetServerAddress();
+            string serverAddress = await _configService.GetServerAddressAsync();
 #endif
-            _baseApiAddress = Url.Combine(serverAddress, "api");
+            return serverAddress;
         }
 
         public async Task<ApiCallResult> CheckDeviceAvailabilityAsync(int deviceId)

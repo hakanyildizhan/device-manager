@@ -1,3 +1,7 @@
+// This file is part of Device Manager project released under GNU General Public License v3.0.
+// See file LICENSE.md or go to https://www.gnu.org/licenses/gpl-3.0.html for full license details.
+// Copyright © Hakan Yildizhan 2020.
+
 using System;
 using System.IO;
 using Microsoft.Deployment.WindowsInstaller;
@@ -14,7 +18,7 @@ namespace DeviceManager.Setup.CustomActions
 
         /// <summary>
         /// Checks if SERVERADDRESS property contains a valid server URL.
-        /// If it is valid, sets TESTRESULT to "1".
+        /// If it is valid, sets TESTRESULT to "1". Additionally, writes the server URL to the registry.
         /// </summary>
         /// <param name="session"></param>
         /// <returns></returns>
@@ -53,6 +57,17 @@ namespace DeviceManager.Setup.CustomActions
             if (serverValidityResult.Success)
             {
                 var result = WriteServerSetting(address);
+
+                if (result.Success)
+                {
+                    bool success = Utility.SaveServerURLToRegistry(address);
+
+                    if (!success)
+                    {
+                        session.Log("Failed writing server URL to registry");
+                    }
+                }
+
                 session.Log(result.Message);
                 session["TESTRESULT"] = result.Success ? "1" : "0";
             }

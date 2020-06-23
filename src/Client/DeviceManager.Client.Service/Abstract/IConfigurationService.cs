@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// This file is part of Device Manager project released under GNU General Public License v3.0.
+// See file LICENSE.md or go to https://www.gnu.org/licenses/gpl-3.0.html for full license details.
+// Copyright © Hakan Yildizhan 2020.
+
 using System.Threading.Tasks;
 
 namespace DeviceManager.Client.Service
@@ -63,6 +63,11 @@ namespace DeviceManager.Client.Service
         /// Gets the server address which the API calls will be based on. This configuration is set during setup process.
         /// </summary>
         /// <returns></returns>
-        string GetServerAddress();
+        Task<string> GetServerAddressAsync();
+
+        /// <summary>
+        /// Completely removes all data stored by the service, then attempts to recreate them.
+        /// </summary>
+        Task Recreate();
     }
 }
