@@ -14,31 +14,34 @@ namespace DeviceManager.Client.Service
     public class JsonConfigService : IConfigurationService
     {
         private readonly ILogService _logService;
+        private readonly IRedundantConfigService _redundantConfigService;
 
         private static string _configFile = Path.Combine(Utility.GetAppRoamingFolder(), "appsettings.json");
         static object lockObj = new object();
 
-        public JsonConfigService(ILogService<JsonConfigService> logService)
+        public JsonConfigService(ILogService<JsonConfigService> logService, IRedundantConfigService redundantConfigService)
         {
             _logService = logService;
-            Init();
+            _redundantConfigService = redundantConfigService;
+            Task.Run(async () => await Init());
         }
 
-        private void Init()
+        /// <summary>
+        /// If the configuration file does not exist, this method creates it & fetches essential settings from the redundancy config service and stores them in the file.
+        /// </summary>
+        /// <returns></returns>
+        private async Task Init()
         {
             try
             {
-                lock (lockObj)
+                if (!File.Exists(_configFile))
                 {
-                    if (!File.Exists(_configFile))
-                    {
-                        File.WriteAllText(_configFile, string.Empty);
-                    }
+                    await Recreate();
                 }
             }
             catch (Exception ex)
             {
-                _logService.LogException(ex, "Could not create config file");
+                _logService.LogException(ex, "Could not initialize config file");
             }
         }
 
@@ -139,9 +142,49 @@ namespace DeviceManager.Client.Service
             return !string.IsNullOrEmpty(value) ? int.Parse(value) : ServiceConstants.Settings.USAGE_PROMPT_DURATION_DEFAULT;
         }
 
-        public string GetServerAddress()
+        /// <summary>
+        /// Gets the server address which the API calls will be based on. This configuration is set during setup process.
+        /// In case server address cannot be fetched from file, it will be recreated along with all settings stored in the redundant config service.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string> GetServerAddressAsync()
         {
+            string serverAddress = Get(ServiceConstants.Settings.SERVER_ADDRESS);
+
+            if (string.IsNullOrEmpty(serverAddress))
+            {
+                await Recreate();
+            }
+
             return Get(ServiceConstants.Settings.SERVER_ADDRESS);
+        }
+
+        public async Task Recreate()
+        {
+            try
+            {
+                lock (lockObj)
+                {
+                    if (File.Exists(_configFile))
+                    {
+                        File.Delete(_configFile);
+                    }
+
+                    File.WriteAllText(_configFile, string.Empty);
+                }
+                
+                string serverAddress = _redundantConfigService.FetchServerURL();
+
+                if (!string.IsNullOrEmpty(serverAddress))
+                {
+                    await this.SetAsync(ServiceConstants.Settings.SERVER_ADDRESS, serverAddress);
+                    _logService.LogInformation("Recreated config file");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logService.LogException(ex, "Could not recreate config file");
+            }
         }
     }
 }

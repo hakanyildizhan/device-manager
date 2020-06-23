@@ -12,6 +12,7 @@ namespace DeviceManager.Setup.CustomActions
         /// <summary>
         /// Checks if the user already has a config file that contains a valid server URL.
         /// If so, sets TESTRESULT to "1" and sets the SERVERADDRESS property.
+        /// Additionally, writes the server URL to the registry.
         /// </summary>
         /// <param name="session"></param>
         /// <returns></returns>
@@ -44,6 +45,18 @@ namespace DeviceManager.Setup.CustomActions
             session.Log(serverValidityResult.Message);
             session["TESTRESULT"] = serverValidityResult.Success ? "1" : "0";
             session["SERVERADDRESS"] = serverValidityResult.Success ? serverAddress : "";
+
+            // if the URL is valid, try saving the value to the registry
+            if (serverValidityResult.Success)
+            {
+                bool success = Utility.SaveServerURLToRegistry(serverAddress);
+
+                if (!success)
+                {
+                    session.Log("Failed writing server URL to registry");
+                }
+            }
+
             return ActionResult.Success;
         }
     }

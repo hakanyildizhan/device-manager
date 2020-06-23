@@ -20,6 +20,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         private IFeedbackService _feedbackService => (IFeedbackService)ServiceProvider.GetService<IFeedbackService>();
         private IConfigurationService _configService => (IConfigurationService)ServiceProvider.GetService<IConfigurationService>();
         private ILogService<MainWindowViewModel> _logService => (ILogService<MainWindowViewModel>)ServiceProvider.GetService<ILogService<MainWindowViewModel>>();
+        private IRedundantConfigService _redundantConfigService => (IRedundantConfigService)ServiceProvider.GetService<IRedundantConfigService>();
 
         private Timer _timer;
         private string _userName;
@@ -172,6 +173,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 }
                 _consecutiveFailedInitializeCount = 0;
                 Initialized = true;
+                _redundantConfigService.StoreServerURL(await _configService.GetServerAddressAsync());
                 EnableTimer(TimerEvent.Refresh);
             }
         }

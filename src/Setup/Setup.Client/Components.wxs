@@ -10,7 +10,9 @@
       <ComponentRef Id="ProgramMenuShortcut" />
       <ComponentRef Id="DesktopShortcut" />
       <ComponentRef Id="StartupShortcut" />
-
+      
+      <!-- Registry entry -->
+      <ComponentRef Id="ServerAddressRegistryEntry" />
     </ComponentGroup>
 
     <!-- Start menu shortcut -->
@@ -25,7 +27,7 @@
                 Icon="icon.exe"/>
 
       <!-- Unique key for this component/shortcut -->
-      <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.AppName)" Name="StartMenuShortcut" Value="1" Type="integer" KeyPath="yes" />
+      <RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="StartMenuShortcut" Value="1" Type="integer" KeyPath="yes" />
 
       <!--Remove start menu items -->
       <RemoveFolder Id="RemoveStartMenu" On="uninstall" />
@@ -44,7 +46,7 @@
                 Icon='icon.exe' />
 
       <!-- Unique key for this component/shortcut -->
-      <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.AppName)" Name="DesktopShortcut" Value="1" Type="integer" KeyPath="yes"/>
+      <RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="DesktopShortcut" Value="1" Type="integer" KeyPath="yes"/>
 
       <!--Remove desktop shortcut -->
       <RemoveFolder Id='RemoveDesktop' On="uninstall"/>
@@ -63,12 +65,24 @@
                 Icon='icon.exe' />
 
       <!-- Unique key for this component/shortcut -->
-      <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.AppName)" Name="StartupShortcut" Value="1" Type="integer" KeyPath="yes"/>
+      <RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="StartupShortcut" Value="1" Type="integer" KeyPath="yes"/>
 
       <!--Remove desktop shortcut -->
       <RemoveFolder Id='RemoveStartup' On="uninstall"/>
 
     </Component>
 
+    <!-- Server address registry entry -->
+    <DirectoryRef Id="INSTALLFOLDER">
+      <Component Id="ServerAddressRegistryEntry" Guid="{9B4BFD61-693E-421A-AE55-1F0E43A26642}">
+
+        <RegistryKey Root="HKCU"
+                     Key="Software\Hakan Yildizhan\DeviceManager">
+          <RegistryValue Type="string" Name="ServerAddress" Value="[SERVERADDRESS]" />
+        </RegistryKey>
+
+      </Component>
+    </DirectoryRef>
+    
   </Fragment>
 </Wix>

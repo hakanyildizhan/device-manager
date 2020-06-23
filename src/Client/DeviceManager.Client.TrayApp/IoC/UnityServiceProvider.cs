@@ -50,6 +50,7 @@ namespace DeviceManager.Client.TrayApp.IoC
             container.RegisterSingleton<IConfigurationService, JsonConfigService>();
             container.RegisterType<IDataService, DataService>();
             container.RegisterType<IFeedbackService, BasicToastFeedbackService>();
+            container.RegisterType<IRedundantConfigService, RegistryService>();
             return container;
         }
     }
