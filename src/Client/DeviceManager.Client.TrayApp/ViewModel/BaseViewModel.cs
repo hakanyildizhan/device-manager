@@ -22,6 +22,30 @@ namespace DeviceManager.Client.TrayApp.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 
+        private static GlobalStateViewModel _globalState;
+
+        /// <summary>
+        /// Global application state that all view models can access.
+        /// </summary>
+        public GlobalStateViewModel GlobalState
+        {
+            get
+            {
+                if (_globalState == null)
+                {
+                    _globalState = new GlobalStateViewModel();
+                }
+                return _globalState;
+            }
+            set 
+            {
+                if (_globalState != value)
+                {
+                    _globalState = value;
+                }
+            }
+        }
+
         /// <summary>
         /// Call this to fire a <see cref="PropertyChanged"/> event
         /// </summary>

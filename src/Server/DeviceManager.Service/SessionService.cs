@@ -116,6 +116,39 @@ namespace DeviceManager.Service
             }
         }
 
+        public async Task<bool> EndAllSessionsOfUserAsync(string userName)
+        {
+            using (var transaction = DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    IList<Session> activeSessions = DbContext.Sessions
+                        .Where(s => s.Client.DomainUsername == userName && s.IsActive)
+                        .ToList();
+
+                    // currently there is no active session for the user, succeed anyway
+                    if (!activeSessions.Any())
+                        return true;
+
+                    foreach (Session activeSession in activeSessions)
+                    {
+                        activeSession.FinishedAt = DateTime.UtcNow;
+                        activeSession.IsActive = false;
+                        await DbContext.SaveChangesAsync();
+                    }
+
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    _logService.LogException(ex, $"Unknown error occured during ending all sessions for user {userName}");
+                    throw new ServiceException(ex);
+                }
+            }
+            return true;
+        }
+
         public bool IsDeviceAvailable(int deviceId)
         {
             try

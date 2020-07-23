@@ -31,7 +31,6 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         private int _consecutiveFailedInitializeCount = 0;
         private bool _initialized;
         private AboutWindow _aboutWindow;
-        private bool _isOffline;
 
         /// <summary>
         /// Invoked when there is a change in any setting that has an impact on application behavior.
@@ -96,22 +95,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             }
         }
 
-        /// <summary>
-        /// Indicates whether a certain number of previous initialization/refresh attemps have failed.
-        /// </summary>
-        public bool IsOffline 
-        {
-            get { return _isOffline; }
-            set
-            {
-                if (_isOffline != value)
-                {
-                    _isOffline = value;
-                    OnPropertyChanged(nameof(IsOffline));
-                }
-            }
-        }
-
+        
         public int RefreshInterval
         {
             get
@@ -133,11 +117,32 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             }
         }
 
+        /// <summary>
+        /// Returns true if the user currently has one or more checked-out items.
+        /// </summary>
+        public bool CheckedoutItemsExist 
+        { 
+            get
+            {
+                foreach (var deviceGroup in Devices)
+                {
+                    foreach (var device in deviceGroup.DeviceList)
+                    {
+                        if (device.UsedByMe)
+                            return true;
+                    }
+                }
+                return false;
+            }
+        }
+
         public ICommand SetNameCommand { get; set; }
+        public ICommand ReleaseAllCommand { get; set; }
+        public ICommand NavigateToServerInterfaceCommand { get; set; }
         public ICommand ShowAboutWindowCommand { get; set; }
         public ICommand EnterEditModeCommand { get; set; }
         public ICommand ExitCommand { get; set; }
-        
+
         public MainWindowViewModel()
         {
             Devices = new ObservableCollection<DeviceListViewModel>();
@@ -145,6 +150,8 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             ShowAboutWindowCommand = new RelayCommand(async () => await ShowAboutWindow());
             EnterEditModeCommand = new RelayCommand(() => { EditMode = !EditMode; });
             SetNameCommand = new RelayParameterizedCommand(async (parameter) => await SetName(parameter));
+            ReleaseAllCommand = new RelayCommand(async () => await ReleaseAll());
+            NavigateToServerInterfaceCommand = new RelayCommand(async () => await NavigateToServerInterface());
             Task.Run(InitializeAsync);
             _logService.LogInformation($"App initialized. Version: {Utility.GetApplicationVersion()}");
         }
@@ -177,6 +184,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 }
                 _consecutiveFailedInitializeCount = 0;
                 Initialized = true;
+                GlobalState.IsOffline = false;
                 _redundantConfigService.StoreServerURL(await _configService.GetServerAddressAsync());
                 EnableTimer(TimerEvent.Refresh);
             }
@@ -212,12 +220,20 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                     App.Current.Dispatcher.Invoke((Action)delegate
                     {
                         TeardownDeviceList();
-                        devices.MapDeviceToViewModel().ToList().ForEach(d => 
+                        devices.MapDeviceToViewModel().ToList().ForEach(d =>
                         {
-                            d.DeviceList.ToList().ForEach(di => { this.SettingsChanged += di.HandleSettingsChanged; });
+                            d.DeviceList.ToList().ForEach(di => 
+                            {
+                                // subscribe to SettingsChanged event, so that each device item gets updated settings
+                                this.SettingsChanged += di.HandleSettingsChanged;
+
+                                // subscribe to StateChanged event, so that this view model is made aware any time a device item's state changes
+                                di.StateChanged += this.DeviceItemStateChanged;
+                            });
                             Devices.Add(d);
                         });
                     });
+                    OnPropertyChanged(nameof(CheckedoutItemsExist));
                     success = true;
                     _logService.LogInformation("Got device list successfully");
                     await _configService.LogSuccessfulRefresh();
@@ -232,17 +248,20 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         private void TeardownDeviceList()
         {
             // unsubscribe all SettingsChanged event handlers
-            var clientList = this.SettingsChanged?.GetInvocationList();
-            if (clientList != null && clientList.Any())
+            var subscriberList = this.SettingsChanged?.GetInvocationList();
+            if (subscriberList != null && subscriberList.Any())
             {
-                foreach (var d in clientList)
+                foreach (var subscriber in subscriberList)
                 {
-                    this.SettingsChanged -= (d as EventHandler<List<string>>);
+                    this.SettingsChanged -= (subscriber as EventHandler<List<string>>);
                 }
             }
 
             // dispose and clear all device items
-            Devices.ToList().ForEach(d => d.DeviceList.ToList().ForEach(di => di.Dispose()));
+            Devices.ToList().ForEach(d => d.DeviceList.ToList().ForEach(di => 
+            {
+                di.Dispose();
+            }));
             Devices.Clear();
         }
 
@@ -338,7 +357,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         {
             await _feedbackService.ShowMessageAsync(MessageType.Information, "Connection to the server has been established successfuly.");
             _logService.LogInformation("Connection re-established");
-            IsOffline = false;
+            GlobalState.IsOffline = false;
         }
 
         /// <summary>
@@ -348,7 +367,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         private async Task HandleGoingOffline()
         {
             await _feedbackService.ShowMessageAsync(MessageType.Error, "Cannot contact the server right now.");
-            IsOffline = true;
+            GlobalState.IsOffline = true;
         }
 
         /// <summary>
@@ -421,7 +440,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                         changedSettings.Add(setting.Key);
                     }
                 }
-                
+
                 await _configService.SetAsync(setting.Key, setting.Value);
 
                 if (changedSettings.Any())
@@ -450,7 +469,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             {
                 this.SettingsChanged.Invoke(this, changedSettings);
             }
-            
+
         }
 
         private async Task SetName(object parameter)
@@ -503,7 +522,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             {
                 _timer.Interval = TimeSpan.FromSeconds(currentInterval).TotalMilliseconds;
             }
-            
+
             switch (timerEvent)
             {
                 case TimerEvent.RegisterUser:
@@ -563,9 +582,64 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             }), System.Windows.Threading.DispatcherPriority.Normal);
         }
 
+        /// <summary>
+        /// Opens a browser window and navigates to the server web interface URL.
+        /// </summary>
+        /// <returns></returns>
+        private async Task NavigateToServerInterface()
+        {
+            var serverAddress = _configService.GetServerAddressAsync();
+            System.Diagnostics.Process.Start(await serverAddress);
+        }
+
+        /// <summary>
+        /// Releases all device items that are currently checked-out to the current user.
+        /// </summary>
+        /// <returns></returns>
+        private async Task ReleaseAll()
+        {
+            var result = await _dataService.CheckinAllDevicesAsync(Utility.GetCurrentUserName());
+
+            if (result == ApiCallResult.Success)
+            {
+                await _feedbackService.ShowMessageAsync(MessageType.Information, "All items are released successfully.");
+                _logService.LogInformation($"All items released successfully");
+
+                // update status of previously checked out devices
+                foreach (var deviceGroup in Devices)
+                {
+                    foreach (var device in deviceGroup.DeviceList)
+                    {
+                        device.IsAvailable = true;
+                        device.UsedBy = null;
+                    }
+                }
+            }
+            else if (result == ApiCallResult.NotReachable)
+            {
+                await _feedbackService.ShowMessageAsync(MessageType.Error, "Server unreachable", "Cannot reach the server right now. Please try again later.");
+                _logService.LogError($"Check-in of all items failed. Server unreachable");
+            }
+            else
+            {
+                await _feedbackService.ShowMessageAsync(MessageType.Error, "Operation failed", "Could not release devices. Please try again later.");
+                _logService.LogError($"Check-in of all items failed");
+            }
+        }
+
         private void AboutWindow_Closed(object sender, EventArgs e)
         {
             _aboutWindow = null;
+        }
+
+        /// <summary>
+        /// Called automatically whenever a device item's check-in state changes.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DeviceItemStateChanged(object sender, System.EventArgs e)
+        {
+            OnPropertyChanged(nameof(CheckedoutItemsExist));
         }
     }
 }

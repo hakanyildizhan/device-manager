@@ -99,6 +99,35 @@ namespace DeviceManager.Client.Service
             }
         }
 
+        public async Task<ApiCallResult> CheckinAllDevicesAsync(string userName)
+        {
+            string uri = Url.Combine(_baseApiAddress, "session/endall");
+            try
+            {
+                HttpResponseMessage response = await client.PostAsJsonAsync(uri, userName);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    bool result = await response.Content.ReadAsAsync<bool>();
+                    return result ? ApiCallResult.Success : ApiCallResult.Failure;
+                }
+                else
+                {
+                    return ApiCallResult.Failure;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                _logService.LogException(ex, "Cannot contact server. Failed to check in all devices");
+                return ApiCallResult.NotReachable;
+            }
+            catch (Exception ex)
+            {
+                _logService.LogException(ex, "Unknown error occured while checking in all devices");
+                return ApiCallResult.Unknown;
+            }
+        }
+
         public async Task<ApiCallResult> CheckoutDeviceAsync(string userName, int deviceId)
         {
             string uri = Url.Combine(_baseApiAddress, "session/create");

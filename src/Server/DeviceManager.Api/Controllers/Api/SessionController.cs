@@ -44,5 +44,13 @@ namespace DeviceManager.Api.Controllers
             bool sessionEnded = await _sessionService.EndSessionAsync(request.UserName, request.DeviceId);
             return Request.CreateResponse(HttpStatusCode.OK, sessionEnded);
         }
+
+        // PUT api/session/endall
+        [HttpPost]
+        public async Task<HttpResponseMessage> EndAll([FromBody]string domainUserName)
+        {
+            bool success = await _sessionService.EndAllSessionsOfUserAsync(domainUserName);
+            return Request.CreateResponse(HttpStatusCode.OK, success);
+        }
     }
 }

@@ -17,6 +17,14 @@ Copyright © Hakan Yildizhan 2020.
           Style="{DynamicResource MenuItemControlTemplate}"
           >
 
+    <MenuItem.IsEnabled>
+        <MultiBinding Converter="{local:DeviceItemIsEnabledConverter}">
+            <Binding Path="GlobalState.IsOffline" />
+            <Binding Path="IsAvailable" />
+            <Binding Path="UsedByMe" />
+        </MultiBinding>
+    </MenuItem.IsEnabled>
+
     <d:DesignerProperties.DesignStyle>
         <Style TargetType="MenuItem">
             <Setter Property="Background" 

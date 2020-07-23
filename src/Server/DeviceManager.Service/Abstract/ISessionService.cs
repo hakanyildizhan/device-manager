@@ -34,6 +34,13 @@ namespace DeviceManager.Service
         Task<bool> EndSessionAsync(string userName, int deviceId);
 
         /// <summary>
+        /// Ends all existing sessions for given user.
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        Task<bool> EndAllSessionsOfUserAsync(string userName);
+
+        /// <summary>
         /// Ends all active sessions for all users.
         /// </summary>
         /// <returns></returns>
