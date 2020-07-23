@@ -105,13 +105,15 @@
     <Compile Include="IoC\IAppServiceProvider.cs" />
     <Compile Include="IoC\UnityServiceProvider.cs" />
     <Compile Include="Service\NLogLogger.cs" />
+    <Compile Include="ValueConverters\CanReleaseAllConverter.cs" />
     <Compile Include="ValueConverters\OnlineStateToSetNameTextConverter.cs" />
     <Compile Include="ValueConverters\OnlineStateToIconConverter.cs" />
     <Compile Include="ValueConverters\BaseMultiValueConverter.cs" />
-    <Compile Include="ValueConverters\BooleanOrBooleanConverter.cs" />
+    <Compile Include="ValueConverters\DeviceItemIsEnabledConverter.cs" />
     <Compile Include="ValueConverters\BooleanReversalConverter.cs" />
     <Compile Include="ValueConverters\UserNameOrFriendlyNameConverter.cs" />
     <Compile Include="ViewModel\AboutWindowViewModel.cs" />
+    <Compile Include="ViewModel\GlobalStateViewModel.cs" />
     <Compile Include="ViewModel\DeviceListViewModel.cs" />
     <Compile Include="Service\BasicToastFeedbackService.cs" />
     <Compile Include="ValueConverters\AvailabilityToIconConverter.cs" />

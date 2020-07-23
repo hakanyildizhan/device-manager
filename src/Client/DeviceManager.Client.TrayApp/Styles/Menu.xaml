@@ -65,15 +65,6 @@ Copyright © Hakan Yildizhan 2020.
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Padding" Value="1"/>
 
-        <Setter Property="IsEnabled">
-            <Setter.Value>
-                <MultiBinding Converter="{local:BooleanOrBooleanConverter}">
-                    <Binding Path="IsAvailable" />
-                    <Binding Path="UsedByMe" />
-                </MultiBinding>
-            </Setter.Value>
-        </Setter>
-
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -112,14 +103,6 @@ Copyright © Hakan Yildizhan 2020.
         </Style.Resources>
 
         <Setter Property="StaysOpenOnClick" Value="True"/>
-        <Setter Property="IsEnabled">
-            <Setter.Value>
-                <MultiBinding Converter="{local:BooleanOrBooleanConverter}">
-                    <Binding Path="IsAvailable" />
-                    <Binding Path="UsedByMe" />
-                </MultiBinding>
-            </Setter.Value>
-        </Setter>
 
         <Setter Property="local:IsBusyProperty.Value" Value="False" />
 

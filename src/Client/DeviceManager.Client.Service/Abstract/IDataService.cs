@@ -17,6 +17,7 @@ namespace DeviceManager.Client.Service
         Task<ApiCallResult> CheckDeviceAvailabilityAsync(int deviceId);
         Task<ApiCallResult> CheckoutDeviceAsync(string userName, int deviceId);
         Task<ApiCallResult> CheckinDeviceAsync(string userName, int deviceId);
+        Task<ApiCallResult> CheckinAllDevicesAsync(string userName);
         Task<RefreshResponse> Refresh(string lastSuccessfulRefreshTime);
     }
 }

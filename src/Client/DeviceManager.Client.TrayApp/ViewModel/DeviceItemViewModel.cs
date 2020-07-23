@@ -7,6 +7,7 @@ using DeviceManager.Client.Service.Model;
 using DeviceManager.Client.TrayApp.Windows;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -36,6 +37,11 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         /// Reminder prompt window associated with this device item.
         /// </summary>
         private Window _reminderWindow;
+
+        /// <summary>
+        /// Event that the <see cref="MainWindowViewModel"/> subscribes to in order to be alerted whenever a state change happens on this device item.
+        /// </summary>
+        public event EventHandler StateChanged;
 
         public int Id { get; set; }
 
@@ -165,6 +171,8 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 if (_usedByMe != value)
                 {
                     _usedByMe = value;
+                    NotifyStateChanged();
+
                     if (_usedByMe)
                     {
                         EnableTimer();
@@ -296,7 +304,9 @@ namespace DeviceManager.Client.TrayApp.ViewModel
 
         private async void UsageTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (_reminderWindow != null)
+            // do nothing if the popup is already being shown,
+            // or the app is currently offline, as the user will not be able to check-in anyway
+            if (_reminderWindow != null || GlobalState.IsOffline)
             {
                 return;
             }
@@ -344,6 +354,13 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         /// <param name="e"></param>
         internal void HandleReminderClose(object sender, ReminderResponse reminderResponse)
         {
+            // If the window instance is already null, this means that the device list was updated while the popup was on screen (see issue #45)
+            // In that case, do not re-enable the timer & do nothing and return
+            if (_reminderWindow == null)
+            {
+                return;
+            }
+
             _reminderWindow = null;
 
             // if reminder window was closed without checkin, restart the reminder popup timer
@@ -436,7 +453,26 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         public void Dispose()
         {
             DisableTimer();
+
+            // unsubscribe all StateChanged event handlers
+            var subscriberList = this.StateChanged?.GetInvocationList();
+            if (subscriberList != null && subscriberList.Any())
+            {
+                foreach (var subscriber in subscriberList)
+                {
+                    this.StateChanged -= (subscriber as EventHandler);
+                }
+            }
+
             _reminderWindow = null;
+        }
+
+        /// <summary>
+        /// Should be invoked to declare that the check-in state for this device item has changed.
+        /// </summary>
+        private void NotifyStateChanged()
+        {
+            StateChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

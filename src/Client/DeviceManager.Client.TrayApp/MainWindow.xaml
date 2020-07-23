@@ -17,10 +17,10 @@ Copyright © Hakan Yildizhan 2020.
         Title="Device Manager">
 
     <tb:TaskbarIcon x:Name="trayIcon"
-        IconSource="{Binding IsOffline, Converter={local:OnlineStateToIconConverter}}"
+        IconSource="{Binding GlobalState.IsOffline, Converter={local:OnlineStateToIconConverter}}"
         ToolTipText="Device Manager"
         local:IsBusyProperty.Value="{Binding ExecutingCommand}"
-        local:IsOfflineProperty.Value="{Binding IsOffline}"
+        local:IsOfflineProperty.Value="{Binding GlobalState.IsOffline}"
         Style="{StaticResource TaskbarIconStyle}">
 
         <tb:TaskbarIcon.ContextMenu>
@@ -45,8 +45,9 @@ Copyright © Hakan Yildizhan 2020.
 
                         <local:SetNameControl ToolTip="{Binding UserName}"
                                               local:IsVisibleProperty.Value="{Binding Initialized}"
-                                              local:IsOfflineProperty.Value="{Binding IsOffline}"
-                                              Visibility="{TemplateBinding local:IsVisibleProperty.Value, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=True}">
+                                              local:IsOfflineProperty.Value="{Binding GlobalState.IsOffline}"
+                                              Visibility="{TemplateBinding local:IsVisibleProperty.Value, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=True}"
+                                              IsEnabled="{Binding GlobalState.IsOffline, Converter={local:BooleanReversalConverter}}">
 
                             <local:SetNameControl.Header>
                                 <MultiBinding Converter="{local:UserNameOrFriendlyNameConverter}">
@@ -56,6 +57,23 @@ Copyright © Hakan Yildizhan 2020.
                             </local:SetNameControl.Header>
                             
                         </local:SetNameControl>
+
+                        <MenuItem
+                            Header="Release all"
+                            Command="{Binding ReleaseAllCommand}">
+
+                            <MenuItem.IsEnabled>
+                                <MultiBinding Converter="{local:CanReleaseAllConverter}">
+                                    <Binding Path="GlobalState.IsOffline" />
+                                    <Binding Path="CheckedoutItemsExist" />
+                                </MultiBinding>
+                            </MenuItem.IsEnabled>
+                            
+                        </MenuItem>
+
+                        <MenuItem
+                            Header="Open server interface"
+                            Command="{Binding NavigateToServerInterfaceCommand}"/>
 
                         <MenuItem
                             Header="About"
