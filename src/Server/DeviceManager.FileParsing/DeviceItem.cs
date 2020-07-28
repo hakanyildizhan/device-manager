@@ -4,7 +4,7 @@
 
 namespace DeviceManager.FileParsing
 {
-    public class Hardware
+    public class DeviceItem
     {
         public string Name { get; set; }
         public string Group { get; set; }

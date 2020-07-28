@@ -10,16 +10,16 @@ namespace DeviceManager.Service
 {
     public static class DeviceSelect
     {
-        public static IEnumerable<Entity.Context.Entity.Device> ToDevice(this IEnumerable<DeviceImport> hardwareList)
+        public static IEnumerable<Entity.Context.Entity.Device> ToDevice(this IEnumerable<DeviceImport> importedDeviceList)
         {
-            return hardwareList.Select((d, x) => new Entity.Context.Entity.Device
+            return importedDeviceList.Select((d, x) => new Entity.Context.Entity.Device
             {
                 Name = d.Name,
-                Address = d.Address,
-                Address2 = d.Address2,
+                Address = d.PrimaryAddress,
+                Address2 = d.SecondaryAddress,
                 ConnectedModuleInfo = d.ConnectedModuleInfo,
                 Group = d.Group,
-                HardwareInfo = d.HardwareInfo,
+                HardwareInfo = d.Info,
                 IsActive = true
             });
         }

@@ -33,7 +33,7 @@
             <div class="tab-content">
                 <div class="tab-pane" id="tab1">
                     <div class="tab-content">
-                        <p>Excel (*.xls/*.xlsx) and Offline OneNote Section files (*.one) are supported.</p>
+                        <p>Excel (*.xls/*.xlsx) files are supported.</p>
                         
                         <div id="excel-input" class="upload-group">
                             <div class="form-check">
@@ -49,31 +49,6 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <div id="oneNote-input" class="upload-group">
-                            <div class="form-check">
-                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-                            <label class="form-check-label" for="exampleRadios2">
-                                OneNote Notebook/Section path
-                            </label>
-                        </div>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">OneNote Section Path</span>
-                                </div>
-                                <input id="inputOneNotePath" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" disabled>
-                            </div>
-                            <div class="input-group">
-                                <div id="pageName" class="input-group input-group-sm mb-3">
-
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">OneNote page name</span>
-                                    </div>
-                                    <input id="inputPageName" type="text" class="form-control" onkeyup="onPageNameSelected()" aria-label="Small" aria-describedby="inputGroup-sizing-sm" disabled>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
                 <div class="tab-pane" id="tab2">
@@ -160,9 +135,9 @@
                 //
                 if (current === 3) {
                     setSpinner(true);
-                    var hardwareList = [];
+                    var deviceList = [];
                     $('#importData tr').each(function (row, tr) {
-                        hardwareList.push({
+                        deviceList.push({
                             Group: $(tr).find('td:eq(0)').text().trim(),
                             Name: $(tr).find('td:eq(1)').text().trim(),
                             Info: $(tr).find('td:eq(2)').text().trim(),
@@ -175,7 +150,7 @@
                     $.ajax({
                         url: '/Administration/ImportData',
                         type: 'POST',
-                        data: JSON.stringify({ 'hardwareList': hardwareList }),
+                        data: JSON.stringify({ 'deviceList': deviceList }),
                         dataType: 'json',
                         cache: false,
                         contentType: 'application/json; charset=utf-8',
@@ -236,18 +211,8 @@
         }
     }
 
-    $('#oneNote-input input.form-check-input').change(function() {
-        if ($(this).is(":checked")) {
-            $('#inputOneNotePath').removeAttr('disabled');
-            $('#inputPageName').removeAttr('disabled');
-            $('#inputGroupFile04').attr("disabled", 'disabled');
-        }
-    });
-
     $('#excel-input input.form-check-input').change(function() {
         if ($(this).is(":checked")) {
-            $('#inputOneNotePath').attr('disabled', 'disabled');
-            $('#inputPageName').attr('disabled', 'disabled');
             $('#inputGroupFile04').removeAttr('disabled');
         }      
     });
@@ -266,8 +231,6 @@
 
         var formData = new FormData();
         formData.append('File', $('input#inputGroupFile04').prop('files')[0]);
-        formData.append('OneNotePageName', $('input#inputPageName').val());
-        formData.append('OneNotePath', $('input#inputOneNotePath').val());
 
         function makeButtonUnclickable(btn) {
             $(btn).click(function () {

@@ -9,6 +9,7 @@ namespace DeviceManager.Service.Model
 {
     /// <summary>
     /// Entity representation for a device item for Add / Update scenarios.
+    /// This model is also used to return device items checked out to a particular user - see <see cref="IDeviceService.GetUserDevices(string)"/>.
     /// </summary>
     public class DeviceDetail
     {

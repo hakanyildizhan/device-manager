@@ -16,13 +16,18 @@ namespace DeviceManager.Service
     {
         private readonly ISettingsService _settingsService;
         private readonly ILogService _logService;
+        private readonly ISessionService _sessionService;
 
         [Dependency]
         public DeviceManagerContext DbContext { get; set; }
 
-        public DeviceService(ISettingsService settingsService, ILogService<DeviceService> logService)
+        public DeviceService(
+            ISettingsService settingsService,
+            ISessionService sessionService,
+            ILogService<DeviceService> logService)
         {
             _settingsService = settingsService;
+            _sessionService = sessionService;
             _logService = logService;
         }
 
@@ -67,12 +72,44 @@ namespace DeviceManager.Service
             }
         }
 
+        public IEnumerable<DeviceDetail> GetUserDevices(string userName)
+        {
+            var devices = new List<DeviceDetail>();
+            DbContext.Sessions.Where(s => s.IsActive && s.Client.DomainUsername.Equals(userName) && s.Device.IsActive)
+                .ToList()
+                .ForEach(s =>
+            {
+                devices.Add(new DeviceDetail
+                {
+                    Id = s.Device.Id,
+                    Group = s.Device.Group,
+                    Info = s.Device.HardwareInfo,
+                    Name = s.Device.Name,
+                    Address = s.Device.Address,
+                    Address2 = s.Device.Address2,
+                    ConnectedModuleInfo = s.Device.ConnectedModuleInfo
+                });
+            });
+
+            return devices;
+        }
+
         public async Task<bool> Import(IEnumerable<DeviceImport> deviceData)
         {
             using (var transaction = DbContext.Database.BeginTransaction())
             {
                 try
                 {
+                    // end all active sessions
+                    bool success = await _sessionService.EndActiveSessionsAsync();
+
+                    if (!success)
+                    {
+                        _logService.LogError("Error occured during hardware import. Could not end active sessions");
+                        transaction.Rollback();
+                        return false;
+                    }
+
                     DbContext.Devices.ToList().ForEach(d => { d.IsActive = false; });
                     await DbContext.SaveChangesAsync();
                     foreach (Entity.Context.Entity.Device item in deviceData.ToDevice())
@@ -96,11 +133,13 @@ namespace DeviceManager.Service
                 catch (System.Data.DataException ex)
                 {
                     _logService.LogException(ex, "DataException occured during hardware import");
+                    transaction.Rollback();
                     return false;
                 }
                 catch (Exception ex)
                 {
                     _logService.LogException(ex, "Unknown error occured during hardware import");
+                    transaction.Rollback();
                     throw new ServiceException(ex);
                 }
             }

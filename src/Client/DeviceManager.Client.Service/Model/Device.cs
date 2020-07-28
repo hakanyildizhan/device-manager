@@ -6,6 +6,9 @@ using System;
 
 namespace DeviceManager.Client.Service.Model
 {
+    /// <summary>
+    /// This class should be in sync with the server-side model <see cref="DeviceManager.Service.Model.Device"/>.
+    /// </summary>
     public class Device
     {
         public int Id { get; set; }
