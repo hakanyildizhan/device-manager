@@ -61,7 +61,7 @@ namespace DeviceManager.Api.Controllers
         public ActionResult Review()
         {
             ViewBag.ActivePage = "Review";
-            var hardwareList = _deviceService.GetDevices().OrderBy(d => d.DeviceGroup).ToList();
+            var hardwareList = _deviceService.GetDevices().OrderBy(d => d.DeviceGroup).ThenBy(d => d.Name).ToList();
             return View(hardwareList);
         }
 

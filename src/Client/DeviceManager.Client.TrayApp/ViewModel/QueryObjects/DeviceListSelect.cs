@@ -16,7 +16,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             return devices.GroupBy(d => d.DeviceGroup).Select(d => new DeviceListViewModel
             {
                 Type = d.Key,
-                DeviceList = new ObservableCollection<DeviceItemViewModel>(d.AsEnumerable().Select(i => new DeviceItemViewModel
+                DeviceList = new ObservableCollection<DeviceItemViewModel>(d.AsEnumerable().OrderBy(di => di.Name).Select(i => new DeviceItemViewModel
                 {
                     Id = i.Id,
                     DeviceName = i.Name,
