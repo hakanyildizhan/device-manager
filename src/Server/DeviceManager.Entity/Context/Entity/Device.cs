@@ -13,9 +13,11 @@ namespace DeviceManager.Entity.Context.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        [MaxLength(50)]
         public string Group { get; set; }
 
         [Required]
+        [MaxLength(50)]
         public string Name { get; set; }
         
         [Required]
@@ -27,6 +29,7 @@ namespace DeviceManager.Entity.Context.Entity
         public string Address2 { get; set; }
 
         public string ConnectedModuleInfo { get; set; }
+
         public bool IsActive { get; set; }
     }
 }

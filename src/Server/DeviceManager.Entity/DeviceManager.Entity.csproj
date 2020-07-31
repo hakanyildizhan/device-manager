@@ -103,6 +103,10 @@
     <Compile Include="Migrations\202004171059111_Identity.designer.cs">
       <DependentUpon>202004171059111_Identity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202007282136345_DeviceGroupAndNameUniqueConstraint.cs" />
+    <Compile Include="Migrations\202007282136345_DeviceGroupAndNameUniqueConstraint.designer.cs">
+      <DependentUpon>202007282136345_DeviceGroupAndNameUniqueConstraint.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -137,6 +141,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202004171059111_Identity.resx">
       <DependentUpon>202004171059111_Identity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202007282136345_DeviceGroupAndNameUniqueConstraint.resx">
+      <DependentUpon>202007282136345_DeviceGroupAndNameUniqueConstraint.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

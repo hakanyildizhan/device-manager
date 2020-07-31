@@ -33,7 +33,7 @@ namespace DeviceManager.Api.Controllers
             StatusPageViewModel model = new StatusPageViewModel()
             {
                 UserList = _userService.GetClientInfo(),
-                HardwareList = _deviceListService.GetDevices().OrderBy(d => d.DeviceGroup).ToList()
+                HardwareList = _deviceListService.GetDevices().OrderBy(d => d.DeviceGroup).ThenBy(d => d.Name).ToList()
             };
 
             ViewBag.ActivePage = "Index";
