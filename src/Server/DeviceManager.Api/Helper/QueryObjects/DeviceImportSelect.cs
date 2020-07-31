@@ -2,7 +2,6 @@
 // See file LICENSE.md or go to https://www.gnu.org/licenses/gpl-3.0.html for full license details.
 // Copyright © Hakan Yildizhan 2020.
 
-using DeviceManager.Api.Model;
 using DeviceManager.FileParsing;
 using DeviceManager.Service.Model;
 using System.Collections.Generic;
@@ -10,11 +9,11 @@ using System.Linq;
 
 namespace DeviceManager.Api
 {
-    public static class HardwareInfoSelect
+    public static class DeviceImportSelect
     {
-        public static IList<HardwareInfo> ToHardwareInfo(this IList<Hardware> hardwareList)
+        public static IList<DeviceImport> ToDeviceImport(this IList<DeviceItem> deviceItemList)
         {
-            return hardwareList.Select((h, x) => new HardwareInfo
+            return deviceItemList.Select((h, x) => new DeviceImport
             {
                 Name = h.Name,
                 PrimaryAddress = h.PrimaryAddress,
@@ -23,19 +22,6 @@ namespace DeviceManager.Api
                 Info = h.HardwareInfo,
                 ConnectedModuleInfo = h.ConnectedModuleInfo
             }).ToList();
-        }
-
-        public static IEnumerable<DeviceImport> ToDeviceImport(this IEnumerable<HardwareInfo> hardwareList)
-        {
-            return hardwareList.Select((h, x) => new DeviceImport
-            {
-                Name = h.Name,
-                Address = h.PrimaryAddress,
-                Address2 = h.SecondaryAddress,
-                Group = h.Group,
-                ConnectedModuleInfo = h.ConnectedModuleInfo,
-                HardwareInfo = h.Info
-            });
         }
     }
 }

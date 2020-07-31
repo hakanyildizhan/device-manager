@@ -17,6 +17,12 @@ namespace DeviceManager.Service
         IEnumerable<Device> GetDevices();
 
         /// <summary>
+        /// Gets all devices checked out to given user.
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<DeviceDetail> GetUserDevices(string userName);
+
+        /// <summary>
         /// Gets requested device by Id.
         /// </summary>
         /// <returns></returns>

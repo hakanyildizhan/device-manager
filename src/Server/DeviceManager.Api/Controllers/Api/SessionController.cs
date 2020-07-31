@@ -21,6 +21,11 @@ namespace DeviceManager.Api.Controllers
         }
 
         // POST api/session/isDeviceAvailable
+        /// <summary>
+        /// Returns true if a device item with given ID is currently not checked out to anybody.
+        /// </summary>
+        /// <param name="deviceId">ID of the device item to check.</param>
+        /// <returns></returns>
         [HttpPost]
         public HttpResponseMessage IsDeviceAvailable([FromBody]int deviceId)
         {
@@ -29,6 +34,11 @@ namespace DeviceManager.Api.Controllers
         }
 
         // POST api/session/create
+        /// <summary>
+        /// Checks out given device item to the specified user.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<HttpResponseMessage> Create(SessionRequest request)
         {
@@ -37,7 +47,12 @@ namespace DeviceManager.Api.Controllers
             return Request.CreateResponse(HttpStatusCode.Created, sessionCreated);
         }
 
-        // PUT api/session/end
+        // POST api/session/end
+        /// <summary>
+        /// Checks in given device item currently checked out to the specified user.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<HttpResponseMessage> End(SessionRequest request)
         {
@@ -45,7 +60,12 @@ namespace DeviceManager.Api.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, sessionEnded);
         }
 
-        // PUT api/session/endall
+        // POST api/session/endall
+        /// <summary>
+        /// Checks in all device items currently checked out to the specified user.
+        /// </summary>
+        /// <param name="domainUserName">Windows username of the user.</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<HttpResponseMessage> EndAll([FromBody]string domainUserName)
         {

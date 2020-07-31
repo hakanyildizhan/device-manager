@@ -9,11 +9,11 @@ namespace DeviceManager.Service.Model
     /// </summary>
     public class DeviceImport
     {
-        public string Group { get; set; }
         public string Name { get; set; }
-        public string HardwareInfo { get; set; }
-        public string Address { get; set; }
-        public string Address2 { get; set; }
+        public string Group { get; set; }
+        public string Info { get; set; }
+        public string PrimaryAddress { get; set; }
+        public string SecondaryAddress { get; set; }
         public string ConnectedModuleInfo { get; set; }
     }
 }

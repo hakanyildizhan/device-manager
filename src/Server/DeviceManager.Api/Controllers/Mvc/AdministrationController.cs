@@ -213,8 +213,7 @@ namespace DeviceManager.Api.Controllers
         public JsonResult UploadFile(UploadViewModel viewModel)
         {
             // Validate inputs
-            if ((viewModel.File == null || viewModel.File.ContentLength == 0) &&
-                (string.IsNullOrEmpty(viewModel.OneNotePath) || string.IsNullOrEmpty(viewModel.OneNotePageName)))
+            if (viewModel.File == null || viewModel.File.ContentLength == 0)
             {
                 return Json(new
                 {
@@ -234,16 +233,12 @@ namespace DeviceManager.Api.Controllers
                     path = Path.Combine(Utility.GetAppRoamingFolder(), generatedName);
                     viewModel.File.SaveAs(path);
                 }
-                else
-                {
-                    path = viewModel.OneNotePath;
-                }
 
-                IParser parser = ParserFactory.CreateParser(path, viewModel.OneNotePageName);
-                IList<Hardware> hardwareList = parser.Parse();
+                IParser parser = ParserFactory.CreateParser(path);
+                IList<DeviceItem> deviceItemList = parser.Parse();
 
                 // if name, primary address or hardware info is null or empty, discard those items
-                List<Hardware> invalidRows = hardwareList
+                List<DeviceItem> invalidRows = deviceItemList
                     .Where(r => string.IsNullOrWhiteSpace(r.Name) ||
                                 string.IsNullOrWhiteSpace(r.PrimaryAddress) ||
                                 string.IsNullOrWhiteSpace(r.HardwareInfo))
@@ -251,13 +246,13 @@ namespace DeviceManager.Api.Controllers
 
                 if (invalidRows.Any())
                 {
-                    invalidRows.ForEach(invalidRow => hardwareList.Remove(invalidRow));
+                    invalidRows.ForEach(invalidRow => deviceItemList.Remove(invalidRow));
                 }
 
                 return Json(new
                 {
                     Error = false,
-                    Message = RenderRazorViewToString("~/Views/Administration/Partial/HardwareListPreview.cshtml", hardwareList.ToHardwareInfo()),
+                    Message = RenderRazorViewToString("~/Views/Administration/Partial/HardwareListPreview.cshtml", deviceItemList.ToDeviceImport()),
                     DiscardedRowWarning = invalidRows.Any() ? "Some rows were discarded. Make sure that each row has its hardware name, primary address and hardware info filled and not set to an empty string." : ""
                 });
             }
@@ -274,10 +269,9 @@ namespace DeviceManager.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> ImportData(IEnumerable<HardwareInfo> hardwareList)
+        public async Task<JsonResult> ImportData(IEnumerable<DeviceImport> deviceList)
         {
-            bool success = await _sessionService.EndActiveSessionsAsync();
-            success &= await _deviceService.Import(hardwareList.ToDeviceImport());
+            bool success = await _deviceService.Import(deviceList);
 
             return Json(new
             {
