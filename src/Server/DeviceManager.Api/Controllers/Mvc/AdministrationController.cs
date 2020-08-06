@@ -209,6 +209,11 @@ namespace DeviceManager.Api.Controllers
         }
 
         // POST: UploadFile
+        /// <summary>
+        /// Processes a file containing device item details uploaded by the user and shows a preview of device items ready to be imported.
+        /// </summary>
+        /// <param name="viewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         public JsonResult UploadFile(UploadViewModel viewModel)
         {
@@ -224,18 +229,25 @@ namespace DeviceManager.Api.Controllers
 
             try
             {
-                string path = string.Empty;
-
-                if (viewModel.File != null)
-                {
-                    string fileName = Path.GetFileName(viewModel.File.FileName); // extract only the filename
-                    string generatedName = fileName.Insert(viewModel.File.FileName.IndexOf('.'), "_" + DateTime.UtcNow.ToString("yyyyMMdd-HHmmss"));
-                    path = Path.Combine(Utility.GetAppRoamingFolder(), generatedName);
-                    viewModel.File.SaveAs(path);
-                }
+                string fileName = Path.GetFileName(viewModel.File.FileName); // extract only the filename
+                string generatedName = fileName.Insert(viewModel.File.FileName.IndexOf('.'), "_" + DateTime.UtcNow.ToString("yyyyMMdd-HHmmss"));
+                string path = Path.Combine(Utility.GetAppRoamingFolder(), generatedName);
+                viewModel.File.SaveAs(path);
+                _logService.LogInformation($"Uploaded file is saved successfully under {path}");
 
                 IParser parser = ParserFactory.CreateParser(path);
                 IList<DeviceItem> deviceItemList = parser.Parse();
+
+                if (!deviceItemList.Any())
+                {
+                    _logService.LogError("No device item found to import");
+
+                    return Json(new
+                    {
+                        Error = true,
+                        Message = ""
+                    });
+                }
 
                 // if name, primary address or hardware info is null or empty, discard those items
                 List<DeviceItem> invalidRows = deviceItemList
@@ -246,6 +258,7 @@ namespace DeviceManager.Api.Controllers
 
                 if (invalidRows.Any())
                 {
+                    _logService.LogInformation($"Found {invalidRows.Count} invalid rows in the file, which will be discarded");
                     invalidRows.ForEach(invalidRow => deviceItemList.Remove(invalidRow));
                 }
 
@@ -258,7 +271,7 @@ namespace DeviceManager.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logService.LogException(ex, "Error occured during file upload/processing");
+                _logService.LogException(ex, "Error occurred during file upload/processing");
 
                 return Json(new
                 {
@@ -271,7 +284,18 @@ namespace DeviceManager.Api.Controllers
         [HttpPost]
         public async Task<JsonResult> ImportData(IEnumerable<DeviceImport> deviceList)
         {
-            bool success = await _deviceService.Import(deviceList);
+            bool success = false;
+
+            try
+            {
+                _logService.LogInformation("Beginning import");
+                success = await _deviceService.Import(deviceList);
+                _logService.LogInformation($"Import is {(success ? "successful" : "unsuccessful")}");
+            }
+            catch (Exception ex)
+            {
+                _logService.LogException(ex, "Error occurred while importing data!");
+            }
 
             return Json(new
             {

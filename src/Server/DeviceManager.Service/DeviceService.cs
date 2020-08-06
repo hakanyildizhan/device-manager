@@ -101,6 +101,7 @@ namespace DeviceManager.Service
                 try
                 {
                     // end all active sessions
+                    _logService.LogInformation("Ending all active sessions");
                     bool success = await _sessionService.EndActiveSessionsAsync();
 
                     if (!success)
@@ -110,8 +111,11 @@ namespace DeviceManager.Service
                         return false;
                     }
 
+                    _logService.LogInformation("Deactivating all existing devices");
                     DbContext.Devices.ToList().ForEach(d => { d.IsActive = false; });
                     await DbContext.SaveChangesAsync();
+
+                    _logService.LogInformation("Adding imported devices");
                     foreach (Entity.Context.Entity.Device item in deviceData.ToDevice())
                     {
                         try
@@ -127,8 +131,11 @@ namespace DeviceManager.Service
                         }
                     }
 
+                    _logService.LogInformation("Updating device list update date");
                     await UpdateDeviceListUpdateDate();
+                    _logService.LogInformation("Finishing up device import");
                     transaction.Commit();
+                    return true;
                 }
                 catch (System.Data.DataException ex)
                 {
@@ -140,10 +147,9 @@ namespace DeviceManager.Service
                 {
                     _logService.LogException(ex, "Unknown error occured during hardware import");
                     transaction.Rollback();
-                    throw new ServiceException(ex);
+                    return false;
                 }
             }
-            return true;
         }
 
         public DeviceDetail GetDevice(int id)

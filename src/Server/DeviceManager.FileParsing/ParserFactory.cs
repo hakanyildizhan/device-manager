@@ -12,9 +12,17 @@ namespace DeviceManager.FileParsing
         public static IParser CreateParser(string filePath)
         {
             string extension = new FileInfo(filePath).Extension;
-            if (extension == ".xls" || extension == ".xlsx")
+            if (extension == ".xlsx")
             {
                 return new OpenXmlParser(filePath);
+            }
+            else if (extension == ".csv")
+            {
+                return new CsvParser(filePath);
+            }
+            else if (extension == ".txt")
+            {
+                return new TextFileParser(filePath);
             }
             else
             {
