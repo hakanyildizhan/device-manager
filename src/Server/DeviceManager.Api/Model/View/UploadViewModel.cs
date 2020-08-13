@@ -9,7 +9,5 @@ namespace DeviceManager.Api.Model
     public class UploadViewModel
     {
         public HttpPostedFileBase File { set; get; }
-        public string OneNotePageName { set; get; }
-        public string OneNotePath { set; get; }
     }
 }

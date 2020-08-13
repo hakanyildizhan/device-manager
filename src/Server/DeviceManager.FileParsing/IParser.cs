@@ -8,6 +8,6 @@ namespace DeviceManager.FileParsing
 {
     public interface IParser
     {
-        IList<Hardware> Parse();
+        IList<DeviceItem> Parse();
     }
 }

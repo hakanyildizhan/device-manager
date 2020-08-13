@@ -82,7 +82,7 @@ namespace DeviceManager.Service
             catch (Exception ex)
             {
                 _logService.LogException(ex, "Unknown error occured while ending all active sessions");
-                throw new ServiceException(ex);
+                return false;
             }
         }
 
