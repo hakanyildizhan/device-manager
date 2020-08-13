@@ -9,16 +9,20 @@ namespace DeviceManager.FileParsing
 {
     public static class ParserFactory
     {
-        public static IParser CreateParser(string filePath, string pageName = null)
+        public static IParser CreateParser(string filePath)
         {
             string extension = new FileInfo(filePath).Extension;
-            if (extension == ".xls" || extension == ".xlsx")
+            if (extension == ".xlsx")
             {
-                return new ExcelParser(filePath);
+                return new OpenXmlParser(filePath);
             }
-            else if (extension == ".one")
+            else if (extension == ".csv")
             {
-                return new OneNoteParser(filePath, pageName);
+                return new CsvParser(filePath);
+            }
+            else if (extension == ".txt")
+            {
+                return new TextFileParser(filePath);
             }
             else
             {

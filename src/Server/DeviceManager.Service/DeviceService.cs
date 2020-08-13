@@ -16,13 +16,18 @@ namespace DeviceManager.Service
     {
         private readonly ISettingsService _settingsService;
         private readonly ILogService _logService;
+        private readonly ISessionService _sessionService;
 
         [Dependency]
         public DeviceManagerContext DbContext { get; set; }
 
-        public DeviceService(ISettingsService settingsService, ILogService<DeviceService> logService)
+        public DeviceService(
+            ISettingsService settingsService,
+            ISessionService sessionService,
+            ILogService<DeviceService> logService)
         {
             _settingsService = settingsService;
+            _sessionService = sessionService;
             _logService = logService;
         }
 
@@ -73,8 +78,22 @@ namespace DeviceManager.Service
             {
                 try
                 {
+                    // end all active sessions
+                    _logService.LogInformation("Ending all active sessions");
+                    bool success = await _sessionService.EndActiveSessionsAsync();
+
+                    if (!success)
+                    {
+                        _logService.LogError("Error occured during hardware import. Could not end active sessions");
+                        transaction.Rollback();
+                        return false;
+                    }
+
+                    _logService.LogInformation("Deactivating all existing devices");
                     DbContext.Devices.ToList().ForEach(d => { d.IsActive = false; });
                     await DbContext.SaveChangesAsync();
+
+                    _logService.LogInformation("Adding imported devices");
                     foreach (Entity.Context.Entity.Device item in deviceData.ToDevice())
                     {
                         try
@@ -90,21 +109,25 @@ namespace DeviceManager.Service
                         }
                     }
 
+                    _logService.LogInformation("Updating device list update date");
                     await UpdateDeviceListUpdateDate();
+                    _logService.LogInformation("Finishing up device import");
                     transaction.Commit();
+                    return true;
                 }
                 catch (System.Data.DataException ex)
                 {
                     _logService.LogException(ex, "DataException occured during hardware import");
+                    transaction.Rollback();
                     return false;
                 }
                 catch (Exception ex)
                 {
                     _logService.LogException(ex, "Unknown error occured during hardware import");
-                    throw new ServiceException(ex);
+                    transaction.Rollback();
+                    return false;
                 }
             }
-            return true;
         }
 
         public DeviceDetail GetDevice(int id)

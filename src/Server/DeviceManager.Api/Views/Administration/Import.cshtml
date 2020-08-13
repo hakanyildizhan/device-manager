@@ -33,7 +33,7 @@
             <div class="tab-content">
                 <div class="tab-pane" id="tab1">
                     <div class="tab-content">
-                        <p>Excel (*.xls/*.xlsx) and Offline OneNote Section files (*.one) are supported.</p>
+                        <p>Excel Open XML (*.xlsx), comma-separated values (*.csv) and tab-delimited text (*.txt) files are supported.</p>
                         
                         <div id="excel-input" class="upload-group">
                             <div class="form-check">
@@ -44,36 +44,11 @@
                         </div>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
+                                    <input type="file" class="custom-file-input" accept=".csv, .txt, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
                                     <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
                                 </div>
                             </div>
                         </div>
-                        
-                        <div id="oneNote-input" class="upload-group">
-                            <div class="form-check">
-                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-                            <label class="form-check-label" for="exampleRadios2">
-                                OneNote Notebook/Section path
-                            </label>
-                        </div>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">OneNote Section Path</span>
-                                </div>
-                                <input id="inputOneNotePath" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" disabled>
-                            </div>
-                            <div class="input-group">
-                                <div id="pageName" class="input-group input-group-sm mb-3">
-
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">OneNote page name</span>
-                                    </div>
-                                    <input id="inputPageName" type="text" class="form-control" onkeyup="onPageNameSelected()" aria-label="Small" aria-describedby="inputGroup-sizing-sm" disabled>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
                 <div class="tab-pane" id="tab2">
@@ -116,9 +91,7 @@
         $('#rootwizard').bootstrapWizard({
             onTabShow: function (tab, navigation, index) {
                 // set progress bar
-                var total = navigation.find('li.tab').length;
                 var current = index + 1;
-                console.log(current);
 
                 function makeNextActive() {
                     $('#rootwizard .wizard li.next').removeClass('disabled');
@@ -140,29 +113,24 @@
                 if (current === 1) {
                     $('#rootwizard input#inputGroupFile04').change(function () {
                         $(this).next('.custom-file-label').html(this.files.item(0).name);
-                        if (this.files.item(0).name.endsWith('one')) {
-                            $('div#pageName').removeAttr('hidden');
-                        }
-                        else {
-                            makeNextActive();
-                        }
+                        makeNextActive();
                     });
                 }
 
                 // tab 2
-                // upload file automatically
+                // upload file & show a preview of items
                 if (current === 2) {
                     $('#rootwizard form#fileUpload').submit();
                     setSpinner(true);
                 }
 
                 // tab 3
-                //
+                // import data
                 if (current === 3) {
                     setSpinner(true);
-                    var hardwareList = [];
+                    var deviceList = [];
                     $('#importData tr').each(function (row, tr) {
-                        hardwareList.push({
+                        deviceList.push({
                             Group: $(tr).find('td:eq(0)').text().trim(),
                             Name: $(tr).find('td:eq(1)').text().trim(),
                             Info: $(tr).find('td:eq(2)').text().trim(),
@@ -173,9 +141,9 @@
                     });
 
                     $.ajax({
-                        url: '/Administration/ImportData',
+                        url: $('#importData').attr('action'),
                         type: 'POST',
-                        data: JSON.stringify({ 'hardwareList': hardwareList }),
+                        data: JSON.stringify({ 'deviceList': deviceList }),
                         dataType: 'json',
                         cache: false,
                         contentType: 'application/json; charset=utf-8',
@@ -188,7 +156,7 @@
                             else {
                                 $('#import-finished-message').removeAttr('hidden');
                                 window.setTimeout(function () {
-                                    window.location.href = '/Home';
+                                    window.location.href = "@Url.Action("Index", "Home")";
                                 }, 4000);
                             }
                             setSpinner(false);
@@ -225,7 +193,6 @@
     function onFileSelected() {
         var name = document.getElementById('inputGroupFile04');
         $(name).next('.custom-file-label').html(name.files.item(0).name);
-
     }
 
     function onPageNameSelected() {
@@ -236,20 +203,10 @@
         }
     }
 
-    $('#oneNote-input input.form-check-input').change(function() {
-        if ($(this).is(":checked")) {
-            $('#inputOneNotePath').removeAttr('disabled');
-            $('#inputPageName').removeAttr('disabled');
-            $('#inputGroupFile04').attr("disabled", 'disabled');
-        }
-    });
-
     $('#excel-input input.form-check-input').change(function() {
         if ($(this).is(":checked")) {
-            $('#inputOneNotePath').attr('disabled', 'disabled');
-            $('#inputPageName').attr('disabled', 'disabled');
             $('#inputGroupFile04').removeAttr('disabled');
-        }      
+        }
     });
 
     function setSpinner(state) {
@@ -266,15 +223,6 @@
 
         var formData = new FormData();
         formData.append('File', $('input#inputGroupFile04').prop('files')[0]);
-        formData.append('OneNotePageName', $('input#inputPageName').val());
-        formData.append('OneNotePath', $('input#inputOneNotePath').val());
-
-        function makeButtonUnclickable(btn) {
-            $(btn).click(function () {
-                var input = this;
-                input.disabled = true;
-            });
-        }
 
         function makeNextActive() {
             $('#rootwizard .wizard li.next').removeClass('disabled');
