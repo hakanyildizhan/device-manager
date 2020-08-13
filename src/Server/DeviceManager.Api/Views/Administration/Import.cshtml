@@ -91,9 +91,7 @@
         $('#rootwizard').bootstrapWizard({
             onTabShow: function (tab, navigation, index) {
                 // set progress bar
-                var total = navigation.find('li.tab').length;
                 var current = index + 1;
-                console.log(current);
 
                 function makeNextActive() {
                     $('#rootwizard .wizard li.next').removeClass('disabled');
@@ -115,24 +113,19 @@
                 if (current === 1) {
                     $('#rootwizard input#inputGroupFile04').change(function () {
                         $(this).next('.custom-file-label').html(this.files.item(0).name);
-                        if (this.files.item(0).name.endsWith('one')) {
-                            $('div#pageName').removeAttr('hidden');
-                        }
-                        else {
-                            makeNextActive();
-                        }
+                        makeNextActive();
                     });
                 }
 
                 // tab 2
-                // upload file automatically
+                // upload file & show a preview of items
                 if (current === 2) {
                     $('#rootwizard form#fileUpload').submit();
                     setSpinner(true);
                 }
 
                 // tab 3
-                //
+                // import data
                 if (current === 3) {
                     setSpinner(true);
                     var deviceList = [];
@@ -148,7 +141,7 @@
                     });
 
                     $.ajax({
-                        url: '/Administration/ImportData',
+                        url: $('#importData').attr('action'),
                         type: 'POST',
                         data: JSON.stringify({ 'deviceList': deviceList }),
                         dataType: 'json',
@@ -163,7 +156,7 @@
                             else {
                                 $('#import-finished-message').removeAttr('hidden');
                                 window.setTimeout(function () {
-                                    window.location.href = '/Home';
+                                    window.location.href = "@Url.Action("Index", "Home")";
                                 }, 4000);
                             }
                             setSpinner(false);
@@ -200,7 +193,6 @@
     function onFileSelected() {
         var name = document.getElementById('inputGroupFile04');
         $(name).next('.custom-file-label').html(name.files.item(0).name);
-
     }
 
     function onPageNameSelected() {
@@ -214,7 +206,7 @@
     $('#excel-input input.form-check-input').change(function() {
         if ($(this).is(":checked")) {
             $('#inputGroupFile04').removeAttr('disabled');
-        }      
+        }
     });
 
     function setSpinner(state) {
@@ -231,13 +223,6 @@
 
         var formData = new FormData();
         formData.append('File', $('input#inputGroupFile04').prop('files')[0]);
-
-        function makeButtonUnclickable(btn) {
-            $(btn).click(function () {
-                var input = this;
-                input.disabled = true;
-            });
-        }
 
         function makeNextActive() {
             $('#rootwizard .wizard li.next').removeClass('disabled');

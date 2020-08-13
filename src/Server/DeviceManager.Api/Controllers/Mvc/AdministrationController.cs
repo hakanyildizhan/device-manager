@@ -230,7 +230,7 @@ namespace DeviceManager.Api.Controllers
             try
             {
                 string fileName = Path.GetFileName(viewModel.File.FileName); // extract only the filename
-                string generatedName = fileName.Insert(viewModel.File.FileName.IndexOf('.'), "_" + DateTime.UtcNow.ToString("yyyyMMdd-HHmmss"));
+                string generatedName = fileName.Insert(fileName.IndexOf('.'), "_" + DateTime.UtcNow.ToString("yyyyMMdd-HHmmss"));
                 string path = Path.Combine(Utility.GetAppRoamingFolder(), generatedName);
                 viewModel.File.SaveAs(path);
                 _logService.LogInformation($"Uploaded file is saved successfully under {path}");
