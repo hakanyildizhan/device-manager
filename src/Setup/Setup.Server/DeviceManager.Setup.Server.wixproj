@@ -33,6 +33,7 @@
     <Compile Include="IISSettingsDlg.wxs" />
     <Compile Include="Product.wxs" />
     <Compile Include="Update\1.1.0\DatabaseConfiguration.wxs" />
+    <Compile Include="Update\1.2.0\DatabaseConfiguration.wxs" />
     <Compile Include="WixUI_DeviceManager_Server.wxs" />
   </ItemGroup>
   <ItemGroup>
@@ -59,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="license.rtf" />
+    <Content Include="Scripts\OnInstall\Data_v1.2.0.sql" />
     <Content Include="Scripts\OnInstall\Data_v1.1.0.sql" />
     <Content Include="Scripts\OnInstall\Data_v1.0.0.0.sql" />
     <Content Include="Scripts\OnInstall\Tables_v1.0.0.0.sql" />
@@ -71,6 +73,7 @@
     <Folder Include="Scripts\OnInstall" />
     <Folder Include="Scripts\OnUninstall" />
     <Folder Include="Update\1.1.0" />
+    <Folder Include="Update\1.2.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Setup.Server.CustomActions\DeviceManager.Setup.Server.CustomActions.csproj">

@@ -81,6 +81,9 @@
       
       <!-- Version 1.1.0 -->
       <ComponentGroupRef Id="Version110DatabaseConfiguration" />
+
+      <!-- Version 1.2.0 -->
+      <ComponentGroupRef Id="Version120DatabaseConfiguration" />
     </Feature>
 
     <!-- Define main app icon -->
