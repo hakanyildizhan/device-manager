@@ -2,11 +2,10 @@
 // See file LICENSE.md or go to https://www.gnu.org/licenses/gpl-3.0.html for full license details.
 // Copyright © Hakan Yildizhan 2020.
 
-using DeviceManager.Client.Service;
 using NLog;
 using System;
 
-namespace DeviceManager.Client.TrayApp.Service
+namespace DeviceManager.Common
 {
     public class NLogLogger<T> : ILogService<T>
     {
@@ -15,6 +14,7 @@ namespace DeviceManager.Client.TrayApp.Service
         {
             _logger = LogManager.GetLogger(typeof(T).FullName);
         }
+
         public void LogException(Exception exception)
         {
             _logger.Log(LogLevel.Error, exception);
@@ -24,7 +24,6 @@ namespace DeviceManager.Client.TrayApp.Service
         {
             _logger.Log(LogLevel.Error, exception, message);
         }
-
 
         public void LogInformation(string message)
         {

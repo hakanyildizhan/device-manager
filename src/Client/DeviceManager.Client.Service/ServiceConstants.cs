@@ -24,6 +24,8 @@ namespace DeviceManager.Client.Service
             public const string SERVER_ADDRESS = "serverAddress";
             public const string SERVER_VERSION = "serverVersion";
             public const string LAST_DEVICELIST_UPDATE = "lastDeviceListUpdate";
+            public const string ACCESS_TOKEN = "accessToken";
+            public const string ACCESS_TOKEN_EXPIRY = "accessTokenExpiry";
         }
     }
 }

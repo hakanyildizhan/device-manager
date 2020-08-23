@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Manifest>
+	<ServerList>
+		<Server version="1.0.0" latest="false">
+			<Installer>Server/DeviceManager_server_1.0.0.0.msi</Installer>
+			<CompatibleClients>
+				<CompatibleClient version="1.0.0" latest="false"/>
+				<CompatibleClient version="1.0.1" latest="true" />
+			</CompatibleClients>
+		</Server>
+		<Server version="1.1.0" latest="false">
+			<Installer>Server/DeviceManager_server_1.1.0.msi</Installer>
+			<CompatibleClients>
+				<CompatibleClient version="1.1.0" latest="false"/>
+				<CompatibleClient version="1.1.1" latest="true" />
+			</CompatibleClients>
+		</Server>
+		<Server version="1.2.0" latest="true">
+			<Installer>Server/DeviceManager_server_1.2.0.msi</Installer>
+			<CompatibleClients>
+				<CompatibleClient version="1.1.0" latest="false"/>
+				<CompatibleClient version="1.1.1" latest="true" />
+			</CompatibleClients>
+		</Server>
+	</ServerList>
+	
+	<ClientList>
+		<Client version="1.0.0" latest="false">
+			<Installer>Client/DeviceManager_client_1.0.0.0.msi</Installer>
+		</Client>
+		<Client version="1.0.1" latest="false">
+			<Installer>Client/DeviceManager_client_1.0.1.0.msi</Installer>
+		</Client>
+		<Client version="1.1.0" latest="false">
+			<Installer>Client/DeviceManager_client_1.1.0.msi</Installer>
+		</Client>
+		<Client version="1.1.1" latest="true">
+			<Installer>Client/DeviceManager_client_1.1.1.msi</Installer>
+		</Client>
+	</ClientList>
+</Manifest>

@@ -3,6 +3,7 @@
 // Copyright © Hakan Yildizhan 2020.
 
 using DeviceManager.Api.IoC;
+using DeviceManager.Common;
 using DeviceManager.Service;
 using DeviceManager.Service.Identity;
 using Microsoft.Owin.Security;

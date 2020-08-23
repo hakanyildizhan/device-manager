@@ -4,6 +4,7 @@
 
 using DeviceManager.Client.Service.Model;
 using DeviceManager.Client.Service.Model.Api;
+using DeviceManager.Common;
 using Flurl;
 using System;
 using System.Collections.Generic;

@@ -316,6 +316,10 @@
     <Content Include="Views\Administration\Settings.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\DeviceManager.Common\DeviceManager.Common.csproj">
+      <Project>{6179FE37-10E6-4683-A7EB-0E72AC65EDF1}</Project>
+      <Name>DeviceManager.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DeviceManager.FileParsing\DeviceManager.FileParsing.csproj">
       <Project>{3e06185e-ef0a-4a72-a014-b6735120aca2}</Project>
       <Name>DeviceManager.FileParsing</Name>

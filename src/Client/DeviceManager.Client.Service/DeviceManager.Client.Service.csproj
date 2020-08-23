@@ -62,8 +62,8 @@
     <Compile Include="Abstract\IConfigurationService.cs" />
     <Compile Include="Abstract\IDataService.cs" />
     <Compile Include="Abstract\IFeedbackService.cs" />
-    <Compile Include="Abstract\ILogService.cs" />
     <Compile Include="Abstract\IRedundantConfigService.cs" />
+    <Compile Include="Abstract\IUpdateManager.cs" />
     <Compile Include="DataService.cs" />
     <Compile Include="Helper\DateTimeHelpers.cs" />
     <Compile Include="Helper\Utility.cs" />
@@ -80,9 +80,20 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegistryService.cs" />
     <Compile Include="ServiceConstants.cs" />
+    <Compile Include="UpdateManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\DeviceManager.Common\DeviceManager.Common.csproj">
+      <Project>{6179FE37-10E6-4683-A7EB-0E72AC65EDF1}</Project>
+      <Name>DeviceManager.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\DeviceManager.Update\DeviceManager.Update.csproj">
+      <Project>{683869AB-ACA3-49CE-8C05-0CEC91A062D3}</Project>
+      <Name>DeviceManager.Update</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

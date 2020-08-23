@@ -3,6 +3,7 @@
 // Copyright © Hakan Yildizhan 2020.
 
 using DeviceManager.Api.Model;
+using DeviceManager.Common;
 using DeviceManager.Service;
 using DeviceManager.Service.Model;
 using System.Net;

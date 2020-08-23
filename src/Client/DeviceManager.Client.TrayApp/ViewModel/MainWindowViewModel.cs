@@ -5,6 +5,7 @@
 using DeviceManager.Client.Service;
 using DeviceManager.Client.Service.Model;
 using DeviceManager.Client.TrayApp.Windows;
+using DeviceManager.Common;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -186,6 +187,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 Initialized = true;
                 GlobalState.IsOffline = false;
                 _redundantConfigService.StoreServerURL(await _configService.GetServerAddressAsync());
+                //bool updateIsAvailable = await CheckForUpdate();
                 EnableTimer(TimerEvent.Refresh);
             }
         }

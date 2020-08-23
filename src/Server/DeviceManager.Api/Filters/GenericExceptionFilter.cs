@@ -2,7 +2,7 @@
 // See file LICENSE.md or go to https://www.gnu.org/licenses/gpl-3.0.html for full license details.
 // Copyright © Hakan Yildizhan 2020.
 
-using DeviceManager.Service;
+using DeviceManager.Common;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http.Filters;

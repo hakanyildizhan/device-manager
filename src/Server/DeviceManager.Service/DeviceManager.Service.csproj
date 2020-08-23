@@ -100,8 +100,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\IDeviceService.cs" />
+    <Compile Include="Abstract\IUpdateService.cs" />
     <Compile Include="Identity\Abstract\IIdentityService.cs" />
-    <Compile Include="Abstract\ILogService.cs" />
     <Compile Include="Abstract\ISessionService.cs" />
     <Compile Include="Abstract\ISettingsService.cs" />
     <Compile Include="Abstract\IClientService.cs" />
@@ -135,14 +135,18 @@
     <Compile Include="Model\Setting\ServerVersion.cs" />
     <Compile Include="Model\Setting\UsagePromptDuration.cs" />
     <Compile Include="Model\Setting\UsagePromptInterval.cs" />
-    <Compile Include="NLogLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helper\ServiceConstants.cs" />
     <Compile Include="SessionService.cs" />
     <Compile Include="SettingsService.cs" />
     <Compile Include="ClientService.cs" />
+    <Compile Include="UpdateService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\DeviceManager.Common\DeviceManager.Common.csproj">
+      <Project>{6179fe37-10e6-4683-a7eb-0e72ac65edf1}</Project>
+      <Name>DeviceManager.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DeviceManager.Entity\DeviceManager.Entity.csproj">
       <Project>{d28a525d-6da9-46e9-a6ed-ebbc78abceb3}</Project>
       <Name>DeviceManager.Entity</Name>

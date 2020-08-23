@@ -4,6 +4,8 @@
 
 using DeviceManager.Client.Service;
 using DeviceManager.Client.TrayApp.Service;
+using DeviceManager.Common;
+using DeviceManager.Update;
 using System;
 using Unity;
 
@@ -51,6 +53,8 @@ namespace DeviceManager.Client.TrayApp.IoC
             container.RegisterType<IDataService, DataService>();
             container.RegisterType<IFeedbackService, BasicToastFeedbackService>();
             container.RegisterType<IRedundantConfigService, RegistryService>();
+            container.RegisterType<ITokenStore, TokenStore>();
+            container.RegisterType<IUpdateChecker, UpdateChecker>();
             return container;
         }
     }

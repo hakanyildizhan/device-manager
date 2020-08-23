@@ -4,7 +4,7 @@
 
 using System;
 
-namespace DeviceManager.Client.Service
+namespace DeviceManager.Common
 {
     public interface ILogService
     {

@@ -104,7 +104,7 @@
     <Compile Include="Helper\RelayParameterizedCommand.cs" />
     <Compile Include="IoC\IAppServiceProvider.cs" />
     <Compile Include="IoC\UnityServiceProvider.cs" />
-    <Compile Include="Service\NLogLogger.cs" />
+    <Compile Include="Service\TokenStore.cs" />
     <Compile Include="ValueConverters\CanReleaseAllConverter.cs" />
     <Compile Include="ValueConverters\OnlineStateToSetNameTextConverter.cs" />
     <Compile Include="ValueConverters\OnlineStateToIconConverter.cs" />
@@ -228,6 +228,14 @@
     <Resource Include="Resources\Images\unlocked.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\DeviceManager.Common\DeviceManager.Common.csproj">
+      <Project>{6179FE37-10E6-4683-A7EB-0E72AC65EDF1}</Project>
+      <Name>DeviceManager.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\DeviceManager.Update\DeviceManager.Update.csproj">
+      <Project>{683869AB-ACA3-49CE-8C05-0CEC91A062D3}</Project>
+      <Name>DeviceManager.Update</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DeviceManager.Client.Service\DeviceManager.Client.Service.csproj">
       <Project>{2627477b-01e1-4c37-bc13-3f8354d0c318}</Project>
       <Name>DeviceManager.Client.Service</Name>
