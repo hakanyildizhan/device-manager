@@ -59,5 +59,26 @@ namespace DeviceManager.Client.TrayApp.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;CommandMetaInfoList&gt;
+        ///
+        ///	&lt;CommandMetaInfo&gt;
+        ///		&lt;CommandId&gt;Checkin&lt;/CommandId&gt;
+        ///		&lt;Assembly&gt;DeviceManager.Client.Service&lt;/Assembly&gt;
+        ///	&lt;/CommandMetaInfo&gt;
+        ///	&lt;CommandMetaInfo&gt;
+        ///		&lt;CommandId&gt;Checkout&lt;/CommandId&gt;
+        ///		&lt;Assembly&gt;DeviceManager.Client.Service&lt;/Assembly&gt;
+        ///	&lt;/CommandMetaInfo&gt;
+        ///
+        ///&lt;/CommandMetaInfoList&gt;.
+        /// </summary>
+        internal static string CommandRegistry {
+            get {
+                return ResourceManager.GetString("CommandRegistry", resourceCulture);
+            }
+        }
     }
 }

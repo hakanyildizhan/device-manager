@@ -3,7 +3,8 @@
 // Copyright © Hakan Yildizhan 2020.
 
 using DeviceManager.Client.Service;
-using DeviceManager.Client.Service.Model;
+using DeviceManager.Client.TrayApp.Command;
+using DeviceManager.Client.TrayApp.Service;
 using DeviceManager.Client.TrayApp.Windows;
 using DeviceManager.Common;
 using System;
@@ -19,10 +20,9 @@ namespace DeviceManager.Client.TrayApp.ViewModel
 {
     public class DeviceItemViewModel : BaseViewModel, IDisposable
     {
-        private IDataService _dataService => (IDataService)ServiceProvider.GetService<IDataService>();
-        private IFeedbackService _feedbackService => (IFeedbackService)ServiceProvider.GetService<IFeedbackService>();
-        private ILogService<DeviceItemViewModel> _logService => (ILogService<DeviceItemViewModel>)ServiceProvider.GetService<ILogService<DeviceItemViewModel>>();
         private IConfigurationService _configService => (IConfigurationService)ServiceProvider.GetService<IConfigurationService>();
+        private ILogService<DeviceItemViewModel> _logService => (ILogService<DeviceItemViewModel>)ServiceProvider.GetService<ILogService<DeviceItemViewModel>>();
+        private IPromptService _promptService => (IPromptService)ServiceProvider.GetService<IPromptService>();
 
         private string _deviceName;
         private string _header;
@@ -35,9 +35,9 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         private Timer _usageTimer;
 
         /// <summary>
-        /// Reminder prompt window associated with this device item.
+        /// Whether reminder prompt associated with this device item is being shown.
         /// </summary>
-        private Window _reminderWindow;
+        private bool _reminderActive;
 
         /// <summary>
         /// Event that the <see cref="MainWindowViewModel"/> subscribes to in order to be alerted whenever a state change happens on this device item.
@@ -73,7 +73,25 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         /// <summary>
         /// The duration of the reminder popup to stay on the screen.
         /// </summary>
-        public int UsagePromptDuration => _configService.GetUsagePromptDuration();
+        public int UsagePromptDuration
+        {
+            get
+            {
+                int promptTimeout = _configService.GetUsagePromptDuration();
+#if DEBUG
+                return promptTimeout;
+#else
+                if (promptTimeout < ServiceConstants.Settings.USAGE_PROMPT_DURATION_MINIMUM)
+                {
+                    return ServiceConstants.Settings.USAGE_PROMPT_DURATION_DEFAULT;
+                }
+                else
+                {
+                    return promptTimeout;
+                }
+#endif
+            }
+        }
 
         /// <summary>
         /// Only the hardware item name part of <see cref="Name"/> shown on the menu item.
@@ -208,9 +226,21 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         public bool ExecutingCommand { get; set; }
         public ICommand CheckoutOrReleaseCommand { get; set; }
 
+        /// <summary>
+        /// Event handler to be invoked by the prompt controller. This handler manages the success state of the check-in action performed via prompt.
+        /// </summary>
+        public EventHandler<bool> CheckinOnReminder { get; set; }
+
+        /// <summary>
+        /// Event handler to be invoked by the prompt controller. This handler manages the closing of the check-in prompt.
+        /// </summary>
+        public EventHandler<PromptResult> ReminderClose { get; set; }
+
         public DeviceItemViewModel()
         {
             CheckoutOrReleaseCommand = new RelayCommand(async () => await CheckoutOrReleaseAsync());
+            this.CheckinOnReminder += HandleCheckinOnReminder;
+            this.ReminderClose += HandleReminderClose;
         }
 
         private async Task CheckoutOrReleaseAsync()
@@ -229,38 +259,18 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         {
             await RunCommandAsync(() => this.ExecutingCommand, async () =>
             {
-                var result = await _dataService.CheckDeviceAvailabilityAsync(this.Id);
-                if (result == ApiCallResult.Success)
+                CommandFactory commandFactory = CommandFactory.Instance;
+                var success = await commandFactory.GetCommand($"CheckDeviceAvailability?deviceId={Id}&deviceName={DeviceName}").Execute();
+
+                if (success)
                 {
-                    result = await _dataService.CheckoutDeviceAsync(Utility.GetCurrentUserName(), this.Id);
-                    if (result == ApiCallResult.Success)
+                    success = await commandFactory.GetCommand($"Checkout?userName={Utility.GetCurrentUserName()}&deviceId={Id}&deviceName={DeviceName}").Execute();
+
+                    if (success)
                     {
-                        await _feedbackService.ShowMessageAsync(MessageType.Information, "Device checked out successfully.");
-                        _logService.LogInformation($"Check-out of {DeviceName} successful");
                         IsAvailable = false;
                         UsedBy = Utility.GetCurrentUserName();
                     }
-                    else if (result == ApiCallResult.NotReachable)
-                    {
-                        await _feedbackService.ShowMessageAsync(MessageType.Error, "Server unreachable", "Cannot reach the server right now. Please try again later.");
-                        _logService.LogError($"Check-out of {DeviceName} failed");
-                    }
-                    else
-                    {
-                        await _feedbackService.ShowMessageAsync(MessageType.Error, "Operation failed", "Could not check out device. Please try again later.");
-                        _logService.LogError($"Check-out of {DeviceName} failed");
-                    }
-                }
-                else if (result == ApiCallResult.NotReachable)
-                {
-                    await _feedbackService.ShowMessageAsync(MessageType.Error, "Server unreachable", "Cannot reach the server right now. Please try again later.");
-                    _logService.LogError($"Could not check availability for {DeviceName}. Server unreachable");
-                }
-                else
-                {
-                    await _feedbackService.ShowMessageAsync(MessageType.Warning, "Device unavailable", "This device is currently unavailable. Device status will be updated shortly.");
-                    _logService.LogError($"Could not check device availability for {DeviceName}");
-                    // TODO: get latest status for this specific device
                 }
             });
         }
@@ -271,23 +281,13 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             {
                 if (UsedByMe)
                 {
-                    var result = await _dataService.CheckinDeviceAsync(Utility.GetCurrentUserName(), this.Id);
-                    if (result == ApiCallResult.Success)
+                    CommandFactory commandFactory = CommandFactory.Instance;
+                    var success = await commandFactory.GetCommand($"Checkin?userName={Utility.GetCurrentUserName()}&deviceId={Id}&deviceName={DeviceName}").Execute();
+
+                    if (success)
                     {
-                        await _feedbackService.ShowMessageAsync(MessageType.Information, "Device is released successfully.");
-                        _logService.LogInformation($"Check-in of {DeviceName} succeeded");
                         IsAvailable = true;
                         UsedBy = null;
-                    }
-                    else if (result == ApiCallResult.NotReachable)
-                    {
-                        await _feedbackService.ShowMessageAsync(MessageType.Error, "Server unreachable", "Cannot reach the server right now. Please try again later.");
-                        _logService.LogError($"Check-in of {DeviceName} failed. Server unreachable");
-                    }
-                    else
-                    {
-                        await _feedbackService.ShowMessageAsync(MessageType.Error, "Operation failed", "Could not release device. Please try again later.");
-                        _logService.LogError($"Check-in of {DeviceName} failed");
                     }
                 }
             });
@@ -303,49 +303,39 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             _usageTimer.Start();
         }
 
-        private async void UsageTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private void UsageTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            // do nothing if the popup is already being shown,
+            // do nothing if the prompt is already being shown,
             // or the app is currently offline, as the user will not be able to check-in anyway
-            if (_reminderWindow != null || GlobalState.IsOffline)
+            if (_reminderActive == true || GlobalState.IsOffline)
             {
                 return;
             }
 
-            await App.Current.Dispatcher.BeginInvoke(new Action(delegate ()
-            {
-                _reminderWindow = new ReminderWindow();
-                ReminderWindowViewModel reminderWindowViewModel = new ReminderWindowViewModel(_reminderWindow);
-                reminderWindowViewModel.Subscribe(this);
-                _reminderWindow.DataContext = reminderWindowViewModel;
-                _reminderWindow.Topmost = true;
-                _reminderWindow.ShowDialog();
-            }), System.Windows.Threading.DispatcherPriority.Background);
+            EventAggregator ag = EventAggregator.Instance;
+            ag.Add(this, CheckinOnReminder);
+            ag.Add(this, ReminderClose);
+
+            _promptService.ShowPrompt(
+                "Check-in reminder", 
+                $"Do you still need to use {Header.Replace("\t", "  ")}?", 
+                $"Checkin?deviceId={Id}&userName={Utility.GetCurrentUserName()}&deviceName={DeviceName}", 
+                this,
+                UsagePromptDuration,
+                ExecuteOnAction.No);
+
+            _reminderActive = true;
         }
 
-        internal async void HandleCheckinOnReminder(object sender, ApiCallResult e)
+        internal void HandleCheckinOnReminder(object sender, bool success)
         {
-            switch (e)
+            if (success)
             {
-                case ApiCallResult.Success:
-                    await _feedbackService.ShowMessageAsync(MessageType.Information, "Device is released successfully.");
-                    _logService.LogInformation($"Check-in of {DeviceName} succeeded via reminder");
-                    IsAvailable = true;
-                    UsedBy = null;
-                    break;
-                case ApiCallResult.NotReachable:
-                    await _feedbackService.ShowMessageAsync(MessageType.Error, "Server unreachable", "Cannot reach the server right now. Please try again later.");
-                    _logService.LogError($"Check-in of {DeviceName} failed via reminder. Server unreachable");
-                    break;
-                case ApiCallResult.Failure:
-                case ApiCallResult.Unknown:
-                default:
-                    await _feedbackService.ShowMessageAsync(MessageType.Error, "Operation failed", "Could not release device. Please try again later.");
-                    _logService.LogError($"Check-in of {DeviceName} via reminder failed");
-                    break;
+                IsAvailable = true;
+                UsedBy = null;
             }
 
-            _reminderWindow = null;
+            _reminderActive = false;
         }
 
         /// <summary>
@@ -353,19 +343,20 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        internal void HandleReminderClose(object sender, ReminderResponse reminderResponse)
+        internal void HandleReminderClose(object sender, PromptResult promptResult)
         {
-            // If the window instance is already null, this means that the device list was updated while the popup was on screen (see issue #45)
+            // If the reminderActive flag is already false, this means that the device list was updated while the popup was on screen (see issue #45)
             // In that case, do not re-enable the timer & do nothing and return
-            if (_reminderWindow == null)
+            if (_reminderActive == false)
             {
                 return;
             }
 
-            _reminderWindow = null;
+            _reminderActive = false;
+            _logService.LogInformation($"Check-in prompt closed, reason: {promptResult}");
 
-            // if reminder window was closed without checkin, restart the reminder popup timer
-            if (reminderResponse != ReminderResponse.Checkin)
+            // if the prompt was closed without checkin, restart the reminder timer
+            if (promptResult != PromptResult.ActionPerformed)
             {
                 EnableTimer();
             }
@@ -465,7 +456,13 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 }
             }
 
-            _reminderWindow = null;
+            this.CheckinOnReminder -= HandleCheckinOnReminder;
+            this.ReminderClose -= HandleReminderClose;
+            EventAggregator ag = EventAggregator.Instance;
+            ag.Remove(this, CheckinOnReminder);
+            ag.Remove(this, ReminderClose);
+
+            _reminderActive = false;
         }
 
         /// <summary>

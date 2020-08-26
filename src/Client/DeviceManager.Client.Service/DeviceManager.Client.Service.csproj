@@ -58,12 +58,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstract\Enum\ExecuteOnAction.cs" />
+    <Compile Include="Abstract\Enum\PromptResult.cs" />
     <Compile Include="Abstract\Enum\MessageType.cs" />
     <Compile Include="Abstract\IConfigurationService.cs" />
+    <Compile Include="Abstract\IPromptService.cs" />
     <Compile Include="Abstract\IDataService.cs" />
     <Compile Include="Abstract\IFeedbackService.cs" />
     <Compile Include="Abstract\IRedundantConfigService.cs" />
     <Compile Include="Abstract\IUpdateManager.cs" />
+    <Compile Include="Command\CheckDeviceAvailabilityCommand.cs" />
+    <Compile Include="Command\CheckoutCommand.cs" />
+    <Compile Include="Command\CheckinCommand.cs" />
+    <Compile Include="Command\Abstract\IAppCommand.cs" />
     <Compile Include="DataService.cs" />
     <Compile Include="Helper\DateTimeHelpers.cs" />
     <Compile Include="Helper\Utility.cs" />

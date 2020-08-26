@@ -1,88 +1,113 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <?include Definitions.wxi ?>
+	<?include Definitions.wxi ?>
 
-  <Fragment>
-    <!-- Product Components -->
-    <ComponentGroup Id="ProductComponents">
+	<Fragment>
+		<!-- Product Components -->
+		<ComponentGroup Id="ProductComponents">
 
-      <!-- Shortcut -->
-      <ComponentRef Id="ProgramMenuShortcut" />
-      <ComponentRef Id="DesktopShortcut" />
-      <ComponentRef Id="StartupShortcut" />
-      
-      <!-- Registry entry -->
-      <ComponentRef Id="ServerAddressRegistryEntry" />
-    </ComponentGroup>
+			<!-- Shortcut -->
+			<ComponentRef Id="ProgramMenuShortcut" />
+			<ComponentRef Id="DesktopShortcut" />
+			<ComponentRef Id="StartupShortcut" />
+			
+			<!-- Additional files -->
+			<ComponentRef Id="AppIconFile" />
 
-    <!-- Start menu shortcut -->
-    <Component Id="ProgramMenuShortcut"
-               Guid="{0995664D-AE63-4DD6-B894-708A99611370}"
-               Directory="InstallProgramMenuFolder">
+			<!-- Registry entry -->
+			<ComponentRef Id="ServerAddressRegistryEntry" />
+		</ComponentGroup>
 
-      <Shortcut Id="ProgramMenuShortcut"
-                Name="$(var.AppName)"
-                Target="[INSTALLFOLDER]DeviceManager.Client.TrayApp.exe"
-                WorkingDirectory="INSTALLFOLDER"
-                Icon="icon.exe"/>
+		<!-- Start menu shortcut -->
+		<Component Id="ProgramMenuShortcut"
+				   Guid="{0995664D-AE63-4DD6-B894-708A99611370}"
+				   Directory="InstallProgramMenuFolder">
 
-      <!-- Unique key for this component/shortcut -->
-      <RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="StartMenuShortcut" Value="1" Type="integer" KeyPath="yes" />
+			<Shortcut Id="ProgramMenuShortcut"
+					  Name="$(var.AppName)"
+					  Target="[INSTALLFOLDER]DeviceManager.Client.TrayApp.exe"
+					  WorkingDirectory="INSTALLFOLDER"
+					  Icon="icon.exe">
 
-      <!--Remove start menu items -->
-      <RemoveFolder Id="RemoveStartMenu" On="uninstall" />
+				<!--AUMID-->
+				<ShortcutProperty Key="System.AppUserModel.ID" Value="DeviceManager.Client"/>
 
-    </Component>
+				<!--COM CLSID-->
+				<ShortcutProperty Key="System.AppUserModel.ToastActivatorCLSID" Value="{EB975E8A-0662-4C64-9F19-81EB11672550}"/>
 
-    <!-- Desktop shortcut -->
-    <Component Id="DesktopShortcut" 
-               Guid="{0995664D-AE63-4DD6-B894-708A99611371}" 
-               Directory="DesktopFolder">
+			</Shortcut>
 
-      <Shortcut Id="DesktopShortcut"
-                Name="$(var.AppName)"
-                Target="[INSTALLFOLDER]DeviceManager.Client.TrayApp.exe"
-                WorkingDirectory="INSTALLFOLDER"
-                Icon='icon.exe' />
+			<!-- Unique key for this component/shortcut -->
+			<RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="StartMenuShortcut" Value="1" Type="integer" KeyPath="yes" />
 
-      <!-- Unique key for this component/shortcut -->
-      <RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="DesktopShortcut" Value="1" Type="integer" KeyPath="yes"/>
+			<!--Remove start menu items -->
+			<RemoveFolder Id="RemoveStartMenu" On="uninstall" />
 
-      <!--Remove desktop shortcut -->
-      <RemoveFolder Id='RemoveDesktop' On="uninstall"/>
+		</Component>
 
-    </Component>
+		<!-- Desktop shortcut -->
+		<Component Id="DesktopShortcut"
+				   Guid="{0995664D-AE63-4DD6-B894-708A99611371}"
+				   Directory="DesktopFolder">
 
-    <!-- Startup shortcut -->
-    <Component Id="StartupShortcut" 
-               Guid="{E5AE36F7-872A-41EA-B43C-8DFF1ED2D325}" 
-               Directory="StartupFolder">
+			<Shortcut Id="DesktopShortcut"
+					  Name="$(var.AppName)"
+					  Target="[INSTALLFOLDER]DeviceManager.Client.TrayApp.exe"
+					  WorkingDirectory="INSTALLFOLDER"
+					  Icon='icon.exe' />
 
-      <Shortcut Id="StartupShortcut"
-                Name="$(var.AppName)"
-                Target="[INSTALLFOLDER]DeviceManager.Client.TrayApp.exe"
-                WorkingDirectory="INSTALLFOLDER"
-                Icon='icon.exe' />
+			<!-- Unique key for this component/shortcut -->
+			<RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="DesktopShortcut" Value="1" Type="integer" KeyPath="yes"/>
 
-      <!-- Unique key for this component/shortcut -->
-      <RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="StartupShortcut" Value="1" Type="integer" KeyPath="yes"/>
+			<!--Remove desktop shortcut -->
+			<RemoveFolder Id='RemoveDesktop' On="uninstall"/>
 
-      <!--Remove desktop shortcut -->
-      <RemoveFolder Id='RemoveStartup' On="uninstall"/>
+		</Component>
 
-    </Component>
+		<!-- Startup shortcut -->
+		<Component Id="StartupShortcut"
+				   Guid="{E5AE36F7-872A-41EA-B43C-8DFF1ED2D325}"
+				   Directory="StartupFolder">
 
-    <!-- Server address registry entry -->
-    <DirectoryRef Id="INSTALLFOLDER">
-      <Component Id="ServerAddressRegistryEntry" Guid="{9B4BFD61-693E-421A-AE55-1F0E43A26642}">
+			<Shortcut Id="StartupShortcut"
+					  Name="$(var.AppName)"
+					  Target="[INSTALLFOLDER]DeviceManager.Client.TrayApp.exe"
+					  WorkingDirectory="INSTALLFOLDER"
+					  Icon='icon.exe' />
 
-        <RegistryKey Root="HKCU"
-                     Key="Software\Hakan Yildizhan\DeviceManager">
-          <RegistryValue Type="string" Name="ServerAddress" Value="[SERVERADDRESS]" />
-        </RegistryKey>
+			<!-- Unique key for this component/shortcut -->
+			<RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="StartupShortcut" Value="1" Type="integer" KeyPath="yes"/>
 
-      </Component>
-    </DirectoryRef>
-    
-  </Fragment>
+			<!--Remove desktop shortcut -->
+			<RemoveFolder Id='RemoveStartup' On="uninstall"/>
+
+		</Component>
+
+		<!-- AppIcon file -->
+		<Component Id="AppIconFile"
+				   Guid="{060DD024-9CB1-4DCE-AAAE-72CA2561E823}"
+				   Directory="RoamingFolder">
+			
+			<File Source="Files\AppIcon.png" />
+		
+			<!-- Unique key for this component/shortcut -->
+			<RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="AppIconFile" Value="1" Type="integer" KeyPath="yes"/>
+
+			<!--Remove desktop shortcut -->
+			<RemoveFolder Id='RemoveAppIconFile' On="uninstall"/>
+		</Component>
+
+		<!-- Server address registry entry -->
+		<DirectoryRef Id="INSTALLFOLDER">
+			<Component Id="ServerAddressRegistryEntry" Guid="{9B4BFD61-693E-421A-AE55-1F0E43A26642}">
+
+				<RegistryKey Root="HKCU"
+							 Key="Software\Hakan Yildizhan\DeviceManager">
+					<RegistryValue Type="string" Name="ServerAddress" Value="[SERVERADDRESS]" />
+				</RegistryKey>
+
+			</Component>
+		</DirectoryRef>
+
+	</Fragment>
 </Wix>

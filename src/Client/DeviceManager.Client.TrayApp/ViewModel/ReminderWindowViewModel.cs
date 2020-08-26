@@ -3,9 +3,10 @@
 // Copyright © Hakan Yildizhan 2020.
 
 using DeviceManager.Client.Service;
-using DeviceManager.Client.Service.Model;
-using DeviceManager.Common;
+using DeviceManager.Client.TrayApp.Command;
+using DeviceManager.Client.TrayApp.Service;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
@@ -15,49 +16,54 @@ namespace DeviceManager.Client.TrayApp.ViewModel
 {
     public class ReminderWindowViewModel : BaseViewModel
     {
-        private IDataService _dataService => (IDataService)ServiceProvider.GetService<IDataService>();
-        private ILogService<ReminderWindowViewModel> _logService => (ILogService<ReminderWindowViewModel>)ServiceProvider.GetService<ILogService<ReminderWindowViewModel>>();
-
         /// <summary>
         /// The window this view model controls.
         /// </summary>
         private Window _window;
 
-        private string _deviceNameOnPrompt => DeviceItem?.Header.Replace("\t", "  ");
+        private string _promptMessage;
         private Timer _promptActiveTimer;
-        private int _promptTimeout;
-        private DeviceItemViewModel _deviceItem;
 
         /// <summary>
         /// View model for the corresponding device item.
         /// </summary>
-        public DeviceItemViewModel DeviceItem 
-        { 
-            get { return _deviceItem; }
+        public DeviceItemViewModel DeviceItem { get; set; }
+
+        /// <summary>
+        /// Event handler for handling a check-in attempt result.
+        /// </summary>
+        public EventHandler<bool> CheckinPerformed { get; set; }
+
+        /// <summary>
+        /// Event handler for handling the closing of the reminder.
+        /// </summary>
+        public EventHandler<PromptResult> ReminderClosed { get; set; }
+
+        /// <summary>
+        /// The message to be shown on the dialog. Must be set by the caller.
+        /// </summary>
+        public string PromptMessage 
+        {
+            get { return _promptMessage; }
             set
             {
-                if (_deviceItem != value)
+                if (_promptMessage != value)
                 {
-                    _deviceItem = value;
+                    _promptMessage = value;
                     OnPropertyChanged(nameof(Width));
                 }
             }
         }
 
         /// <summary>
-        /// Event handler for handling a check-in attempt result.
+        /// Title of the popup. Must be set by the caller.
         /// </summary>
-        public EventHandler<ApiCallResult> CheckinPerformed { get; set; }
+        public string PromptTitle { get; set; }
 
         /// <summary>
-        /// Event handler for handling the closing of the reminder.
+        /// Duration in seconds for the prompt to be active on screen. Must be set by the caller
         /// </summary>
-        public EventHandler<ReminderResponse> ReminderClosed { get; set; }
-
-        /// <summary>
-        /// The message to be shown on the dialog.
-        /// </summary>
-        public string PromptMessage => PreparePromptMessage();
+        public int PromptTimeout { get; set; } = ServiceConstants.Settings.USAGE_PROMPT_DURATION_DEFAULT;
 
         /// <summary>
         /// Window width.
@@ -75,32 +81,6 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         public double CaptionHeight => 30;
 
         /// <summary>
-        /// Duration in seconds for the prompt to be active on screen.
-        /// </summary>
-        public int PromptTimeout
-        {
-            get
-            {
-#if DEBUG
-                return _promptTimeout;
-#else
-                if (_promptTimeout < ServiceConstants.Settings.USAGE_PROMPT_DURATION_MINIMUM)
-                {
-                    return ServiceConstants.Settings.USAGE_PROMPT_DURATION_DEFAULT;
-                }
-                else
-                {
-                    return _promptTimeout;
-                }
-#endif
-            }
-            set
-            {
-                _promptTimeout = value;
-            }
-        }
-
-        /// <summary>
         /// A flag indicating that the check-in command is currently being executed.
         /// </summary>
         public bool ExecutingCommand { get; set; }
@@ -112,30 +92,42 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         {
             _window = window;
             ReleaseCommand = new RelayCommand(async () => await ReleaseAsync());
-            CloseCommand = new RelayCommand(async () => await Close(ReminderResponse.KeepUsing));
+            CloseCommand = new RelayCommand(async () => await Close(PromptResult.Dismissed));
             _window.ContentRendered += OnWindowShown;   
         }
 
         private void OnWindowShown(object sender, EventArgs e)
         {
-            _logService.LogInformation($"Reminder popup for {DeviceItem.DeviceName} is shown");
             StartAutoCloseCountdown();
         }
 
         public void Subscribe(DeviceItemViewModel deviceItem)
         {
             DeviceItem = deviceItem;
-            this.PromptTimeout = DeviceItem.UsagePromptDuration;
-            this.CheckinPerformed += DeviceItem.HandleCheckinOnReminder;
-            this.ReminderClosed += DeviceItem.HandleReminderClose;
         }
 
-        private async Task Close(ReminderResponse reminderResult)
+        private async Task Close(PromptResult reminderResult)
         {
-            _logService.LogInformation($"Closing reminder popup, reason: {reminderResult}");
-            this.ReminderClosed?.Invoke(this, reminderResult);
-            this.CheckinPerformed -= DeviceItem.HandleCheckinOnReminder;
-            this.ReminderClosed -= DeviceItem.HandleReminderClose;
+            EventAggregator ag = EventAggregator.Instance;
+            ag.Raise(DeviceItem, null, reminderResult);
+
+            var subscriberList = this.CheckinPerformed?.GetInvocationList();
+            if (subscriberList != null && subscriberList.Any())
+            {
+                foreach (var subscriber in subscriberList)
+                {
+                    this.CheckinPerformed -= (subscriber as EventHandler<bool>);
+                }
+            }
+            subscriberList = this.ReminderClosed?.GetInvocationList();
+            if (subscriberList != null && subscriberList.Any())
+            {
+                foreach (var subscriber in subscriberList)
+                {
+                    this.ReminderClosed -= (subscriber as EventHandler<PromptResult>);
+                }
+            }
+
             DisposeTimer();
             await App.Current.Dispatcher.BeginInvoke(new Action(delegate ()
             {
@@ -152,9 +144,13 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         {
             await RunCommandAsync(() => this.ExecutingCommand, async () =>
             {
-                var result = await _dataService.CheckinDeviceAsync(Utility.GetCurrentUserName(), DeviceItem.Id);
-                CheckinPerformed?.Invoke(this, result);
-                await Close(ReminderResponse.Checkin);
+                CommandFactory commandFactory = CommandFactory.Instance;
+                var result = await commandFactory.GetCommand($"Checkin?userName={Utility.GetCurrentUserName()}&deviceId={DeviceItem.Id}&deviceName={DeviceItem.DeviceName}").Execute();
+
+                EventAggregator ag = EventAggregator.Instance;
+                ag.Raise(DeviceItem, null, result);
+
+                await Close(PromptResult.ActionPerformed);
             });
         }
 
@@ -184,16 +180,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         private async void Timeout_Reached(object sender, ElapsedEventArgs e)
         {
             DisposeTimer();
-            await Close(ReminderResponse.Timeout);
-        }
-
-        /// <summary>
-        /// Returns the prompt message to be shown to the user.
-        /// </summary>
-        /// <returns></returns>
-        private string PreparePromptMessage()
-        {
-            return $"Do you still need to use\r\n{_deviceNameOnPrompt}?";
+            await Close(PromptResult.Timeout);
         }
 
         /// <summary>
@@ -202,9 +189,9 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         /// <returns></returns>
         private double CalculateWindowWidth()
         {
-            if (_deviceNameOnPrompt.Length > 45)
+            if (PromptMessage.Length > 45)
             {
-                return 400 + 4 * (_deviceNameOnPrompt.Length - 45);
+                return 400 + 4 * (PromptMessage.Length - 45);
             }
             else
             {

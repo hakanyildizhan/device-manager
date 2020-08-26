@@ -48,13 +48,15 @@ namespace DeviceManager.Client.TrayApp.IoC
         private IUnityContainer BuildUnityContainer()
         {
             var container = new UnityContainer();
-            container.RegisterType(typeof(ILogService<>), typeof(NLogLogger<>));
+            container.RegisterSingleton(typeof(ILogService<>), typeof(NLogLogger<>));
             container.RegisterSingleton<IConfigurationService, JsonConfigService>();
             container.RegisterType<IDataService, DataService>();
             container.RegisterType<IFeedbackService, BasicToastFeedbackService>();
             container.RegisterType<IRedundantConfigService, RegistryService>();
             container.RegisterType<ITokenStore, TokenStore>();
             container.RegisterType<IUpdateChecker, UpdateChecker>();
+            container.RegisterSingleton<IPromptService, ToastPromptService>();
+            //container.RegisterSingleton<IPromptService, WindowPromptService>();
             return container;
         }
     }

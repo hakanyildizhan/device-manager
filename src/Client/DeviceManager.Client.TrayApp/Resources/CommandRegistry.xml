@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CommandMetaInfoList>
+
+	<CommandMetaInfo>
+		<CommandId>Checkin</CommandId>
+		<ClassName>DeviceManager.Client.Service.Command.CheckinCommand</ClassName>
+		<Assembly>DeviceManager.Client.Service.dll</Assembly>
+	</CommandMetaInfo>
+	<CommandMetaInfo>
+		<CommandId>Checkout</CommandId>
+		<ClassName>DeviceManager.Client.Service.Command.CheckoutCommand</ClassName>
+		<Assembly>DeviceManager.Client.Service.dll</Assembly>
+	</CommandMetaInfo>
+	<CommandMetaInfo>
+		<CommandId>CheckDeviceAvailability</CommandId>
+		<ClassName>DeviceManager.Client.Service.Command.CheckDeviceAvailabilityCommand</ClassName>
+		<Assembly>DeviceManager.Client.Service.dll</Assembly>
+	</CommandMetaInfo>
+
+</CommandMetaInfoList>

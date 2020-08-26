@@ -11,7 +11,7 @@ Copyright © Hakan Yildizhan 2020.
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DeviceManager.Client.TrayApp"
         mc:Ignorable="d"
-        Title="Device Usage Reminder"
+        Title="{Binding PromptTitle, FallbackValue=Device Usage Reminder}"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         ResizeMode="NoResize"

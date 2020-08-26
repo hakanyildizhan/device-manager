@@ -1,31 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <?include Definitions.wxi ?>
+	<?include Definitions.wxi ?>
 
-  <Fragment>
+	<Fragment>
 
-    <Directory Id="TARGETDIR" Name="SourceDir">
+		<Directory Id="TARGETDIR" Name="SourceDir">
 
-      <!-- Start Menu -->
-      <Directory Id="ProgramMenuFolder" Name="Programs">
-        <Directory Id="InstallProgramMenuFolder" Name="$(var.AppName)" />
-      </Directory>
+			<!-- Start Menu -->
+			<Directory Id="ProgramMenuFolder" Name="Programs">
+				<Directory Id="InstallProgramMenuFolder" Name="$(var.AppName)" />
+			</Directory>
 
-      <!-- Desktop -->
-      <Directory Id="DesktopFolder" Name="Desktop"/>
+			<!-- Desktop -->
+			<Directory Id="DesktopFolder" Name="Desktop"/>
 
-      <!-- Program Files folder -->
-      <Directory Id="ProgramFilesFolder">
-        <Directory Id="INSTALLFOLDER" Name="$(var.AppName)" />
-      </Directory>
+			<!-- Program Files folder -->
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="$(var.AppName)" />
+			</Directory>
 
-      <!-- Shortcut folder -->
-      <Directory Id="StartupFolder" />
+			<!-- Shortcut folder -->
+			<Directory Id="StartupFolder" />
 
-    </Directory>
+			<!-- AppData\Roaming\DeviceManager folder -->
+			<Directory Id="AppDataFolder">
+				<Directory Id="RoamingFolder" Name="DeviceManager"/>
+			</Directory>
+			
+		</Directory>
 
-    <!-- Installed files -->
-    <DirectoryRef Id="INSTALLFOLDER" FileSource="..\DeviceManager.Client.TrayApp\bin\$(var.Configuration)\"/>
+		<!-- Installed files -->
+		<DirectoryRef Id="INSTALLFOLDER" FileSource="..\DeviceManager.Client.TrayApp\bin\$(var.Configuration)\"/>
 
-  </Fragment>
+	</Fragment>
 </Wix>
