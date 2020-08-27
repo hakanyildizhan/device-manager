@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+	 xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+	
 	<?include Definitions.wxi ?>
 
 	<Fragment>
+		
+		<Property Id="OS_MAJOR_VERSION">
+		  <RegistrySearch Id="OS_MAJOR_VERSION_RegistrySearch"
+						  Root="HKLM"
+						  Key="Software\Microsoft\Windows NT\CurrentVersion"
+						  Name="CurrentMajorVersionNumber"
+						  Type="raw"/>
+		</Property>
+		
 		<!-- Product Components -->
 		<ComponentGroup Id="ProductComponents">
 
 			<!-- Shortcut -->
 			<ComponentRef Id="ProgramMenuShortcut" />
+			<ComponentRef Id="ProgramMenuShortcutWin10" />
 			<ComponentRef Id="DesktopShortcut" />
 			<ComponentRef Id="StartupShortcut" />
 			
@@ -18,19 +30,49 @@
 			<ComponentRef Id="ServerAddressRegistryEntry" />
 		</ComponentGroup>
 
-		<!-- Start menu shortcut -->
+		<!-- Start menu shortcut for operating systems < Windows 10 -->
 		<Component Id="ProgramMenuShortcut"
 				   Guid="{0995664D-AE63-4DD6-B894-708A99611370}"
 				   Directory="InstallProgramMenuFolder">
+
+			<Condition>
+				<![CDATA[(OS_MAJOR_VERSION < "#10")]]>
+			</Condition>
 
 			<Shortcut Id="ProgramMenuShortcut"
 					  Name="$(var.AppName)"
 					  Target="[INSTALLFOLDER]DeviceManager.Client.TrayApp.exe"
 					  WorkingDirectory="INSTALLFOLDER"
 					  Icon="icon.exe">
+				
+			</Shortcut>
+
+			<!-- Unique key for this component/shortcut -->
+			<RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="StartMenuShortcut" Value="1" Type="integer" KeyPath="yes" />
+
+			<!--Remove start menu items -->
+			<RemoveFolder Id="RemoveStartMenu" On="uninstall" />
+
+		</Component>
+
+		<!-- Start menu shortcut for Windows 10 (and above). -->
+		<!-- Includes Application User Model ID (AUMID) and toast activator CLSID for Toast Notifications -->
+		<Component Id="ProgramMenuShortcutWin10"
+				   Guid="{6927BE60-1350-4629-9656-3514BEF26DA4}"
+				   Directory="InstallProgramMenuFolder">
+
+			<Condition>
+				<![CDATA[(OS_MAJOR_VERSION >= "#10")]]>
+			</Condition>
+
+			<Shortcut Id="ProgramMenuShortcutWin10"
+					  Name="$(var.AppName)"
+					  Target="[INSTALLFOLDER]DeviceManager.Client.TrayApp.exe"
+					  WorkingDirectory="INSTALLFOLDER"
+					  Icon="icon.exe">
 
 				<!--AUMID-->
-				<ShortcutProperty Key="System.AppUserModel.ID" Value="DeviceManager.Client"/>
+				<ShortcutProperty Key="System.AppUserModel.ID" Value="DeviceManager.Client" />
 
 				<!--COM CLSID-->
 				<ShortcutProperty Key="System.AppUserModel.ToastActivatorCLSID" Value="{EB975E8A-0662-4C64-9F19-81EB11672550}"/>
@@ -41,7 +83,7 @@
 			<RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="StartMenuShortcut" Value="1" Type="integer" KeyPath="yes" />
 
 			<!--Remove start menu items -->
-			<RemoveFolder Id="RemoveStartMenu" On="uninstall" />
+			<RemoveFolder Id="RemoveStartMenuWin10" On="uninstall" />
 
 		</Component>
 

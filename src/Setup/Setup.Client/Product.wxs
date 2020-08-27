@@ -14,7 +14,7 @@
              Keywords="Installer"
              Manufacturer="Hakan Yildizhan"
              Platform="x64"
-						 InstallerVersion="200" 
+			 InstallerVersion="200" 
              Compressed="yes" 
              InstallScope="perUser"  />
 
@@ -22,10 +22,10 @@
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed. Setup will now exit." />
 
     <!-- Include .cab file into .msi file -->
-		<MediaTemplate EmbedCab="yes" />
+   	<MediaTemplate EmbedCab="yes" />
 
     <!-- Define components, shortcuts, files etc... for installer -->
-		<Feature Id="ProductFeature" 
+	<Feature Id="ProductFeature" 
              Title="DeviceManager.Client.Setup" 
              Display='expand' 
              Level='1' 
@@ -33,7 +33,7 @@
 
       <ComponentGroupRef Id="ProductComponents" />
       <ComponentGroupRef Id="PublishedComponents" />
-		</Feature>
+	</Feature>
 
     <!-- Define main app icon -->
     <Icon Id="icon.exe" SourceFile="$(var.BasePath)\DeviceManager.Client.TrayApp.exe" />
@@ -81,10 +81,6 @@
                   Execute='immediate'
                   Return='check'/>
 
-    <!-- Call CustomAction_CheckServerConfig as soon as this dialog is displayed -->
-    <!--<InstallExecuteSequence>
-      <Custom Action='CustomAction_CheckServerConfig' After='CostFinalize' />
-    </InstallExecuteSequence>-->
 	</Product>
 
 </Wix>

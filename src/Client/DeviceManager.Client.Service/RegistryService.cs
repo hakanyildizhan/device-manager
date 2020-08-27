@@ -22,6 +22,12 @@ namespace DeviceManager.Client.Service
             _logService = logService;
         }
 
+        public bool CanUseToastNotifications()
+        {
+            int OSMajorVersion = (int)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CurrentMajorVersionNumber", 0);
+            return OSMajorVersion >= 10;
+        }
+
         public string FetchServerURL()
         {
             RegistryKey regKey = Registry.CurrentUser;

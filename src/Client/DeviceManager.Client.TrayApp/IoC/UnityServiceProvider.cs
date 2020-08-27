@@ -52,11 +52,21 @@ namespace DeviceManager.Client.TrayApp.IoC
             container.RegisterSingleton<IConfigurationService, JsonConfigService>();
             container.RegisterType<IDataService, DataService>();
             container.RegisterType<IFeedbackService, BasicToastFeedbackService>();
-            container.RegisterType<IRedundantConfigService, RegistryService>();
+            container.RegisterSingleton<IRedundantConfigService, RegistryService>();
             container.RegisterType<ITokenStore, TokenStore>();
             container.RegisterType<IUpdateChecker, UpdateChecker>();
-            container.RegisterSingleton<IPromptService, ToastPromptService>();
-            //container.RegisterSingleton<IPromptService, WindowPromptService>();
+
+            bool toastsAreSupported = container.Resolve<IRedundantConfigService>().CanUseToastNotifications();
+
+            if (toastsAreSupported)
+            {
+                container.RegisterSingleton<IPromptService, ToastPromptService>();
+            }
+            else
+            {
+                container.RegisterSingleton<IPromptService, WindowPromptService>();
+            }
+
             return container;
         }
     }

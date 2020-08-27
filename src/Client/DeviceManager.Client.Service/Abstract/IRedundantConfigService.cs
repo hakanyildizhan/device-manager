@@ -22,5 +22,11 @@ namespace DeviceManager.Client.Service
         /// </summary>
         /// <returns></returns>
         string FetchServerURL();
+
+        /// <summary>
+        /// Whether current operating system environment supports Windows 10 Toast Notification mechanism.
+        /// </summary>
+        /// <returns></returns>
+        bool CanUseToastNotifications();
     }
 }
