@@ -5,7 +5,9 @@
 using DeviceManager.Client.Service;
 using DeviceManager.Client.TrayApp.IoC;
 using DeviceManager.Client.TrayApp.Properties;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web;
@@ -90,7 +92,7 @@ namespace DeviceManager.Client.TrayApp.Command
                 string commandAssembly = commandMeta.Element("Assembly").Value;
                 string commandClassName = commandMeta.Element("ClassName").Value;
 
-                var assembly = Assembly.LoadFrom(commandAssembly);
+                var assembly = Assembly.LoadFrom(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, commandAssembly));
                 var commandType = assembly.GetType(commandClassName);
                 var constructors = commandType.GetConstructors(BindingFlags.Instance | BindingFlags.Public);
                 var injectedTypes = constructors[0].GetParameters().Select(p => p.ParameterType);

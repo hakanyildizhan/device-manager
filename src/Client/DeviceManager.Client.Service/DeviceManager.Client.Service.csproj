@@ -62,6 +62,7 @@
     <Compile Include="Abstract\Enum\PromptResult.cs" />
     <Compile Include="Abstract\Enum\MessageType.cs" />
     <Compile Include="Abstract\IConfigurationService.cs" />
+    <Compile Include="Abstract\IProgressBarService.cs" />
     <Compile Include="Abstract\IPromptService.cs" />
     <Compile Include="Abstract\IDataService.cs" />
     <Compile Include="Abstract\IFeedbackService.cs" />

@@ -10,7 +10,7 @@ using System.Windows;
 
 namespace DeviceManager.Client.TrayApp.Service
 {
-    public class BasicToastFeedbackService : IFeedbackService
+    public class BalloonFeedbackService : IFeedbackService
     {
         public async Task ShowMessageAsync(MessageType messageType, string title, string message)
         {

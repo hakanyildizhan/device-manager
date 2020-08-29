@@ -4,6 +4,8 @@
 
 using DeviceManager.Update;
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using Version = DeviceManager.Update.Version;
 
@@ -14,17 +16,22 @@ namespace DeviceManager.Client.Service
         private readonly IUpdateChecker _updater;
         private readonly IConfigurationService _configService;
         private readonly IFeedbackService _feedbackService;
+        private readonly IProgressBarService _progressBar;
 
         public UpdateManager(
             IUpdateChecker updater, 
             IConfigurationService configService,
-            IFeedbackService feedbackService)
+            IFeedbackService feedbackService,
+            IProgressBarService progressBar)
         {
             _updater = updater;
             _configService = configService;
+            _feedbackService = feedbackService;
+            _progressBar = progressBar;
         }
 
         public bool UpdateIsAvailable { get; set; }
+        //public bool UpdateIsReadyToInstall { get; set; }
         public string InstallerPath { get; set; }
         public UpdatePackage Update { get; set; }
 
@@ -53,16 +60,54 @@ namespace DeviceManager.Client.Service
             }
         }
 
-        public Task DownloadAndInstall()
+        public async Task DownloadAndInstall()
         {
-            throw new NotImplementedException();
+            if (!UpdateIsAvailable || Update == null)
+            {
+                await _feedbackService.ShowMessageAsync(MessageType.Error, "An error occurred. Please try again later.");
+                return;
+            }
+
+            string requestId = Guid.NewGuid().ToString();
+            _updater.DownloadProgressChanged += HandleDownloadProgressChanged;
+            _progressBar?.Show("Downloading update", $"Update v{Update.Version}", "Downloading...", requestId);
+            var result = await _updater.DownloadUpdate(new UpdateDownloadRequest()
+            {
+                Package = Update,
+                TargetDirectory = Path.GetTempPath(),
+                RequestId = requestId
+            });
+
+            _progressBar?.Close(requestId);
+
+            if (!result.Success || string.IsNullOrEmpty(result.File))
+            {
+                await _feedbackService.ShowMessageAsync(MessageType.Error, "An error occurred while downloading the update.");
+                return;
+            }
+
             Reset();
+            await _feedbackService.ShowMessageAsync(MessageType.Information, "Installing the update...");
+
+            Process process = new Process();
+            process.StartInfo = new ProcessStartInfo("msiexec", $@"/i ""{result.File}"" /qn SILENT=1");
+            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.UseShellExecute = true;
+            process.Start();
         }
 
         public void Reset()
         {
             Update = null;
             UpdateIsAvailable = false;
+            _updater.DownloadProgressChanged -= HandleDownloadProgressChanged;
+            //UpdateIsReadyToInstall = false;
+        }
+
+        private void HandleDownloadProgressChanged(object sender, int newProgress)
+        {
+            string requestId = (string)sender;
+            _progressBar?.IncreaseProgress(requestId, newProgress);
         }
     }
 }

@@ -6,6 +6,7 @@ using DeviceManager.Client.Service;
 using DeviceManager.Client.TrayApp.Service;
 using DeviceManager.Common;
 using DeviceManager.Update;
+using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using Unity;
 
@@ -51,20 +52,37 @@ namespace DeviceManager.Client.TrayApp.IoC
             container.RegisterSingleton(typeof(ILogService<>), typeof(NLogLogger<>));
             container.RegisterSingleton<IConfigurationService, JsonConfigService>();
             container.RegisterType<IDataService, DataService>();
-            container.RegisterType<IFeedbackService, BasicToastFeedbackService>();
+            container.RegisterType<IFeedbackService, BalloonFeedbackService>();
             container.RegisterSingleton<IRedundantConfigService, RegistryService>();
             container.RegisterType<ITokenStore, TokenStore>();
             container.RegisterType<IUpdateChecker, UpdateChecker>();
+            container.RegisterType<IUpdateManager, UpdateManager>();
 
             bool toastsAreSupported = container.Resolve<IRedundantConfigService>().CanUseToastNotifications();
 
             if (toastsAreSupported)
             {
+                // Register AUMID and COM server (for MSIX/sparse package apps, this no-ops)
+                DesktopNotificationManagerCompat.RegisterAumidAndComServer<ToastNotificationActivator>("DeviceManager.Client");
+
+                // Register COM server and activator type
+                DesktopNotificationManagerCompat.RegisterActivator<ToastNotificationActivator>();
                 container.RegisterSingleton<IPromptService, ToastPromptService>();
             }
             else
             {
                 container.RegisterSingleton<IPromptService, WindowPromptService>();
+            }
+
+            bool toastProgressBarsAreSupported = container.Resolve<IRedundantConfigService>().CanUseToastProgressBars();
+
+            if (toastProgressBarsAreSupported)
+            {
+                container.RegisterSingleton<IProgressBarService, ToastProgressBarService>();
+            }
+            else
+            {
+                container.RegisterSingleton<IProgressBarService, WindowProgressBarService>();
             }
 
             return container;

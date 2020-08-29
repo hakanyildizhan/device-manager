@@ -6,7 +6,6 @@ using DeviceManager.Common;
 using Flurl;
 using Newtonsoft.Json;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -17,10 +16,14 @@ namespace DeviceManager.Update
 {
     public class UpdateChecker : IUpdateChecker
     {
+        private string _requestId;
+
         private readonly ILogService _logService;
         private readonly IManifestParser _manifestParser;
         private readonly string _baseURL;
         private readonly ITokenStore _tokenStore;
+
+        public EventHandler<int> DownloadProgressChanged { get; set; }
 
         public UpdateChecker(
             ILogService<UpdateChecker> logService, 
@@ -81,6 +84,7 @@ namespace DeviceManager.Update
 
         public async Task<UpdateDownloadResult> DownloadUpdate(UpdateDownloadRequest request)
         {
+            _requestId = request.RequestId;
             _logService.LogInformation("Starting update download");
 
             if (request == null || 
@@ -102,7 +106,8 @@ namespace DeviceManager.Update
                 using (WebClient wc = new WebClient())
                 {
                     wc.Headers.Add("Authorization", "Bearer " + token.access_token);
-                    wc.DownloadFileAsync(new System.Uri(url), targetFilePath);
+                    wc.DownloadProgressChanged += Wc_DownloadProgressChanged;
+                    wc.DownloadFileAsync(new Uri(url), targetFilePath);
                 }
 
                 if (!File.Exists(targetFilePath) || new FileInfo(targetFilePath).Length == 0)
@@ -119,6 +124,11 @@ namespace DeviceManager.Update
                 _logService.LogException(ex, "Error downloading the update");
                 return new UpdateDownloadResult() { Success = false };
             }
+        }
+
+        private void Wc_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
+            DownloadProgressChanged?.Invoke(_requestId, e.ProgressPercentage);
         }
 
         public async Task<AccessToken> GetAccessToken()
@@ -177,14 +187,6 @@ namespace DeviceManager.Update
                 _logService.LogException(ex, "Error occurred while getting manifest");
                 return null;
             }
-        }
-
-        public void RunUpdate(string installerPath)
-        {
-            Process process = new Process();
-            process.StartInfo = new ProcessStartInfo(installerPath, "/qn");
-            process.StartInfo.CreateNoWindow = true;
-            process.Start();
         }
 
         private string GenerateFileURLFromRelativeURL(string relativeFileUrl)

@@ -18,6 +18,11 @@ namespace DeviceManager.Client.Service
         bool UpdateIsAvailable { get; set; }
 
         /// <summary>
+        /// Check to see if the installer is already downloaded & ready to install.
+        /// </summary>
+        //bool UpdateIsReadyToInstall { get; set; }
+
+        /// <summary>
         /// Contains information about the update (if there is any).
         /// </summary>
         UpdatePackage Update { get; set; }

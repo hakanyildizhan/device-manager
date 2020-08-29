@@ -8,7 +8,6 @@ using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Windows.UI.Notifications;
 
@@ -19,28 +18,7 @@ namespace DeviceManager.Client.TrayApp.Service
     /// </summary>
     public class ToastPromptService : IPromptService
     {
-        [ClassInterface(ClassInterfaceType.None)]
-        [ComSourceInterfaces(typeof(INotificationActivationCallback))]
-        [Guid("EB975E8A-0662-4C64-9F19-81EB11672550"), ComVisible(true)]
-        public class ToastNotificationActivator : NotificationActivator
-        {
-            public override void OnActivated(string invokedArgs, NotificationUserInput userInput, string appUserModelId)
-            {
-                // to be handled by the Toast_Activated event handler
-            }
-        }
-
         private static string _iconFilepath = Path.Combine(Utility.GetAppRoamingFolder(), "AppIcon.png");
-
-        static ToastPromptService()
-        {
-            // Register AUMID and COM server (for MSIX/sparse package apps, this no-ops)
-            DesktopNotificationManagerCompat.RegisterAumidAndComServer<ToastNotificationActivator>("DeviceManager.Client");
-
-            // Register COM server and activator type
-            DesktopNotificationManagerCompat.RegisterActivator<ToastNotificationActivator>();
-        }
-
         private static Dictionary<object, ToastNotification> activeToasts = new Dictionary<object, ToastNotification>();
 
         public void ShowPrompt(string title, string message, string query, object sender, int timeOut, ExecuteOnAction executeOnAction)
@@ -126,7 +104,7 @@ namespace DeviceManager.Client.TrayApp.Service
 
             else
             {
-                bool result = Task.Run(async () => await CommandFactory.Instance.GetCommand(arguments.Arguments).Execute()).Result;
+                bool result = Task.Run(async () => await CommandFactory.Instance.GetCommand(arguments.Arguments)?.Execute()).Result;
                 EventAggregator ag = EventAggregator.Instance;
                 ag.Raise(subscriber, null, result);
                 ag.Raise(subscriber, null, PromptResult.ActionPerformed);

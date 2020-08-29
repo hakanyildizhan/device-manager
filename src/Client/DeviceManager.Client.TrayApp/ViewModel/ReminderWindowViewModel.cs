@@ -145,7 +145,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             await RunCommandAsync(() => this.ExecutingCommand, async () =>
             {
                 CommandFactory commandFactory = CommandFactory.Instance;
-                var result = await commandFactory.GetCommand($"Checkin?userName={Utility.GetCurrentUserName()}&deviceId={DeviceItem.Id}&deviceName={DeviceItem.DeviceName}").Execute();
+                var result = await commandFactory.GetCommand($"Checkin?userName={Utility.GetCurrentUserName()}&deviceId={DeviceItem.Id}&deviceName={DeviceItem.DeviceName}")?.Execute();
 
                 EventAggregator ag = EventAggregator.Instance;
                 ag.Raise(DeviceItem, null, result);

@@ -8,5 +8,10 @@ namespace DeviceManager.Update
     {
         public UpdatePackage Package { get; set; }
         public string TargetDirectory { get; set; }
+
+        /// <summary>
+        /// Unique ID for this request. This ID will be used to identify and update resources associated with this request, i.e. download progress bar.
+        /// </summary>
+        public string RequestId { get; set; }
     }
 }

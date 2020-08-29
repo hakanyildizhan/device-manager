@@ -33,6 +33,11 @@ namespace DeviceManager.Update
             Minor = regex.Groups[2].Success ? int.Parse(regex.Groups[2].Value) : 0;
             Patch = regex.Groups[3].Success ? int.Parse(regex.Groups[3].Value) : 0;
         }
+
+        public override string ToString()
+        {
+            return $"{Major}.{Minor}.{Patch}";
+        }
     }
 
     public enum VersionCompareResult

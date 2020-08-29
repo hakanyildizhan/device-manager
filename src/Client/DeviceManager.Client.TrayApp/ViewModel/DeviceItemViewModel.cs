@@ -260,11 +260,11 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             await RunCommandAsync(() => this.ExecutingCommand, async () =>
             {
                 CommandFactory commandFactory = CommandFactory.Instance;
-                var success = await commandFactory.GetCommand($"CheckDeviceAvailability?deviceId={Id}&deviceName={DeviceName}").Execute();
+                var success = await commandFactory.GetCommand($"CheckDeviceAvailability?deviceId={Id}&deviceName={DeviceName}")?.Execute();
 
                 if (success)
                 {
-                    success = await commandFactory.GetCommand($"Checkout?userName={Utility.GetCurrentUserName()}&deviceId={Id}&deviceName={DeviceName}").Execute();
+                    success = await commandFactory.GetCommand($"Checkout?userName={Utility.GetCurrentUserName()}&deviceId={Id}&deviceName={DeviceName}")?.Execute();
 
                     if (success)
                     {
@@ -282,7 +282,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 if (UsedByMe)
                 {
                     CommandFactory commandFactory = CommandFactory.Instance;
-                    var success = await commandFactory.GetCommand($"Checkin?userName={Utility.GetCurrentUserName()}&deviceId={Id}&deviceName={DeviceName}").Execute();
+                    var success = await commandFactory.GetCommand($"Checkin?userName={Utility.GetCurrentUserName()}&deviceId={Id}&deviceName={DeviceName}")?.Execute();
 
                     if (success)
                     {

@@ -61,8 +61,21 @@
 
     <Property Id="WixShellExecTarget" Value="[#fil517045D2D9EBFBBE9EC58DAC7BDD4FDD]" />
     <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
-    
-    <!-- Binary definition for custom actions -->
+
+	<!-- This property will be set to 1 for installing silently via command line -->
+	<!-- in order to auto launch the application when setup completes -->
+	<Property Id="SILENT" Value="0" />
+
+	<Property Id="WixQuietExecCmdLine" Value='"[INSTALLFOLDER]DeviceManager.Client.TrayApp.exe"'/>
+	<CustomAction Id="QtExecExample" BinaryKey="WixCA" DllEntry="WixQuietExec" Execute="immediate" Return="check" />
+
+	<InstallExecuteSequence>
+		<Custom Action="QtExecExample" After="InstallFinalize">
+			SILENT = 1
+		</Custom>
+	</InstallExecuteSequence>
+
+	<!-- Binary definition for custom actions -->
     <Binary Id='DeviceManager.Setup.CustomActions.CA.dll' SourceFile='..\CustomActions\bin\$(var.Configuration)\DeviceManager.Setup.CustomActions.CA.dll'/>
 
     <!-- Checks if the given URL is a valid server address  -->

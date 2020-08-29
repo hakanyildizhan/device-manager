@@ -95,8 +95,11 @@
     <Compile Include="IoC\UnityServiceProvider.cs" />
     <Compile Include="Service\Command\CommandFactory.cs" />
     <Compile Include="Service\EventAggregator.cs" />
-    <Compile Include="Service\ToastPromptService.cs" />
+    <Compile Include="Service\ToastNotification\ToastNotificationActivator.cs" />
+    <Compile Include="Service\ToastNotification\ToastProgressBarService.cs" />
+    <Compile Include="Service\ToastNotification\ToastPromptService.cs" />
     <Compile Include="Service\TokenStore.cs" />
+    <Compile Include="Service\WindowProgressBarService.cs" />
     <Compile Include="Service\WindowPromptService.cs" />
     <Compile Include="ValueConverters\CanReleaseAllConverter.cs" />
     <Compile Include="ValueConverters\OnlineStateToSetNameTextConverter.cs" />
@@ -108,7 +111,7 @@
     <Compile Include="ViewModel\AboutWindowViewModel.cs" />
     <Compile Include="ViewModel\GlobalStateViewModel.cs" />
     <Compile Include="ViewModel\DeviceListViewModel.cs" />
-    <Compile Include="Service\BasicToastFeedbackService.cs" />
+    <Compile Include="Service\BalloonFeedbackService.cs" />
     <Compile Include="ValueConverters\AvailabilityToIconConverter.cs" />
     <Compile Include="ValueConverters\BaseValueConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
@@ -117,10 +120,14 @@
     <Compile Include="ViewModel\Enum\ReminderResponse.cs" />
     <Compile Include="ViewModel\Enum\TimerEvent.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\ProgressWindowViewModel.cs" />
     <Compile Include="ViewModel\QueryObjects\DeviceListSelect.cs" />
     <Compile Include="ViewModel\ReminderWindowViewModel.cs" />
     <Compile Include="Windows\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ProgressWindow.xaml.cs">
+      <DependentUpon>ProgressWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ReminderWindow.xaml.cs">
       <DependentUpon>ReminderWindow.xaml</DependentUpon>
@@ -177,6 +184,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ProgressWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

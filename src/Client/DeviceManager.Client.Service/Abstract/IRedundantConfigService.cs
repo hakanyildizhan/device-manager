@@ -28,5 +28,11 @@ namespace DeviceManager.Client.Service
         /// </summary>
         /// <returns></returns>
         bool CanUseToastNotifications();
+
+        /// <summary>
+        /// Whether current operating system environment supports Windows 10 Toast progress bars supported since Creators Update.
+        /// </summary>
+        /// <returns></returns>
+        bool CanUseToastProgressBars();
     }
 }

@@ -28,6 +28,19 @@ namespace DeviceManager.Client.Service
             return OSMajorVersion >= 10;
         }
 
+        public bool CanUseToastProgressBars()
+        {
+            int OSMajorVersion = (int)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CurrentMajorVersionNumber", 0);
+
+            if (OSMajorVersion < 10)
+            {
+                return false;
+            }
+
+            int win10ReleaseId = (int)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ReleaseId", 0);
+            return win10ReleaseId >= 1703;
+        }
+
         public string FetchServerURL()
         {
             RegistryKey regKey = Registry.CurrentUser;
