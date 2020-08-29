@@ -14,20 +14,24 @@ namespace DeviceManager.Client.TrayApp.Service
     /// </summary>
     public class WindowPromptService : IPromptService
     {
-        public async void ShowPrompt(string title, string message, string query, object sender, int timeOut, ExecuteOnAction confirmationOptions)
+        public async void ShowPrompt(string title, string message, string query, object sender, int timeOut, ExecuteOnAction executeOnAction, string affirmativeOption = "Yes", string negativeOption = "No")
         {
             await App.Current.Dispatcher.BeginInvoke(new Action(delegate ()
             {
-                ReminderWindow reminderWindow = new ReminderWindow();
-                ReminderWindowViewModel reminderWindowViewModel = new ReminderWindowViewModel(reminderWindow);
-                reminderWindowViewModel.PromptMessage = message;
-                reminderWindowViewModel.PromptTitle = title;
-                reminderWindowViewModel.PromptTimeout = timeOut;
+                PromptWindow prompt = new PromptWindow();
+                PromptWindowViewModel promptViewModel = new PromptWindowViewModel(prompt);
+                promptViewModel.PromptMessage = message;
+                promptViewModel.PromptTitle = title;
+                promptViewModel.PromptTimeout = timeOut;
+                promptViewModel.YesButtonContent = affirmativeOption;
+                promptViewModel.NoButtonContent = negativeOption;
+                promptViewModel.ExecuteOnAction = executeOnAction;
+                promptViewModel.Query = query;
+                promptViewModel.Owner = sender;
 
-                reminderWindowViewModel.Subscribe((DeviceItemViewModel)sender);
-                reminderWindow.DataContext = reminderWindowViewModel;
-                reminderWindow.Topmost = true;
-                reminderWindow.ShowDialog();
+                prompt.DataContext = promptViewModel;
+                prompt.Topmost = true;
+                prompt.ShowDialog();
             }), System.Windows.Threading.DispatcherPriority.Background);
         }
     }

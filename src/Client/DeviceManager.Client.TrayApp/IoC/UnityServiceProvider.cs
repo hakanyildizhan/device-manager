@@ -55,12 +55,13 @@ namespace DeviceManager.Client.TrayApp.IoC
             container.RegisterType<IFeedbackService, BalloonFeedbackService>();
             container.RegisterSingleton<IRedundantConfigService, RegistryService>();
             container.RegisterType<ITokenStore, TokenStore>();
+            container.RegisterSingleton<IManifestParser, XmlManifestParser>();
             container.RegisterType<IUpdateChecker, UpdateChecker>();
             container.RegisterType<IUpdateManager, UpdateManager>();
 
             bool toastsAreSupported = container.Resolve<IRedundantConfigService>().CanUseToastNotifications();
 
-            if (toastsAreSupported)
+            if (!toastsAreSupported)
             {
                 // Register AUMID and COM server (for MSIX/sparse package apps, this no-ops)
                 DesktopNotificationManagerCompat.RegisterAumidAndComServer<ToastNotificationActivator>("DeviceManager.Client");

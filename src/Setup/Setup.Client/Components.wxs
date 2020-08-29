@@ -26,8 +26,9 @@
 			<!-- Additional files -->
 			<ComponentRef Id="AppIconFile" />
 
-			<!-- Registry entry -->
+			<!-- Registry entries -->
 			<ComponentRef Id="ServerAddressRegistryEntry" />
+			<ComponentRef Id="ExecutablePath" />
 		</ComponentGroup>
 
 		<!-- Start menu shortcut for operating systems < Windows 10 -->
@@ -48,7 +49,7 @@
 			</Shortcut>
 
 			<!-- Unique key for this component/shortcut -->
-			<RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="StartMenuShortcut" Value="1" Type="integer" KeyPath="yes" />
+			<RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="StartMenuShortcut" Value="[InstallProgramMenuFolder]" Type="integer" KeyPath="yes" />
 
 			<!--Remove start menu items -->
 			<RemoveFolder Id="RemoveStartMenu" On="uninstall" />
@@ -80,7 +81,7 @@
 			</Shortcut>
 
 			<!-- Unique key for this component/shortcut -->
-			<RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="StartMenuShortcut" Value="1" Type="integer" KeyPath="yes" />
+			<RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="StartMenuShortcut" Value="[InstallProgramMenuFolder]" Type="integer" KeyPath="yes" />
 
 			<!--Remove start menu items -->
 			<RemoveFolder Id="RemoveStartMenuWin10" On="uninstall" />
@@ -99,7 +100,7 @@
 					  Icon='icon.exe' />
 
 			<!-- Unique key for this component/shortcut -->
-			<RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="DesktopShortcut" Value="1" Type="integer" KeyPath="yes"/>
+			<RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="DesktopShortcut" Value="[DesktopFolder]" Type="integer" KeyPath="yes"/>
 
 			<!--Remove desktop shortcut -->
 			<RemoveFolder Id='RemoveDesktop' On="uninstall"/>
@@ -118,7 +119,7 @@
 					  Icon='icon.exe' />
 
 			<!-- Unique key for this component/shortcut -->
-			<RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="StartupShortcut" Value="1" Type="integer" KeyPath="yes"/>
+			<RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="StartupShortcut" Value="[StartupFolder]" Type="integer" KeyPath="yes"/>
 
 			<!--Remove desktop shortcut -->
 			<RemoveFolder Id='RemoveStartup' On="uninstall"/>
@@ -133,14 +134,16 @@
 			<File Source="Files\AppIcon.png" />
 		
 			<!-- Unique key for this component/shortcut -->
-			<RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="AppIconFile" Value="1" Type="integer" KeyPath="yes"/>
+			<RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="AppIconFile" Value="[RoamingFolder]\Files\AppIcon.png" Type="integer" KeyPath="yes"/>
 
 			<!--Remove desktop shortcut -->
 			<RemoveFolder Id='RemoveAppIconFile' On="uninstall"/>
 		</Component>
 
-		<!-- Server address registry entry -->
+		<!-- Registry entries -->
 		<DirectoryRef Id="INSTALLFOLDER">
+			
+			<!-- Server address registry entry -->
 			<Component Id="ServerAddressRegistryEntry" Guid="{9B4BFD61-693E-421A-AE55-1F0E43A26642}">
 
 				<RegistryKey Root="HKCU"
@@ -148,6 +151,16 @@
 					<RegistryValue Type="string" Name="ServerAddress" Value="[SERVERADDRESS]" />
 				</RegistryKey>
 
+			</Component>
+
+			<!-- Application executable install path registry entry -->
+			<Component Id="ExecutablePath" Guid="{0CB2C0F3-690F-4166-B102-2E8C457A3DC9}">
+
+				<RegistryKey Root="HKCU"
+							 Key="Software\Hakan Yildizhan\DeviceManager">
+					<RegistryValue Type="string" Name="ExecutablePath" Value="[INSTALLFOLDER]\DeviceManager.Client.TrayApp.exe" />
+				</RegistryKey>
+				
 			</Component>
 		</DirectoryRef>
 

@@ -4,7 +4,7 @@ See file LICENSE.md or go to https://www.gnu.org/licenses/gpl-3.0.html for full 
 Copyright © Hakan Yildizhan 2020.
 -->
 
-<Window x:Class="DeviceManager.Client.TrayApp.Windows.ReminderWindow"
+<Window x:Class="DeviceManager.Client.TrayApp.Windows.PromptWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -53,7 +53,7 @@ Copyright © Hakan Yildizhan 2020.
                         VerticalAlignment="Center">
 
                 <TextBlock 
-                    Text="Device Usage Reminder"
+                    Text="{Binding PromptTitle, FallbackValue=Device Usage Reminder}"
                     Foreground="White">
                 </TextBlock>
             </StackPanel>
@@ -95,24 +95,48 @@ Copyright © Hakan Yildizhan 2020.
                 Orientation="Horizontal" 
                 HorizontalAlignment="Center">
 
-                <Button x:Name="KeepUsing"
-                    Content="Yes, keep using" 
+                <Button x:Name="btnYes"
                     Margin="140 8 5 8"
-                    Padding="4 2 0 0"
                     Width="95"
-                    Command="{Binding CloseCommand}"
+                    HorizontalAlignment="Center"
                     Style="{DynamicResource ReminderButtonStyle}"
-                    IsEnabled="{Binding ExecutingCommand, Converter={local:BooleanReversalConverter}}"
-                    />
+                    IsEnabled="{Binding ExecutingCommand, Converter={local:BooleanReversalConverter}}">
 
-                <Button x:Name="Release" 
-                    Content="No, I'm done" 
+                    <Button.Command>
+                        <MultiBinding Converter="{local:PromptCommandBindingConverter}">
+                            <MultiBinding.ConverterParameter>True</MultiBinding.ConverterParameter>
+                            <Binding Path="ExecuteOnAction" />
+                            <Binding Path="RunQueryCommand" />
+                            <Binding Path="CloseCommand" />
+                        </MultiBinding>
+                    </Button.Command>
+
+                    <TextBlock Text="{Binding YesButtonContent, FallbackValue='Yes, keep using'}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+
+                </Button>
+
+                <Button x:Name="btnNo" 
                     Margin="5 8 5 8"
-                    Padding="9 2 0 0"
                     Width="95"
-                    Command="{Binding ReleaseCommand}"
+                    HorizontalAlignment="Center"
                     Style="{DynamicResource ReminderButtonStyle}"
-                    local:IsBusyProperty.Value="{Binding ExecutingCommand}"/>
+                    local:IsBusyProperty.Value="{Binding ExecutingCommand}">
+
+                    <Button.Command>
+                        <MultiBinding Converter="{local:PromptCommandBindingConverter}">
+                            <Binding Path="ExecuteOnAction" />
+                            <Binding Path="RunQueryCommand" />
+                            <Binding Path="CloseCommand" />
+                        </MultiBinding>
+                    </Button.Command>
+                    
+                    <TextBlock Text="{Binding NoButtonContent, FallbackValue='No, I&apos;m done\'}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+
+                </Button>
             </StackPanel>
 
         </Grid>

@@ -4,7 +4,7 @@
 
 using System.Windows;
 
-namespace DeviceManager.Client.TrayApp.Windows
+namespace DeviceManager.Installer
 {
     /// <summary>
     /// Interaction logic for ProgressWindow.xaml

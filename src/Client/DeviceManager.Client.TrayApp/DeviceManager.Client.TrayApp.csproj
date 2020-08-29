@@ -101,6 +101,7 @@
     <Compile Include="Service\TokenStore.cs" />
     <Compile Include="Service\WindowProgressBarService.cs" />
     <Compile Include="Service\WindowPromptService.cs" />
+    <Compile Include="ValueConverters\PromptCommandBindingConverter.cs" />
     <Compile Include="ValueConverters\CanReleaseAllConverter.cs" />
     <Compile Include="ValueConverters\OnlineStateToSetNameTextConverter.cs" />
     <Compile Include="ValueConverters\OnlineStateToIconConverter.cs" />
@@ -120,17 +121,13 @@
     <Compile Include="ViewModel\Enum\ReminderResponse.cs" />
     <Compile Include="ViewModel\Enum\TimerEvent.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
-    <Compile Include="ViewModel\ProgressWindowViewModel.cs" />
     <Compile Include="ViewModel\QueryObjects\DeviceListSelect.cs" />
-    <Compile Include="ViewModel\ReminderWindowViewModel.cs" />
+    <Compile Include="ViewModel\PromptWindowViewModel.cs" />
     <Compile Include="Windows\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\ProgressWindow.xaml.cs">
-      <DependentUpon>ProgressWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\ReminderWindow.xaml.cs">
-      <DependentUpon>ReminderWindow.xaml</DependentUpon>
+    <Compile Include="Windows\PromptWindow.xaml.cs">
+      <DependentUpon>PromptWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\DeviceItemControl.xaml">
       <SubType>Designer</SubType>
@@ -187,11 +184,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\ProgressWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\ReminderWindow.xaml">
+    <Page Include="Windows\PromptWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -234,6 +227,10 @@
     <ProjectReference Include="..\..\Common\DeviceManager.Common\DeviceManager.Common.csproj">
       <Project>{6179FE37-10E6-4683-A7EB-0E72AC65EDF1}</Project>
       <Name>DeviceManager.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\DeviceManager.Installer\DeviceManager.Installer.csproj">
+      <Project>{3a2eb9fd-b176-4868-a8db-83621ca2e847}</Project>
+      <Name>DeviceManager.Installer</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Common\DeviceManager.Update\DeviceManager.Update.csproj">
       <Project>{683869AB-ACA3-49CE-8C05-0CEC91A062D3}</Project>

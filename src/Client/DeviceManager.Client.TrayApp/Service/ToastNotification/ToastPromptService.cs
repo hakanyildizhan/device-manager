@@ -19,9 +19,9 @@ namespace DeviceManager.Client.TrayApp.Service
     public class ToastPromptService : IPromptService
     {
         private static string _iconFilepath = Path.Combine(Utility.GetAppRoamingFolder(), "AppIcon.png");
-        private static Dictionary<object, ToastNotification> activeToasts = new Dictionary<object, ToastNotification>();
+        private static Dictionary<object, ToastNotification> _activeToasts = new Dictionary<object, ToastNotification>();
 
-        public void ShowPrompt(string title, string message, string query, object sender, int timeOut, ExecuteOnAction executeOnAction)
+        public void ShowPrompt(string title, string message, string query, object sender, int timeOut, ExecuteOnAction executeOnAction, string affirmativeOption = "Yes", string negativeOption = "No")
         {
             bool iconExists = File.Exists(_iconFilepath);
 
@@ -30,12 +30,12 @@ namespace DeviceManager.Client.TrayApp.Service
             switch (executeOnAction)
             {
                 case ExecuteOnAction.Yes:
-                    actions.Buttons.Add(new ToastButton("Yes", query));
-                    actions.Buttons.Add(new ToastButton("No", string.Empty));
+                    actions.Buttons.Add(new ToastButton(affirmativeOption, query));
+                    actions.Buttons.Add(new ToastButton(negativeOption, string.Empty));
                     break;
                 case ExecuteOnAction.No:
-                    actions.Buttons.Add(new ToastButton("Yes", string.Empty));
-                    actions.Buttons.Add(new ToastButton("No", query));
+                    actions.Buttons.Add(new ToastButton(affirmativeOption, string.Empty));
+                    actions.Buttons.Add(new ToastButton(negativeOption, query));
                     break;
                 default:
                     break;
@@ -80,9 +80,13 @@ namespace DeviceManager.Client.TrayApp.Service
             };
 
             var toast = new ToastNotification(toastContent.GetXml());
-            toast.ExpirationTime = DateTimeOffset.Now.AddSeconds(timeOut);
-            activeToasts.Add(sender, toast);
 
+            if (timeOut != 0)
+            {
+                toast.ExpirationTime = DateTimeOffset.Now.AddSeconds(timeOut);
+            }
+            
+            _activeToasts.Add(sender, toast);
             toast.Dismissed += Toast_Dismissed;
             toast.Activated += Toast_Activated;
             DesktopNotificationManagerCompat.CreateToastNotifier().Show(toast);
@@ -126,7 +130,7 @@ namespace DeviceManager.Client.TrayApp.Service
         {
             object subscriber = null;
 
-            foreach (var entry in activeToasts)
+            foreach (var entry in _activeToasts)
             {
                 if (entry.Value == toast)
                 {
@@ -136,7 +140,7 @@ namespace DeviceManager.Client.TrayApp.Service
 
             if (subscriber != null)
             {
-                activeToasts.Remove(subscriber);
+                _activeToasts.Remove(subscriber);
             }
 
             return subscriber;

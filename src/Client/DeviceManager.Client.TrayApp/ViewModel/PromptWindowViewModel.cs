@@ -6,7 +6,6 @@ using DeviceManager.Client.Service;
 using DeviceManager.Client.TrayApp.Command;
 using DeviceManager.Client.TrayApp.Service;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
@@ -14,7 +13,7 @@ using System.Windows.Input;
 
 namespace DeviceManager.Client.TrayApp.ViewModel
 {
-    public class ReminderWindowViewModel : BaseViewModel
+    public class PromptWindowViewModel : BaseViewModel
     {
         /// <summary>
         /// The window this view model controls.
@@ -23,21 +22,6 @@ namespace DeviceManager.Client.TrayApp.ViewModel
 
         private string _promptMessage;
         private Timer _promptActiveTimer;
-
-        /// <summary>
-        /// View model for the corresponding device item.
-        /// </summary>
-        public DeviceItemViewModel DeviceItem { get; set; }
-
-        /// <summary>
-        /// Event handler for handling a check-in attempt result.
-        /// </summary>
-        public EventHandler<bool> CheckinPerformed { get; set; }
-
-        /// <summary>
-        /// Event handler for handling the closing of the reminder.
-        /// </summary>
-        public EventHandler<PromptResult> ReminderClosed { get; set; }
 
         /// <summary>
         /// The message to be shown on the dialog. Must be set by the caller.
@@ -61,9 +45,19 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         public string PromptTitle { get; set; }
 
         /// <summary>
-        /// Duration in seconds for the prompt to be active on screen. Must be set by the caller
+        /// Duration in seconds for the prompt to be active on screen. 0 (zero) means there is no timeout. Must be set by the caller.
         /// </summary>
         public int PromptTimeout { get; set; } = ServiceConstants.Settings.USAGE_PROMPT_DURATION_DEFAULT;
+
+        /// <summary>
+        /// Text to show on the affirmative button. Default is "Yes".
+        /// </summary>
+        public string YesButtonContent { get; set; } = "Yes";
+
+        /// <summary>
+        /// Text to show on the negative button. Default is "No".
+        /// </summary>
+        public string NoButtonContent { get; set; } = "No";
 
         /// <summary>
         /// Window width.
@@ -85,48 +79,44 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         /// </summary>
         public bool ExecutingCommand { get; set; }
 
-        public ICommand ReleaseCommand { get; set; }
+        /// <summary>
+        /// Whether affirmative or negative option should run the <see cref="Query"/>.
+        /// </summary>
+        public ExecuteOnAction ExecuteOnAction { get; set; }
+
+        /// <summary>
+        /// The resource associated with this prompt, e.g. <see cref="DeviceItemViewModel"/>, <see cref="MainWindowViewModel"/>, etc.
+        /// </summary>
+        public object Owner { get; set; }
+
+        /// <summary>
+        /// The command query to run.
+        /// </summary>
+        public string Query { get; set; }
+
+        public ICommand RunQueryCommand { get; set; }
         public ICommand CloseCommand { get; set; }
 
-        public ReminderWindowViewModel(Window window)
+        public PromptWindowViewModel(Window window)
         {
             _window = window;
-            ReleaseCommand = new RelayCommand(async () => await ReleaseAsync());
+            RunQueryCommand = new RelayCommand(async () => await RunQuery());
             CloseCommand = new RelayCommand(async () => await Close(PromptResult.Dismissed));
-            _window.ContentRendered += OnWindowShown;   
+            _window.ContentRendered += OnWindowShown;
         }
 
         private void OnWindowShown(object sender, EventArgs e)
         {
-            StartAutoCloseCountdown();
-        }
-
-        public void Subscribe(DeviceItemViewModel deviceItem)
-        {
-            DeviceItem = deviceItem;
+            if (this.PromptTimeout != 0)
+            {
+                StartAutoCloseCountdown();
+            }
         }
 
         private async Task Close(PromptResult reminderResult)
         {
             EventAggregator ag = EventAggregator.Instance;
-            ag.Raise(DeviceItem, null, reminderResult);
-
-            var subscriberList = this.CheckinPerformed?.GetInvocationList();
-            if (subscriberList != null && subscriberList.Any())
-            {
-                foreach (var subscriber in subscriberList)
-                {
-                    this.CheckinPerformed -= (subscriber as EventHandler<bool>);
-                }
-            }
-            subscriberList = this.ReminderClosed?.GetInvocationList();
-            if (subscriberList != null && subscriberList.Any())
-            {
-                foreach (var subscriber in subscriberList)
-                {
-                    this.ReminderClosed -= (subscriber as EventHandler<PromptResult>);
-                }
-            }
+            ag.Raise(Owner, null, reminderResult);
 
             DisposeTimer();
             await App.Current.Dispatcher.BeginInvoke(new Action(delegate ()
@@ -137,18 +127,18 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         }
 
         /// <summary>
-        /// Checks in a device when the user clicks "No" on reminder prompt.
+        /// Runs the query when the user selects the option corresponding to the <see cref="ExecuteOnAction"/> variable.
         /// </summary>
         /// <returns></returns>
-        private async Task ReleaseAsync()
+        private async Task RunQuery()
         {
             await RunCommandAsync(() => this.ExecutingCommand, async () =>
             {
                 CommandFactory commandFactory = CommandFactory.Instance;
-                var result = await commandFactory.GetCommand($"Checkin?userName={Utility.GetCurrentUserName()}&deviceId={DeviceItem.Id}&deviceName={DeviceItem.DeviceName}")?.Execute();
+                var result = await commandFactory.GetCommand(Query)?.Execute();
 
                 EventAggregator ag = EventAggregator.Instance;
-                ag.Raise(DeviceItem, null, result);
+                ag.Raise(Owner, null, result);
 
                 await Close(PromptResult.ActionPerformed);
             });
@@ -184,7 +174,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         }
 
         /// <summary>
-        /// Calculates the minimum width of the window base on length of the device name.
+        /// Calculates the minimum width of the window base on length of the prompt message.
         /// </summary>
         /// <returns></returns>
         private double CalculateWindowWidth()

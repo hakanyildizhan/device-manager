@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceManager.Update", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceManager.Common", "..\Common\DeviceManager.Common\DeviceManager.Common.csproj", "{6179FE37-10E6-4683-A7EB-0E72AC65EDF1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceManager.Installer", "..\Common\DeviceManager.Installer\DeviceManager.Installer.csproj", "{3A2EB9FD-B176-4868-A8DB-83621CA2E847}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,14 @@ Global
 		{6179FE37-10E6-4683-A7EB-0E72AC65EDF1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6179FE37-10E6-4683-A7EB-0E72AC65EDF1}.Release|x86.ActiveCfg = Release|Any CPU
 		{6179FE37-10E6-4683-A7EB-0E72AC65EDF1}.Release|x86.Build.0 = Release|Any CPU
+		{3A2EB9FD-B176-4868-A8DB-83621CA2E847}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A2EB9FD-B176-4868-A8DB-83621CA2E847}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A2EB9FD-B176-4868-A8DB-83621CA2E847}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3A2EB9FD-B176-4868-A8DB-83621CA2E847}.Debug|x86.Build.0 = Debug|Any CPU
+		{3A2EB9FD-B176-4868-A8DB-83621CA2E847}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A2EB9FD-B176-4868-A8DB-83621CA2E847}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A2EB9FD-B176-4868-A8DB-83621CA2E847}.Release|x86.ActiveCfg = Release|Any CPU
+		{3A2EB9FD-B176-4868-A8DB-83621CA2E847}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

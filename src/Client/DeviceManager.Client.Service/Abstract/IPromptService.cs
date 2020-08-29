@@ -11,10 +11,12 @@ namespace DeviceManager.Client.Service
         /// </summary>
         /// <param name="title"></param>
         /// <param name="message"></param>
-        /// <param name="query"></param>
+        /// <param name="query">Query to execute as an <see cref="IAppCommand"/> if the user makes that selection.</param>
         /// <param name="sender"></param>
-        /// <param name="timeOut"></param>
-        /// <param name="executeOnAction"></param>
-        void ShowPrompt(string title, string message, string query, object sender, int timeOut, ExecuteOnAction executeOnAction);
+        /// <param name="timeOut">Time after which the prompt should disappear. 0 means the prompt will be active until closed manually.</param>
+        /// <param name="executeOnAction">Option which should trigger the execution of given query.</param>
+        /// <param name="affirmativeOption">Content to display on the affirmative option of the prompt. Default is "Yes".</param>
+        /// <param name="negativeOption">Content to display on the negative option of the prompt. Default is "No".</param>
+        void ShowPrompt(string title, string message, string query, object sender, int timeOut, ExecuteOnAction executeOnAction, string affirmativeOption = "Yes", string negativeOption = "No");
     }
 }

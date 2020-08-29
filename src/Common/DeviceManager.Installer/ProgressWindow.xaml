@@ -4,12 +4,12 @@ See file LICENSE.md or go to https://www.gnu.org/licenses/gpl-3.0.html for full 
 Copyright © Hakan Yildizhan 2020.
 -->
     
-<Window x:Class="DeviceManager.Client.TrayApp.Windows.ProgressWindow"
+<Window x:Class="DeviceManager.Installer.ProgressWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DeviceManager.Client.TrayApp.Windows"
+        xmlns:local="clr-namespace:DeviceManager.Installer"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"

@@ -16,5 +16,10 @@
 		<ClassName>DeviceManager.Client.Service.Command.CheckDeviceAvailabilityCommand</ClassName>
 		<Assembly>DeviceManager.Client.Service.dll</Assembly>
 	</CommandMetaInfo>
+	<CommandMetaInfo>
+		<CommandId>InstallUpdate</CommandId>
+		<ClassName>DeviceManager.Client.Service.Command.InstallUpdateCommand</ClassName>
+		<Assembly>DeviceManager.Client.Service.dll</Assembly>
+	</CommandMetaInfo>
 
 </CommandMetaInfoList>

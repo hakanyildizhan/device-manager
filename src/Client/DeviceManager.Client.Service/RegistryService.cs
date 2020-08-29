@@ -37,7 +37,7 @@ namespace DeviceManager.Client.Service
                 return false;
             }
 
-            int win10ReleaseId = (int)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ReleaseId", 0);
+            int win10ReleaseId = int.Parse(Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ReleaseId", "0").ToString());
             return win10ReleaseId >= 1703;
         }
 

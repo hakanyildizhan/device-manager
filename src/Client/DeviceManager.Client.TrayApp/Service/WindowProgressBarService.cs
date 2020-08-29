@@ -3,8 +3,7 @@
 // Copyright © Hakan Yildizhan 2020.
 
 using DeviceManager.Client.Service;
-using DeviceManager.Client.TrayApp.ViewModel;
-using DeviceManager.Client.TrayApp.Windows;
+using DeviceManager.Installer;
 using System.Collections.Generic;
 
 namespace DeviceManager.Client.TrayApp.Service
@@ -20,7 +19,6 @@ namespace DeviceManager.Client.TrayApp.Service
             viewModel.Message = message;
             viewModel.WindowTitle = title;
             viewModel.StatusMessage = statusMessage;
-            //viewModel.UniqueId = uniqueId;
             progressBar.DataContext = viewModel;
             progressBar.Show();
             _activeProgressBarList.Add(uniqueId, viewModel);

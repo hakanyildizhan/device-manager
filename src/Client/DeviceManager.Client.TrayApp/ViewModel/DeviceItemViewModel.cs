@@ -5,7 +5,6 @@
 using DeviceManager.Client.Service;
 using DeviceManager.Client.TrayApp.Command;
 using DeviceManager.Client.TrayApp.Service;
-using DeviceManager.Client.TrayApp.Windows;
 using DeviceManager.Common;
 using System;
 using System.Collections.Generic;
@@ -322,7 +321,9 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 $"Checkin?deviceId={Id}&userName={Utility.GetCurrentUserName()}&deviceName={DeviceName}", 
                 this,
                 UsagePromptDuration,
-                ExecuteOnAction.No);
+                ExecuteOnAction.No,
+                "Yes, keep using",
+                "No, I'm done");
 
             _reminderActive = true;
         }

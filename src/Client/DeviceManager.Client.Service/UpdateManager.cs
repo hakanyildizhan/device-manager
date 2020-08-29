@@ -89,11 +89,15 @@ namespace DeviceManager.Client.Service
             Reset();
             await _feedbackService.ShowMessageAsync(MessageType.Information, "Installing the update...");
 
-            Process process = new Process();
-            process.StartInfo = new ProcessStartInfo("msiexec", $@"/i ""{result.File}"" /qn SILENT=1");
-            process.StartInfo.CreateNoWindow = true;
-            process.StartInfo.UseShellExecute = true;
-            process.Start();
+            string installerExePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DeviceManager.Installer.exe");
+            await Task.Run(() =>
+            {
+                Process process = new Process();
+                process.StartInfo = new ProcessStartInfo(installerExePath, $@"{Update.Version} ""{result.File}""");
+                process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.UseShellExecute = true;
+                process.Start();
+            });
         }
 
         public void Reset()

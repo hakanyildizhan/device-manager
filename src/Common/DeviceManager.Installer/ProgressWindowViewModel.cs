@@ -2,11 +2,12 @@
 // See file LICENSE.md or go to https://www.gnu.org/licenses/gpl-3.0.html for full license details.
 // Copyright © Hakan Yildizhan 2020.
 
+using System.ComponentModel;
 using System.Windows;
 
-namespace DeviceManager.Client.TrayApp.ViewModel
+namespace DeviceManager.Installer
 {
-    public class ProgressWindowViewModel : BaseViewModel
+    public class ProgressWindowViewModel : INotifyPropertyChanged
     {
         /// <summary>
         /// To store the progress bar.
@@ -33,17 +34,14 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         /// <summary>
         /// Set to true if progress cannot be determined.
         /// </summary>
-        public bool IsIndeterminate { get; set; }
+        public bool IsIndeterminate { get; set; } = false;
 
         /// <summary>
         /// Maximum progress. Default is 100.
         /// </summary>
         public int MaximumProgress { get; set; } = 100;
 
-        /// <summary>
-        /// Id for the progress bar.
-        /// </summary>
-        //public string UniqueId { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 
         /// <summary>
         /// Modify this value to change progress level.
@@ -56,7 +54,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 if (_currentProgress != value)
                 {
                     _currentProgress = value;
-                    OnPropertyChanged(nameof(CurrentProgress));
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(CurrentProgress)));
                 }
             }
         }
