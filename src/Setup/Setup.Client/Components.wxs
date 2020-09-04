@@ -10,6 +10,9 @@
       <ComponentRef Id="ProgramMenuShortcut" />
       <ComponentRef Id="DesktopShortcut" />
       <ComponentRef Id="StartupShortcut" />
+		
+	  <!-- Folder removal on uninstall -->
+	  <ComponentRef Id="RemoveFilesOnUninstall" />
       
       <!-- Registry entry -->
       <ComponentRef Id="ServerAddressRegistryEntry" />
@@ -67,10 +70,22 @@
       <!-- Unique key for this component/shortcut -->
       <RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="StartupShortcut" Value="1" Type="integer" KeyPath="yes"/>
 
-      <!--Remove desktop shortcut -->
+      <!--Remove startup shortcut -->
       <RemoveFolder Id='RemoveStartup' On="uninstall"/>
 
     </Component>
+
+	<!-- Remove application files on uninstall -->
+	<Component Id="RemoveFilesOnUninstall"
+			   Guid="{E981C600-FCA2-4C4A-8C8D-2F3158904DB5}"
+			   Directory="INSTALLFOLDER">
+
+	  <!-- Unique key for this component/shortcut -->
+	  <RegistryValue Root="HKCU" Key="SOFTWARE\Hakan Yildizhan\DeviceManager" Name="InstallLocation" Value="[INSTALLFOLDER]" Type="string" KeyPath="yes"/>
+	  
+	  <RemoveFolder Id="RemoveThisFolder" On="uninstall" />
+		
+	</Component>
 
     <!-- Server address registry entry -->
     <DirectoryRef Id="INSTALLFOLDER">

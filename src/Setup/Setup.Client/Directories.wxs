@@ -14,8 +14,8 @@
       <!-- Desktop -->
       <Directory Id="DesktopFolder" Name="Desktop"/>
 
-      <!-- Program Files folder -->
-      <Directory Id="ProgramFilesFolder">
+      <!-- App Data\Roaming folder -->
+      <Directory Id="LocalAppDataFolder">
         <Directory Id="INSTALLFOLDER" Name="$(var.AppName)" />
       </Directory>
 
