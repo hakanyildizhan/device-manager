@@ -81,10 +81,16 @@
                   Execute='immediate'
                   Return='check'/>
 
-    <!-- Call CustomAction_CheckServerConfig as soon as this dialog is displayed -->
-    <!--<InstallExecuteSequence>
-      <Custom Action='CustomAction_CheckServerConfig' After='CostFinalize' />
-    </InstallExecuteSequence>-->
-	</Product>
+	<!-- Closes installation folder (if open) before installing files -->
+	<CustomAction Id='CustomAction_CloseInstallFolder'
+                BinaryKey='DeviceManager.Setup.CustomActions.CA.dll'
+                DllEntry='CloseInstallFolder'
+                Execute='immediate'
+                Return='check'/>
+
+    <InstallExecuteSequence>
+      <Custom Action='CustomAction_CloseInstallFolder' Before='InstallFiles' />
+    </InstallExecuteSequence>
+  </Product>
 
 </Wix>
