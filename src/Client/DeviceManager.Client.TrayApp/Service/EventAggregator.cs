@@ -3,9 +3,8 @@
 // Copyright © Hakan Yildizhan 2020.
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 
 namespace DeviceManager.Client.TrayApp.Service
 {
@@ -14,7 +13,7 @@ namespace DeviceManager.Client.TrayApp.Service
     /// </summary>
     public class EventAggregator
     {
-        private static readonly Dictionary<object, List<Delegate>> m_events = new Dictionary<object, List<Delegate>>();
+        private static readonly ConcurrentDictionary<object, List<Delegate>> _events = new ConcurrentDictionary<object, List<Delegate>>();
         private static EventAggregator _eventAggregatorInstance;
         private static object _lockObject = new object();
 
@@ -35,53 +34,43 @@ namespace DeviceManager.Client.TrayApp.Service
 
         public void Add(object eventKey, Delegate handler)
         {
-            Monitor.Enter(m_events);
-            List<Delegate> d;
-            bool delegatesForObjectExists = m_events.TryGetValue(eventKey, out d);
-
-            if (!delegatesForObjectExists)
+            _events.AddOrUpdate(eventKey, new List<Delegate> { handler }, (key, existingDlgList) =>
             {
-                m_events.Add(eventKey, new List<Delegate>() { handler });
-            }
-            else
-            {
-                d.Add(handler);
-                m_events[eventKey] = d;
-            }
-
-            Monitor.Exit(m_events);
+                existingDlgList.Add(handler);
+                return existingDlgList;
+            });
         }
 
         public void Remove(object eventKey, Delegate handler)
         {
-            Monitor.Enter(m_events);
             List<Delegate> delegateList;
+            bool keyExists = _events.TryRemove(eventKey, out delegateList);
 
-            if (m_events.TryGetValue(eventKey, out delegateList))
+            if (keyExists && delegateList != null && delegateList.Count > 1)
             {
-                Delegate d = delegateList.Where(dlg => dlg == handler).FirstOrDefault();
-                delegateList.Remove(d);
-                d = Delegate.Remove(d, handler);
+                bool removed = delegateList.Remove(handler);
 
-                if (!delegateList.Any())
+                if (removed)
                 {
-                    m_events.Remove(eventKey);
-                }
-                else
-                {
-                    m_events[eventKey] = delegateList;
+                    _events.TryAdd(eventKey, delegateList);
                 }
             }
-
-            Monitor.Exit(m_events);
         }
 
+        /// <summary>
+        /// Raise the event registered by the subscriber. In case the subscriber has not registered any events, no event is raised.
+        /// </summary>
+        /// <param name="eventKey"></param>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void Raise(object eventKey, object sender, object e)
         {
             List<Delegate> delegateList;
-            Monitor.Enter(m_events);
-            m_events.TryGetValue(eventKey, out delegateList);
-            Monitor.Exit(m_events);
+            
+            if (!_events.TryGetValue(eventKey, out delegateList))
+            {
+                return; // no subscriber found
+            }
 
             Delegate d = null;
 
@@ -96,7 +85,7 @@ namespace DeviceManager.Client.TrayApp.Service
 
             if (d != null)
             {
-                d.DynamicInvoke(new Object[] { sender, e });
+                d.DynamicInvoke(new object[] { sender, e });
                 Remove(eventKey, d);
             }
         }

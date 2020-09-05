@@ -16,10 +16,6 @@ Copyright © Hakan Yildizhan 2020.
         ResizeMode="NoResize"
         Title="ProgressWindow" Height="100" Width="300">
 
-    <WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="25"/>
-    </WindowChrome.WindowChrome>
-    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />

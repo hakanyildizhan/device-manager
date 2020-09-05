@@ -70,23 +70,23 @@ namespace DeviceManager.Update
             {
                 return VersionCompareResult.Newer;
             }
-            else if (version.Major == otherVersion.Major && version.Minor < version.Major)
+            else if (version.Major == otherVersion.Major && version.Minor < otherVersion.Minor)
             {
                 return VersionCompareResult.Older;
             }
-            else if (version.Major == otherVersion.Major && version.Minor > version.Major)
+            else if (version.Major == otherVersion.Major && version.Minor > otherVersion.Minor)
             {
                 return VersionCompareResult.Newer;
             }
-            else if (version.Major == otherVersion.Major && version.Minor == version.Major && version.Patch == otherVersion.Patch)
+            else if (version.Major == otherVersion.Major && version.Minor == otherVersion.Minor && version.Patch == otherVersion.Patch)
             {
                 return VersionCompareResult.Equal;
             }
-            else if (version.Major == otherVersion.Major && version.Minor == version.Major && version.Patch < otherVersion.Patch)
+            else if (version.Major == otherVersion.Major && version.Minor == otherVersion.Minor && version.Patch < otherVersion.Patch)
             {
                 return VersionCompareResult.Older;
             }
-            else if (version.Major == otherVersion.Major && version.Minor == version.Major && version.Patch > otherVersion.Patch)
+            else if (version.Major == otherVersion.Major && version.Minor == otherVersion.Minor && version.Patch > otherVersion.Patch)
             {
                 return VersionCompareResult.Newer;
             }

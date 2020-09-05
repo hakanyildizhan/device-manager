@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:simpleType name="latestTrue">
+        <xs:restriction base="xs:boolean">
+            <xs:pattern value="true" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="Manifest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="ServerList" minOccurs="1" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Server" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Installer" type="xs:string" minOccurs="1" maxOccurs="1" />
+                                        <xs:element name="CompatibleClients" minOccurs="1" maxOccurs="1">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="CompatibleClient" minOccurs="1" maxOccurs="unbounded">
+                                                        <xs:complexType>
+                                                            <xs:attribute name="version" type="xs:string" use="required" />
+                                                            <xs:attribute name="latest" type="latestTrue" use="optional" />
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                            <xs:unique name="UniqueClientVersion">
+                                                <xs:selector xpath="CompatibleClient" />
+                                                <xs:field xpath="@version" />
+                                            </xs:unique>
+                                            <xs:unique name="OnlyOneLatestClient">
+                                                <xs:selector xpath="CompatibleClient" />
+                                                <xs:field xpath="@latest" />
+                                            </xs:unique>
+                                        </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="version" type="xs:string" use="required" />
+                                    <xs:attribute name="latest" type="latestTrue" use="optional" />
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                    <xs:unique name="UniqueServerVersion">
+                        <xs:selector xpath="Server" />
+                        <xs:field xpath="@version" />
+                    </xs:unique>
+                    <xs:unique name="UniqueServerInstaller">
+                        <xs:selector xpath="Server/Installer" />
+                        <xs:field xpath="." />
+                    </xs:unique>
+                    <xs:unique name="OnlyOneLatestServer">
+                        <xs:selector xpath="Server" />
+                        <xs:field xpath="@latest" />
+                    </xs:unique>
+                </xs:element>
+                <xs:element name="ClientList" minOccurs="1" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Client" minOccurs="1" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Installer" type="xs:string" minOccurs="1" maxOccurs="1" />
+                                    </xs:sequence>
+                                    <xs:attribute name="version" type="xs:string" use="required" />
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                    <xs:unique name="UniqueClientVersion2">
+                        <xs:selector xpath="Client" />
+                        <xs:field xpath="@version" />
+                    </xs:unique>
+                    <xs:unique name="UniqueClientInstaller">
+                        <xs:selector xpath="Client/Installer" />
+                        <xs:field xpath="." />
+                    </xs:unique>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

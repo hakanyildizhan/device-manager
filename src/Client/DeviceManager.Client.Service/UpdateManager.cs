@@ -2,6 +2,7 @@
 // See file LICENSE.md or go to https://www.gnu.org/licenses/gpl-3.0.html for full license details.
 // Copyright © Hakan Yildizhan 2020.
 
+using DeviceManager.Common;
 using DeviceManager.Update;
 using System;
 using System.Diagnostics;
@@ -17,21 +18,23 @@ namespace DeviceManager.Client.Service
         private readonly IConfigurationService _configService;
         private readonly IFeedbackService _feedbackService;
         private readonly IProgressBarService _progressBar;
+        private readonly ILogService<UpdateManager> _logService;
 
         public UpdateManager(
             IUpdateChecker updater, 
             IConfigurationService configService,
             IFeedbackService feedbackService,
-            IProgressBarService progressBar)
+            IProgressBarService progressBar,
+            ILogService<UpdateManager> logService)
         {
             _updater = updater;
             _configService = configService;
             _feedbackService = feedbackService;
             _progressBar = progressBar;
+            _logService = logService;
         }
 
         public bool UpdateIsAvailable { get; set; }
-        //public bool UpdateIsReadyToInstall { get; set; }
         public string InstallerPath { get; set; }
         public UpdatePackage Update { get; set; }
 
@@ -45,7 +48,7 @@ namespace DeviceManager.Client.Service
                 return;
             }
 
-            string appVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            string appVersion = System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString();
 
             var updateCheckResult = await _updater.CheckForUpdate(new ClientUpdateRequest()
             {
@@ -68,6 +71,15 @@ namespace DeviceManager.Client.Service
                 return;
             }
 
+            string installerExePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DeviceManager.Installer.exe");
+
+            if (!File.Exists(installerExePath))
+            {
+                await _feedbackService.ShowMessageAsync(MessageType.Error, "An error occurred. Cannot install update at this time.");
+                _logService.LogError("Installer was not found, could not install update");
+                return;
+            }
+
             string requestId = Guid.NewGuid().ToString();
             _updater.DownloadProgressChanged += HandleDownloadProgressChanged;
             _progressBar?.Show("Downloading update", $"Update v{Update.Version}", "Downloading...", requestId);
@@ -86,18 +98,29 @@ namespace DeviceManager.Client.Service
                 return;
             }
 
-            Reset();
             await _feedbackService.ShowMessageAsync(MessageType.Information, "Installing the update...");
+            string tempInstaller = Path.Combine(Utility.GetAppRoamingFolder(), "DeviceManager.Installer.exe");
 
-            string installerExePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DeviceManager.Installer.exe");
+            try
+            {
+                File.Copy(installerExePath, tempInstaller, true);
+            }
+            catch (Exception ex)
+            {
+                await _feedbackService.ShowMessageAsync(MessageType.Error, "An error occurred. Cannot install update at this time.");
+                _logService.LogException(ex, "Installer could not be copied. Could not install update");
+                return;
+            }
+
             await Task.Run(() =>
             {
                 Process process = new Process();
-                process.StartInfo = new ProcessStartInfo(installerExePath, $@"{Update.Version} ""{result.File}""");
+                process.StartInfo = new ProcessStartInfo(tempInstaller, $@"{Update.Version} ""{result.File}""");
                 process.StartInfo.CreateNoWindow = true;
                 process.StartInfo.UseShellExecute = true;
                 process.Start();
             });
+            Reset();
         }
 
         public void Reset()
@@ -105,7 +128,21 @@ namespace DeviceManager.Client.Service
             Update = null;
             UpdateIsAvailable = false;
             _updater.DownloadProgressChanged -= HandleDownloadProgressChanged;
-            //UpdateIsReadyToInstall = false;
+
+            string tempInstaller = Path.Combine(Utility.GetAppRoamingFolder(), "DeviceManager.Installer.exe");
+
+            if (File.Exists(tempInstaller))
+            {
+                try
+                {
+                    File.Delete(tempInstaller);
+                }
+                catch (Exception ex)
+                {
+                    _logService.LogException(ex, "Could not delete temp installer after update");
+                    return;
+                }
+            }
         }
 
         private void HandleDownloadProgressChanged(object sender, int newProgress)

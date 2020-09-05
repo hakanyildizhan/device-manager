@@ -78,8 +78,8 @@ namespace DeviceManager.Update
             }
 
             bool updateAvailable = request.ClientVersion.Compare(package.Version) == VersionCompareResult.Older;
-            _logService.LogInformation($"Update check complete, {(updateAvailable ? "" : "no")} update available");
-            return new UpdateCheckResult() { Package = package, UpdateIsAvailable = updateAvailable };
+            _logService.LogInformation($"Update check complete, {(updateAvailable ? "" : "no ")}update available");
+            return new UpdateCheckResult() { Success = true, UpdateIsAvailable = updateAvailable, Package = package };
         }
 
         public async Task<UpdateDownloadResult> DownloadUpdate(UpdateDownloadRequest request)
@@ -107,7 +107,7 @@ namespace DeviceManager.Update
                 {
                     wc.Headers.Add("Authorization", "Bearer " + token.access_token);
                     wc.DownloadProgressChanged += Wc_DownloadProgressChanged;
-                    wc.DownloadFileAsync(new Uri(url), targetFilePath);
+                    await wc.DownloadFileTaskAsync(new Uri(url), targetFilePath);
                 }
 
                 if (!File.Exists(targetFilePath) || new FileInfo(targetFilePath).Length == 0)

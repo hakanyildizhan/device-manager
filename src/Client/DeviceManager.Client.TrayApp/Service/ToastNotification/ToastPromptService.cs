@@ -85,14 +85,14 @@ namespace DeviceManager.Client.TrayApp.Service
             {
                 toast.ExpirationTime = DateTimeOffset.Now.AddSeconds(timeOut);
             }
-            
+
             _activeToasts.Add(sender, toast);
             toast.Dismissed += Toast_Dismissed;
             toast.Activated += Toast_Activated;
             DesktopNotificationManagerCompat.CreateToastNotifier().Show(toast);
         }
 
-        private void Toast_Activated(ToastNotification sender, object args)
+        private async void Toast_Activated(ToastNotification sender, object args)
         {
             var arguments = (ToastActivatedEventArgs)args;
             object subscriber = RemoveSubscriber(sender);
@@ -108,7 +108,7 @@ namespace DeviceManager.Client.TrayApp.Service
 
             else
             {
-                bool result = Task.Run(async () => await CommandFactory.Instance.GetCommand(arguments.Arguments)?.Execute()).Result;
+                bool result = await CommandFactory.Instance.GetCommand(arguments.Arguments)?.Execute();
                 EventAggregator ag = EventAggregator.Instance;
                 ag.Raise(subscriber, null, result);
                 ag.Raise(subscriber, null, PromptResult.ActionPerformed);

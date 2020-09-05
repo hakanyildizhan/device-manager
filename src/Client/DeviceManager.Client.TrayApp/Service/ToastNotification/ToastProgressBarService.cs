@@ -6,6 +6,7 @@ using DeviceManager.Client.Service;
 using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.IO;
+using System.Linq;
 using Windows.UI.Notifications;
 
 namespace DeviceManager.Client.TrayApp.Service
@@ -53,10 +54,10 @@ namespace DeviceManager.Client.TrayApp.Service
             var toast = new ToastNotification(toastContent.GetXml());
             toast.Tag = uniqueId;
             toast.Data = new NotificationData();
-            toast.Data.Values["progressValue"] = "0,0";
+            toast.Data.Values["progressValue"] = "0";
             toast.Data.Values["progressStatus"] = "Downloading update..";
             toast.Data.SequenceNumber = 0;
-            ToastNotificationManager.CreateToastNotifier().Show(toast);
+            DesktopNotificationManagerCompat.CreateToastNotifier().Show(toast);
         }
 
         public void IncreaseProgress(string progressBarId, int newProgress)
@@ -67,12 +68,18 @@ namespace DeviceManager.Client.TrayApp.Service
             };
 
             data.Values["progressValue"] = newProgress.ToString();
-            ToastNotificationManager.CreateToastNotifier().Update(data, progressBarId);
+            DesktopNotificationManagerCompat.CreateToastNotifier().Update(data, progressBarId);
         }
 
         public void Close(string progressBarId)
         {
-            ToastNotificationManager.History.Remove(progressBarId);
+            var progressBar = DesktopNotificationManagerCompat.History.GetHistory().FirstOrDefault(n => n.Tag == progressBarId);
+
+            if (progressBar != null)
+            {
+                DesktopNotificationManagerCompat.CreateToastNotifier().Show(progressBar);
+                DesktopNotificationManagerCompat.CreateToastNotifier().Hide(progressBar);
+            }
         }
     }
 }

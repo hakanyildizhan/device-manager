@@ -23,6 +23,8 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         private IConfigurationService _configService => (IConfigurationService)ServiceProvider.GetService<IConfigurationService>();
         private ILogService<MainWindowViewModel> _logService => (ILogService<MainWindowViewModel>)ServiceProvider.GetService<ILogService<MainWindowViewModel>>();
         private IRedundantConfigService _redundantConfigService => (IRedundantConfigService)ServiceProvider.GetService<IRedundantConfigService>();
+        private IUpdateManager _updater => (IUpdateManager)ServiceProvider.GetService<IUpdateManager>();
+        private IPromptService _prompter => (IPromptService)ServiceProvider.GetService<IPromptService>();
 
         private Timer _timer;
         private string _userName;
@@ -183,12 +185,19 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 {
                     await HandleGoingOnline();
                 }
+
                 _consecutiveFailedInitializeCount = 0;
                 Initialized = true;
                 GlobalState.IsOffline = false;
                 _redundantConfigService.StoreServerURL(await _configService.GetServerAddressAsync());
-                //bool updateIsAvailable = await CheckForUpdate();
                 EnableTimer(TimerEvent.Refresh);
+
+                await _updater.CheckUpdate();
+                if (_updater.UpdateIsAvailable)
+                {
+                    _logService.LogInformation($"Update v{_updater.Update.Version} is available");
+                    _prompter.ShowPrompt("Update available", "Do you want to install the update?", "InstallUpdate", this, 0, ExecuteOnAction.Yes);
+                }
             }
         }
 

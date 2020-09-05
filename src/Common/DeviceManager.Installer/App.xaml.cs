@@ -20,13 +20,17 @@ namespace DeviceManager.Installer
         private ProgressWindow _progressBar;
         private string _installerPath;
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
             if (e.Args.Length < 2 || string.IsNullOrEmpty(e.Args[0]) || string.IsNullOrEmpty(e.Args[1]) ||
                 !File.Exists(e.Args[1]))
             {
+                App.Current.Dispatcher.Invoke(new Action(delegate ()
+                {
+                    MessageBox.Show($"An error occured while installing the update.\r\nBad arguments.", "Device Manager update installation", MessageBoxButton.OK, MessageBoxImage.Error);
+                }));
                 Environment.Exit(0xA0); // bad arguments
             }
 
@@ -40,13 +44,14 @@ namespace DeviceManager.Installer
             viewModel.StatusMessage = $"v{updateVersion}";
             viewModel.IsIndeterminate = true;
             _progressBar.DataContext = viewModel;
+            _progressBar.Topmost = true;
             _progressBar.Show();
 
             // Install update
-            Task.Run(() =>
+            await Task.Run(() =>
             {
                 _process = new Process();
-                _process.StartInfo = new ProcessStartInfo("msiexec", $@"/i ""{_installerPath}"" /qn SILENT=1");
+                _process.StartInfo = new ProcessStartInfo("msiexec", $@"/i ""{_installerPath}"" /qn");
                 _process.StartInfo.CreateNoWindow = true;
                 _process.StartInfo.UseShellExecute = true;
                 _process.EnableRaisingEvents = true;
@@ -65,6 +70,11 @@ namespace DeviceManager.Installer
             });
         }
 
+        /// <summary>
+        /// Depending on the installation result, restarts the new version of the application or displays an error message.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnProcessExited(object sender, EventArgs e)
         {
             if (_process.ExitCode == 0)
@@ -79,6 +89,13 @@ namespace DeviceManager.Installer
                         process.StartInfo = new ProcessStartInfo(executablePath);
                         process.Start();
                     });
+                }
+                else
+                {
+                    App.Current.Dispatcher.Invoke(new Action(delegate ()
+                    {
+                        MessageBox.Show(_progressBar, $"Installation is complete, but the application could not be restarted. Please restart the application manually.", "Device Manager update installation", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }));
                 }
             }
             else
