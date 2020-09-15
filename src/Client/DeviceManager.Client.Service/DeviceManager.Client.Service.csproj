@@ -67,7 +67,6 @@
     <Compile Include="Abstract\IDataService.cs" />
     <Compile Include="Abstract\IFeedbackService.cs" />
     <Compile Include="Abstract\IRedundantConfigService.cs" />
-    <Compile Include="Abstract\IUpdateManager.cs" />
     <Compile Include="Command\CheckDeviceAvailabilityCommand.cs" />
     <Compile Include="Command\InstallUpdateCommand.cs" />
     <Compile Include="Command\CheckoutCommand.cs" />

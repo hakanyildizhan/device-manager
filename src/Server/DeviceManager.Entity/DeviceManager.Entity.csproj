@@ -62,11 +62,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context\Entity\Device.cs" />
+    <Compile Include="Context\Entity\Enum\JobStatus.cs" />
+    <Compile Include="Context\Entity\Job.cs" />
+    <Compile Include="Context\Entity\Enum\JobType.cs" />
     <Compile Include="Context\Entity\Session.cs" />
     <Compile Include="Context\Entity\Setting.cs" />
     <Compile Include="Context\Entity\Client.cs" />
     <Compile Include="Context\DeviceManagerContext.cs" />
     <Compile Include="Context\Entity\Identity\UserAccount.cs" />
+    <Compile Include="Context\Entity\UpdateJob.cs" />
     <Compile Include="Migrations\202003172007444_InitialCreate.cs" />
     <Compile Include="Migrations\202003172007444_InitialCreate.designer.cs">
       <DependentUpon>202003172007444_InitialCreate.cs</DependentUpon>

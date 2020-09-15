@@ -3,11 +3,11 @@
 // Copyright © Hakan Yildizhan 2020.
 
 using DeviceManager.Entity.Context;
-using DeviceManager.UpdateService.IoC;
+using DeviceManager.WindowsService.IoC;
 using System.ServiceProcess;
 using Unity;
 
-namespace DeviceManager.UpdateService
+namespace DeviceManager.WindowsService
 {
     public abstract class UpdateServiceBase : ServiceBase
     {

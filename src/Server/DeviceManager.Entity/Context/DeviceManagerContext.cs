@@ -19,6 +19,8 @@ namespace DeviceManager.Entity.Context
         public DbSet<Session> Sessions { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<Setting> Settings { get; set; }
+        public DbSet<Job> Jobs { get; set; }
+        public DbSet<UpdateJob> UpdateJobs { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

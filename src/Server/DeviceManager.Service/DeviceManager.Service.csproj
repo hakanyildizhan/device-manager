@@ -65,6 +65,9 @@
     <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
     </Reference>
+    <Reference Include="NCrontab, Version=3.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NCrontab.3.3.1\lib\net35\NCrontab.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -84,6 +87,7 @@
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -100,14 +104,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\IDeviceService.cs" />
+    <Compile Include="Abstract\IScheduleParser.cs" />
     <Compile Include="Abstract\IUpdateService.cs" />
+    <Compile Include="CrontabParser.cs" />
+    <Compile Include="Helper\ExtensionMethods.cs" />
     <Compile Include="Identity\Abstract\IIdentityService.cs" />
     <Compile Include="Abstract\ISessionService.cs" />
     <Compile Include="Abstract\ISettingsService.cs" />
     <Compile Include="Abstract\IClientService.cs" />
     <Compile Include="DeviceService.cs" />
     <Compile Include="Helper\DateTimeHelpers.cs" />
-    <Compile Include="Helper\ExtensionMethods.cs" />
     <Compile Include="Helper\NLogConfig.cs" />
     <Compile Include="Helper\QueryObjects\DeviceSelect.cs" />
     <Compile Include="Helper\ServiceException.cs" />
@@ -127,14 +133,17 @@
     <Compile Include="Model\DeviceSessionInfo.cs" />
     <Compile Include="Model\DeviceImport.cs" />
     <Compile Include="Model\Enum\RegisterUserResult.cs" />
+    <Compile Include="Model\ScheduledTask.cs" />
     <Compile Include="Model\RegisterResult.cs" />
     <Compile Include="Model\ClientInfo.cs" />
+    <Compile Include="Model\ScheduleValidationResult.cs" />
     <Compile Include="Model\SettingsDetail.cs" />
     <Compile Include="Model\Setting\LastDeviceListUpdate.cs" />
     <Compile Include="Model\Setting\RefreshInterval.cs" />
     <Compile Include="Model\Setting\ServerVersion.cs" />
     <Compile Include="Model\Setting\UsagePromptDuration.cs" />
     <Compile Include="Model\Setting\UsagePromptInterval.cs" />
+    <Compile Include="Model\UpdateInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helper\ServiceConstants.cs" />
     <Compile Include="SessionService.cs" />

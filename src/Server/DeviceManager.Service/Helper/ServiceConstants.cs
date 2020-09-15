@@ -13,6 +13,9 @@ namespace DeviceManager.Service
             public const string VERSION = "serverVersion";
             public const string USAGE_PROMPT_INTERVAL = "usagePromptInterval";
             public const string USAGE_PROMPT_DURATION = "usagePromptDuration";
+            public const string ACCESS_TOKEN = "accessToken";
+            public const string ACCESS_TOKEN_EXPIRY = "accessTokenExpiry";
+            //public const string JOB_SCHEDULE_UPDATE_CHECK = "updateCheckSchedule";
         }
     }
 }

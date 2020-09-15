@@ -3,11 +3,13 @@
 // Copyright © Hakan Yildizhan 2020.
 
 using DeviceManager.Common;
+using DeviceManager.Service;
 using DeviceManager.Update;
+using DeviceManager.WindowsService.Jobs;
 using System;
 using Unity;
 
-namespace DeviceManager.UpdateService.IoC
+namespace DeviceManager.WindowsService.IoC
 {
     public class UnityServiceProvider : IAppServiceProvider
     {
@@ -15,8 +17,6 @@ namespace DeviceManager.UpdateService.IoC
         public static IAppServiceProvider Instance { get { return lazy.Value; } }
 
         private IUnityContainer _container;
-
-        //public IUnityContainer UnityContainer => _container;
 
         private UnityServiceProvider()
         {
@@ -47,7 +47,15 @@ namespace DeviceManager.UpdateService.IoC
         {
             var container = new UnityContainer();
             container.RegisterType(typeof(ILogService<>), typeof(NLogLogger<>));
-            container.RegisterType<IUpdateChecker, UpdateChecker>();
+            container.RegisterSingleton<IScheduleParser, CrontabParser>();
+            container.RegisterSingleton<ITokenStore, DBTokenStore>();
+            container.RegisterSingleton<IManifestParser, XmlManifestParser>();
+            container.RegisterSingleton<IUpdateChecker, UpdateChecker>();
+            container.RegisterSingleton<ISettingsService, SettingsService>();
+            container.RegisterType<IJob, CheckForUpdate>();
+            container.RegisterType<IJob, DownloadAndInstallUpdate>();
+            container.RegisterSingleton<IJobFactory, JobFactory>();
+
             return container;
         }
     }

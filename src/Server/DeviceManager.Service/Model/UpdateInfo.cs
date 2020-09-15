@@ -2,12 +2,12 @@
 // See file LICENSE.md or go to https://www.gnu.org/licenses/gpl-3.0.html for full license details.
 // Copyright © Hakan Yildizhan 2020.
 
-using System;
-
-namespace DeviceManager.UpdateService.IoC
+namespace DeviceManager.Service.Model
 {
-    public interface IAppServiceProvider : IServiceProvider
+    public class UpdateInfo
     {
-        object GetService<T>();
+        public bool UpdateAvailable { get; set; }
+        public string UpdateVersion { get; set; }
+        public string Info { get; set; }
     }
 }

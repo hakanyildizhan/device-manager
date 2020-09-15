@@ -1,4 +1,4 @@
-﻿namespace DeviceManager.UpdateService
+﻿namespace DeviceManager.WindowsService
 {
     partial class Updater
     {
