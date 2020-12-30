@@ -1,13 +1,11 @@
-﻿// This file is part of Device Manager project released under GNU General Public License v3.0.
-// See file LICENSE.md or go to https://www.gnu.org/licenses/gpl-3.0.html for full license details.
-// Copyright © Hakan Yildizhan 2020.
-
-namespace DeviceManager.Entity.Migrations
+﻿namespace DeviceManager.Entity.Migrations
 {
     using DeviceManager.Entity.Context.Entity;
     using System;
+    using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Globalization;
+    using System.Linq;
 
     internal sealed class Configuration : DbMigrationsConfiguration<DeviceManager.Entity.Context.DeviceManagerContext>
     {
@@ -24,7 +22,7 @@ namespace DeviceManager.Entity.Migrations
             //  to avoid creating duplicate seed data.
 
             context.Settings.AddOrUpdate(s => s.Name,
-                new Setting { Name = "serverVersion", Value = "1.0" },
+                new Setting { Name = "serverVersion", Value = "2.0.0" },
                 new Setting { Name = "refreshInterval", Value = "60", Description = "Refresh interval for clients (seconds)" },
                 new Setting { Name = "usagePromptInterval", Value = "3600", Description = "Interval (seconds) at which clients will be prompted to check devices back in" },
                 new Setting { Name = "lastDeviceListUpdate", Value = DateTime.UtcNow.ToString(CultureInfo.GetCultureInfo("tr-TR")) },

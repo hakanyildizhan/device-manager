@@ -28,8 +28,8 @@
                     </li>
                     @if (Request.IsAuthenticated && User.IsInRole("Admin"))
                     {
-                        <li class="nav-item active @(ViewBag.ActivePage == "Settings" ? "current-page" : "")">
-                            <a class="nav-link" href="@Url.Action("Settings", "Administration")">Server settings</a>
+                        <li class="nav-item active @(ViewBag.ActivePage == "Configuration" ? "current-page" : "")">
+                            <a class="nav-link" href="@Url.Action("Configuration", "Administration")">Configuration</a>
                         </li>
                         <li class="nav-item active @(ViewBag.ActivePage == "Import" ? "current-page" : "")">
                             <a class="nav-link" href="@Url.Action("Import", "Administration")">Import hardware list</a>

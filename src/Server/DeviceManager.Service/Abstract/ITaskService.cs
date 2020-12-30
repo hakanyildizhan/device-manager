@@ -8,13 +8,20 @@ using System.Threading.Tasks;
 
 namespace DeviceManager.Service
 {
-    public interface IUpdateService
+    public interface ITaskService
     {
         /// <summary>
-        /// Schedules an update job previously registered by the updater service.
+        /// Force-schedules a job to run manually by the task service.
         /// </summary>
         /// <returns></returns>
-        Task<bool> ScheduleUpdate();
+        Task<bool> TriggerManually(int taskId);
+
+        /// <summary>
+        /// True if the task with given ID can be triggered by the user. An independent job can be triggered manually, while jobs that are dependent on completion of some other task have to be already in the "Pending" status to be triggered manually.
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <returns></returns>
+        bool CanBeTriggeredManually(int taskId);
 
         /// <summary>
         /// Checks if an update job is registered by the updater service. If so, returns information about an available update. In case no update is available, <see cref="UpdateInfo.Info"/> property will contain some error information.

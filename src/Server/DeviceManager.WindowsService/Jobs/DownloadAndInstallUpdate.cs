@@ -27,6 +27,8 @@ namespace DeviceManager.WindowsService.Jobs
         public JobType Type => JobType.InstallUpdate;
         public string Schedule { get; set; }
         public bool IsEnabled { get; set; }
+        public bool ExecuteNow { get; set; }
+        public bool IsAlreadyRunning { get; set; }
 
         public DownloadAndInstallUpdate(
             IUpdateChecker updater,
@@ -38,38 +40,13 @@ namespace DeviceManager.WindowsService.Jobs
 
         public async Task Execute()
         {
+            if (!ExecuteNow)
+            {
+                return;
+            }
+
             var installUpdateJob = DbContext.Jobs.Where(j => j.Type == JobType.InstallUpdate).FirstOrDefault();
-
-            if (installUpdateJob == null)
-            {
-                _logService.LogInformation("Could not find InstallUpdate job, exiting");
-                return;
-            }
-
-            var installUpdateJobDetail = DbContext.UpdateJobs.Where(j => j.Job == installUpdateJob && j.Status == JobStatus.Scheduled).FirstOrDefault();
-
-            if (installUpdateJobDetail == null)
-            {
-                _logService.LogError("No job detail found for InstallUpdate job, exiting");
-                return;
-            }
-
-            if (!installUpdateJob.IsEnabled) // job does not exist / is not enabled
-            {
-                installUpdateJobDetail.Info = "Job is not enabled, thus will not run";
-                installUpdateJobDetail.LastUpdate = DateTime.UtcNow;
-                installUpdateJobDetail.Status = JobStatus.Completed | JobStatus.Failed;
-                await DbContext.SaveChangesAsync();
-                _logService.LogInformation("InstallUpdate job is not enabled, exiting");
-                return;
-            }
-
-            if (installUpdateJobDetail.Status == JobStatus.Started)
-            {
-                _logService.LogInformation("InstallUpdate job is already running, exiting");
-                return;
-            }
-
+            var installUpdateJobDetail = DbContext.UpdateJobs.Where(j => j.Job == installUpdateJob && j.Status == JobStatus.UserTriggered).OrderByDescending(j => j.LastUpdate).FirstOrDefault();
             installUpdateJobDetail.Status = JobStatus.Started;
             installUpdateJobDetail.LastUpdate = DateTime.UtcNow;
             installUpdateJobDetail.Info = "Starting job";
@@ -106,7 +83,6 @@ namespace DeviceManager.WindowsService.Jobs
                 installUpdateJobDetail.Status = JobStatus.Completed | JobStatus.Succeeded;
                 installUpdateJobDetail.LastUpdate = DateTime.UtcNow;
                 installUpdateJobDetail.Info = "Update installation is completed successfully";
-                installUpdateJob.Schedule = "0 0 31 2 *";
                 await DbContext.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -115,7 +91,6 @@ namespace DeviceManager.WindowsService.Jobs
                 installUpdateJobDetail.Status = JobStatus.Completed | JobStatus.Failed;
                 installUpdateJobDetail.LastUpdate = DateTime.UtcNow;
                 installUpdateJobDetail.Info = "Error occured while installing update";
-                installUpdateJob.Schedule = "0 0 31 2 *";
                 await DbContext.SaveChangesAsync();
             }
         }

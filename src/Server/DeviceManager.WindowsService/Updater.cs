@@ -7,6 +7,7 @@ using DeviceManager.Service;
 using DeviceManager.WindowsService.Jobs;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Timers;
 
 namespace DeviceManager.WindowsService
@@ -27,7 +28,6 @@ namespace DeviceManager.WindowsService
         {
             _timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
             _timer.Interval = TimeSpan.FromMinutes(1).TotalMilliseconds;
-            _timer.Enabled = true;
             _timer.Start();
         }
 
@@ -37,13 +37,29 @@ namespace DeviceManager.WindowsService
 
             foreach (var job in jobs)
             {
+                // job is not enabled, therefore will never run
                 if (!job.IsEnabled)
                 {
                     continue;
                 }
 
+                // job is already running
+                if (job.IsAlreadyRunning)
+                {
+                    continue;
+                }
+
+                // job is triggered manually. execute immediately
+                if (job.ExecuteNow)
+                {
+                    await ExecuteJob(job);
+                    continue;
+                }
+
+                // job is enabled and is set to run automatically
                 bool scheduleIsValid = ScheduleParser.Check(job.Schedule).IsValid;
 
+                // invalid schedule. abort
                 if (!scheduleIsValid)
                 {
                     continue;
@@ -51,23 +67,19 @@ namespace DeviceManager.WindowsService
 
                 DateTime? nextOccurence = ScheduleParser.GetNextOccurence(job.Schedule);
 
+                // schedule shows no incoming executing time. abort
                 if (nextOccurence == null)
                 {
-                    return;
+                    continue;
                 }
 
+                // if it is time to run, execute the job
                 bool timeToRun = (DateTime.UtcNow - nextOccurence.Value).TotalMinutes == 0;
 
                 if (timeToRun)
                 {
-                    try
-                    {
-                        await job.Execute();
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogException(ex, $"Error occurred while executing job (type: {job.Type.ToString()} / {job.Type.GetDescription()})");
-                    }
+                    await ExecuteJob(job);
+                    continue;
                 }
             }
         }
@@ -76,6 +88,18 @@ namespace DeviceManager.WindowsService
         {
             _timer.Stop();
             _timer.Dispose();
+        }
+
+        private async Task ExecuteJob(IJob job)
+        {
+            try
+            {
+                await job.Execute();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogException(ex, $"Error occurred while executing job (type: {job.Type.ToString()} / {job.Type.GetDescription()})");
+            }
         }
     }
 }

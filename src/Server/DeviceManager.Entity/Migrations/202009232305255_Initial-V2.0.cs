@@ -1,19 +1,49 @@
-﻿// This file is part of Device Manager project released under GNU General Public License v3.0.
-// See file LICENSE.md or go to https://www.gnu.org/licenses/gpl-3.0.html for full license details.
-// Copyright © Hakan Yildizhan 2020.
-
-namespace DeviceManager.Entity.Migrations
+﻿namespace DeviceManager.Entity.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Identity : DbMigration
+    public partial class InitialV20 : DbMigration
     {
         public override void Up()
         {
-            RenameTable(name: "dbo.User", newName: "Client");
-            RenameColumn(table: "dbo.Session", name: "User_DomainUsername", newName: "Client_DomainUsername");
-            RenameIndex(table: "dbo.Session", name: "IX_User_DomainUsername", newName: "IX_Client_DomainUsername");
+            CreateTable(
+                "dbo.Client",
+                c => new
+                    {
+                        DomainUsername = c.String(nullable: false, maxLength: 128),
+                        FriendlyName = c.String(),
+                    })
+                .PrimaryKey(t => t.DomainUsername);
+            
+            CreateTable(
+                "dbo.Device",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Group = c.String(maxLength: 50),
+                        Name = c.String(nullable: false, maxLength: 50),
+                        HardwareInfo = c.String(nullable: false),
+                        Address = c.String(nullable: false),
+                        Address2 = c.String(),
+                        ConnectedModuleInfo = c.String(),
+                        IsActive = c.Boolean(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.Job",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Type = c.Int(nullable: false),
+                        IsIndependent = c.Boolean(nullable: false),
+                        Schedule = c.String(nullable: false),
+                        IsEnabled = c.Boolean(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .Index(t => t.Type, unique: true);
+            
             CreateTable(
                 "dbo.AspNetRoles",
                 c => new
@@ -36,6 +66,49 @@ namespace DeviceManager.Entity.Migrations
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
                 .Index(t => t.UserId)
                 .Index(t => t.RoleId);
+            
+            CreateTable(
+                "dbo.Session",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        StartedAt = c.DateTime(nullable: false),
+                        FinishedAt = c.DateTime(),
+                        IsActive = c.Boolean(nullable: false),
+                        Client_DomainUsername = c.String(nullable: false, maxLength: 128),
+                        Device_Id = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Client", t => t.Client_DomainUsername, cascadeDelete: true)
+                .ForeignKey("dbo.Device", t => t.Device_Id, cascadeDelete: true)
+                .Index(t => t.Client_DomainUsername)
+                .Index(t => t.Device_Id);
+            
+            CreateTable(
+                "dbo.Setting",
+                c => new
+                    {
+                        Name = c.String(nullable: false, maxLength: 128),
+                        Value = c.String(nullable: false),
+                        Description = c.String(),
+                    })
+                .PrimaryKey(t => t.Name);
+            
+            CreateTable(
+                "dbo.UpdateJob",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Status = c.Int(nullable: false),
+                        NewVersion = c.String(),
+                        Uri = c.String(),
+                        Info = c.String(),
+                        LastUpdate = c.DateTime(nullable: false),
+                        Job_Id = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Job", t => t.Job_Id, cascadeDelete: true)
+                .Index(t => t.Job_Id);
             
             CreateTable(
                 "dbo.AspNetUsers",
@@ -89,21 +162,31 @@ namespace DeviceManager.Entity.Migrations
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.UpdateJob", "Job_Id", "dbo.Job");
+            DropForeignKey("dbo.Session", "Device_Id", "dbo.Device");
+            DropForeignKey("dbo.Session", "Client_DomainUsername", "dbo.Client");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
+            DropIndex("dbo.UpdateJob", new[] { "Job_Id" });
+            DropIndex("dbo.Session", new[] { "Device_Id" });
+            DropIndex("dbo.Session", new[] { "Client_DomainUsername" });
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
+            DropIndex("dbo.Job", new[] { "Type" });
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
+            DropTable("dbo.UpdateJob");
+            DropTable("dbo.Setting");
+            DropTable("dbo.Session");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetRoles");
-            RenameIndex(table: "dbo.Session", name: "IX_Client_DomainUsername", newName: "IX_User_DomainUsername");
-            RenameColumn(table: "dbo.Session", name: "Client_DomainUsername", newName: "User_DomainUsername");
-            RenameTable(name: "dbo.Client", newName: "User");
+            DropTable("dbo.Job");
+            DropTable("dbo.Device");
+            DropTable("dbo.Client");
         }
     }
 }

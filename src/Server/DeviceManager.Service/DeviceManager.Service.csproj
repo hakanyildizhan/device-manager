@@ -105,7 +105,7 @@
   <ItemGroup>
     <Compile Include="Abstract\IDeviceService.cs" />
     <Compile Include="Abstract\IScheduleParser.cs" />
-    <Compile Include="Abstract\IUpdateService.cs" />
+    <Compile Include="Abstract\ITaskService.cs" />
     <Compile Include="CrontabParser.cs" />
     <Compile Include="Helper\ExtensionMethods.cs" />
     <Compile Include="Identity\Abstract\IIdentityService.cs" />
@@ -144,12 +144,13 @@
     <Compile Include="Model\Setting\UsagePromptDuration.cs" />
     <Compile Include="Model\Setting\UsagePromptInterval.cs" />
     <Compile Include="Model\UpdateInfo.cs" />
+    <Compile Include="Model\Validation\Schedule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helper\ServiceConstants.cs" />
     <Compile Include="SessionService.cs" />
     <Compile Include="SettingsService.cs" />
     <Compile Include="ClientService.cs" />
-    <Compile Include="UpdateService.cs" />
+    <Compile Include="TaskService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common\DeviceManager.Common\DeviceManager.Common.csproj">

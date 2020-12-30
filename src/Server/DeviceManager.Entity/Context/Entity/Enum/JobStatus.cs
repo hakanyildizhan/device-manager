@@ -7,13 +7,36 @@ using System;
 namespace DeviceManager.Entity.Context.Entity
 {
     [Flags]
-    public enum JobStatus
+    public enum JobStatus : int
     {
-        Registered = 0,
-        Scheduled = 1,
-        Started = 2,
-        Completed = 4,
-        Succeeded = 8,
-        Failed = 16
+        /// <summary>
+        /// Job is awaiting user confirmation to execute.
+        /// </summary>
+        Pending = 1,
+
+        /// <summary>
+        /// Job is triggered by the user to be executed immediately.
+        /// </summary>
+        UserTriggered = 2,
+
+        /// <summary>
+        /// Job is being executed.
+        /// </summary>
+        Started = 4,
+
+        /// <summary>
+        /// Job is completed.
+        /// </summary>
+        Completed = 8,
+
+        /// <summary>
+        /// Job is completed and is successful.
+        /// </summary>
+        Succeeded = 16,
+
+        /// <summary>
+        /// Job is completed and it failed.
+        /// </summary>
+        Failed = 32
     }
 }

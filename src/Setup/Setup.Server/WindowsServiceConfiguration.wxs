@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+         xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <Fragment>
+
+    
+    <!-- Components -->
+    <ComponentGroup Id="DeviceManagerWinServiceConfiguration">
+      <ComponentRef Id="WindowsService" />
+    </ComponentGroup>
+
+	  <DirectoryRef Id="INSTALLFOLDER_WINSERVICE">
+
+		  <Component Id="WindowsService" Guid="{0968AC0D-76FF-47F6-AE4C-2907B39B34F3}">
+
+			  <File Id="DeviceManager.WindowsService.exe" 
+					Source="$(var.WinServiceOutputPath)\DeviceManager.WindowsService.exe"
+					Name="DeviceManager.WindowsService.exe"
+					KeyPath="yes" />
+
+			  <ServiceInstall Name="Device Manager Service"
+							  Description="Performs tasks for the Device Manager Server software."
+							  Type="ownProcess" 
+							  Start="auto"
+							  ErrorControl="ignore" 
+							  Account="LocalSystem" 
+							  Vital="yes" >
+				  
+				  <util:ServiceConfig FirstFailureActionType="restart"
+									  SecondFailureActionType="restart"
+									  ThirdFailureActionType="restart" />
+			  </ServiceInstall>
+			  
+		  </Component>
+	  </DirectoryRef>
+  </Fragment>
+</Wix>

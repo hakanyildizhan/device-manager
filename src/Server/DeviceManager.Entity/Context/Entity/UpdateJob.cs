@@ -14,6 +14,7 @@ namespace DeviceManager.Entity.Context.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        [Required]
         public virtual Job Job { get; set; }
 
         [Required]

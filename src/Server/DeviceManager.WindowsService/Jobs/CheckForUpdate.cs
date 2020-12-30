@@ -27,6 +27,8 @@ namespace DeviceManager.WindowsService.Jobs
         public JobType Type => JobType.CheckUpdate;
         public string Schedule { get; set; }
         public bool IsEnabled { get; set; }
+        public bool ExecuteNow { get; set; }
+        public bool IsAlreadyRunning { get; set; }
 
         public CheckForUpdate(
             IUpdateChecker updater,
@@ -42,36 +44,32 @@ namespace DeviceManager.WindowsService.Jobs
         {
             try
             {
-                var updateJob = DbContext.Jobs.Where(j => j.Type == JobType.CheckUpdate).FirstOrDefault();
+                var updateJob = DbContext.Jobs.Where(j => j.Type == this.Type).FirstOrDefault();
+                UpdateJob updateJobDetail = null;
 
-                if (updateJob == null || !updateJob.IsEnabled) // job does not exist / is not enabled
+                if (ExecuteNow)
                 {
-                    _logService.LogInformation("CheckUpdate job is not enabled, exiting");
-                    return;
+                    updateJobDetail = DbContext.UpdateJobs.Where(j => j.Job == updateJob && j.Status == JobStatus.UserTriggered).OrderByDescending(j => j.LastUpdate).FirstOrDefault();
+                    updateJobDetail.Status = JobStatus.Started;
+                    updateJobDetail.Info = "Starting job via manual trigger";
+                    updateJobDetail.LastUpdate = DateTime.UtcNow;
+                }
+                else
+                {
+                    updateJobDetail = new UpdateJob()
+                    {
+                        Job = updateJob,
+                        Status = JobStatus.Started,
+                        Info = "Starting job",
+                        LastUpdate = DateTime.UtcNow
+                    };
+
+                    DbContext.UpdateJobs.Add(updateJobDetail);
                 }
 
-                // is there an already running job?
-                var updateJobDetail = DbContext.UpdateJobs.Where(j => j.Job == updateJob && j.Status == JobStatus.Started).FirstOrDefault();
-
-                if (updateJobDetail != null)
-                {
-                    _logService.LogInformation("CheckUpdate job is already running, exiting");
-                    return;
-                }
-
-                updateJobDetail = new UpdateJob()
-                {
-                    Job = updateJob,
-                    Status = JobStatus.Started,
-                    Info = "Starting job",
-                    LastUpdate = DateTime.UtcNow
-                };
-
-                DbContext.UpdateJobs.Add(updateJobDetail);
                 await DbContext.SaveChangesAsync();
-
                 string serverVersion = _settings.Get(ServiceConstants.Settings.VERSION);
-
+                
                 if (string.IsNullOrEmpty(serverVersion))
                 {
                     _logService.LogError("Cannot get server version. Aborting CheckUpdate");
@@ -116,12 +114,12 @@ namespace DeviceManager.WindowsService.Jobs
                 await DbContext.SaveChangesAsync();
 
                 // register an InstallUpdate job
-                // are there already existing installUpdate jobs?
+                // are there already existing incomplete installUpdate jobs?
 
                 var installUpdateJob = DbContext.Jobs.Where(j => j.Type == JobType.InstallUpdate).FirstOrDefault();
                 var installUpdateJobListDetail = DbContext.UpdateJobs
                                                 .Where(j => j.Job == installUpdateJob && 
-                                                    j.Status == JobStatus.Registered)
+                                                    !j.Status.HasFlag(JobStatus.Completed))
                                                 .ToList();
 
                 if (installUpdateJobListDetail.Any())
@@ -169,6 +167,7 @@ namespace DeviceManager.WindowsService.Jobs
 
                         var installUpdateJobDetail = registrationsForSameVersion.First();
                         _logService.LogInformation($"An update with version {updateCheckResult.Package.Version} found, previous registration of update version {installUpdateJobDetail.NewVersion} is updated");
+                        installUpdateJobDetail.Status = JobStatus.Pending;
                         installUpdateJobDetail.NewVersion = updateCheckResult.Package.Version.ToString();
                         installUpdateJobDetail.Uri = updateCheckResult.Package.Url;
                         installUpdateJobDetail.LastUpdate = DateTime.UtcNow;
@@ -182,7 +181,7 @@ namespace DeviceManager.WindowsService.Jobs
                     var installUpdateJobDetail = new UpdateJob()
                     {
                         Job = installUpdateJob,
-                        Status = JobStatus.Registered,
+                        Status = JobStatus.Pending,
                         NewVersion = updateCheckResult.Package.Version.ToString(),
                         Uri = updateCheckResult.Package.Url,
                         LastUpdate = DateTime.UtcNow,

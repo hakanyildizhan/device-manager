@@ -17,10 +17,13 @@ namespace DeviceManager.Entity.Context.Entity
         [Required, Index(IsUnique = true)]
         public JobType Type { get; set; }
 
+        [Required, DefaultValue(true)]
+        public bool IsIndependent { get; set; }
+
         [Required, DefaultValue("")]
         public string Schedule { get; set; }
 
-        [Required]
+        [Required, DefaultValue(true)]
         public bool IsEnabled { get; set; }
     }
 }

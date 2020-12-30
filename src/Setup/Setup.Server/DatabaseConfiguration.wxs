@@ -46,8 +46,8 @@
       <ComponentRef Id="SqlComponentRegistryEntries" />
     </ComponentGroup>
 
-    <Binary Id="TablesBin" SourceFile="Scripts/OnInstall/Tables_v1.0.0.0.sql"></Binary>
-    <Binary Id="DataBin" SourceFile="Scripts/OnInstall/Data_v1.0.0.0.sql"></Binary>
+    <Binary Id="TablesBin" SourceFile="Scripts/OnInstall/Tables_v2.0.0.sql"></Binary>
+    <Binary Id="DataBin" SourceFile="Scripts/OnInstall/Data_v2.0.0.sql"></Binary>
 
     <!-- On uninstall -->
     <Binary Id="DropDBBin" SourceFile="Scripts/OnUninstall/DropDatabase.sql"></Binary>

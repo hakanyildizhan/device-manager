@@ -12,9 +12,35 @@ namespace DeviceManager.WindowsService.Jobs
     /// </summary>
     public interface IJob
     {
+        /// <summary>
+        /// Type of the job. Each type of job should exist in the <see cref="Job"/> table.
+        /// </summary>
         JobType Type { get; }
+
+        /// <summary>
+        /// Schedule that this job follows to execute automatically.
+        /// </summary>
         string Schedule { get; set; }
+
+        /// <summary>
+        /// Only jobs that are in Enabled state are run.
+        /// </summary>
         bool IsEnabled { get; set; }
+
+        /// <summary>
+        /// Whether the user triggered the job manually.
+        /// </summary>
+        bool ExecuteNow { get; set; }
+
+        /// <summary>
+        /// Whether this job is already running.
+        /// </summary>
+        bool IsAlreadyRunning { get; set; }
+
+        /// <summary>
+        /// Executes the job.
+        /// </summary>
+        /// <returns></returns>
         Task Execute();
     }
 }

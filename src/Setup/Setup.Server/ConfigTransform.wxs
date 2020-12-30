@@ -3,22 +3,64 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 	<Fragment>
 
-    <ComponentGroup Id="TransformWebConfig" >
-      <ComponentRef Id="TransformWebConfigComponent" />
-    </ComponentGroup>
+		<ComponentGroup Id="TransformWebConfig" >
+			<ComponentRef Id="TransformWebConfigWinUser" />
+			<ComponentRef Id="TransformWebConfigSAUser" />
+		</ComponentGroup>
 
-    <!-- Default: C:\inetpub\wwwroot\DeviceManager-->
-    <DirectoryRef Id="INSTALLFOLDER">
+		<ComponentGroup Id="TransformAppConfig" >
+			<ComponentRef Id="TransformAppConfigWinUser" />
+			<ComponentRef Id="TransformAppConfigSAUser" />
+		</ComponentGroup>
 
-      <!-- Web.config transform - Windows authentication -->
-      <Component Id="TransformWebConfigComponent" KeyPath="yes" Guid="{3C3DA7D7-C280-4E8E-ABD0-4CA06F427D9B}">
-        <util:XmlFile Id="webconfigtransform" 
-                      File="[INSTALLFOLDER]Web.config" 
-                      Action="setValue" 
-                      ElementPath="/configuration/connectionStrings/add[\[]@name='DeviceManagerContext'[\]]/@connectionString"
-                      Value="Data Source=[DB_SERVER];Initial Catalog=DeviceManager;Integrated Security=SSPI;MultipleActiveResultSets=true;" Permanent="yes" />
-      </Component>
-      
-    </DirectoryRef>
+		<!-- Default: C:\inetpub\wwwroot\DeviceManager-->
+		<DirectoryRef Id="INSTALLFOLDER">
+
+			<!-- Web.config transform - Windows authentication -->
+			<Component Id="TransformWebConfigWinUser" KeyPath="yes" Guid="{3C3DA7D7-C280-4E8E-ABD0-4CA06F427D9B}">
+				<Condition><![CDATA[DB_AUTHENTICATIONMODE = "0"]]></Condition>
+				<util:XmlFile Id="webconfigsa"
+							  File="[INSTALLFOLDER]Web.config"
+							  Action="setValue"
+							  ElementPath="/configuration/connectionStrings/add[\[]@name='DeviceManagerContext'[\]]/@connectionString"
+							  Value="Data Source=[DB_SERVER];Initial Catalog=DeviceManager;Integrated Security=SSPI;MultipleActiveResultSets=true;" Permanent="yes" />
+			</Component>
+
+			<!-- Web.config transform - User authentication -->
+			<Component Id="TransformWebConfigSAUser" KeyPath="yes" Guid="{34FFA3E9-8D41-4B2D-86A3-F63FC71999A0}">
+				<Condition><![CDATA[DB_AUTHENTICATIONMODE = "1"]]></Condition>
+				<util:XmlFile Id="webconfigwin"
+							  File="[INSTALLFOLDER]Web.config"
+							  Action="setValue"
+							  ElementPath="/configuration/connectionStrings/add[\[]@name='DeviceManagerContext'[\]]/@connectionString"
+							  Value="Data Source=[DB_SERVER];Initial Catalog=DeviceManager;User Id=[DB_USER];Password=[DB_PASSWORD];MultipleActiveResultSets=true;" Permanent="yes" />
+			</Component>
+
+		</DirectoryRef>
+
+		<DirectoryRef Id="INSTALLFOLDER_WINSERVICE">
+
+			<!-- App.config transform - Windows authentication -->
+			<Component Id="TransformAppConfigWinUser" KeyPath="yes" Guid="{201EDEE6-A91C-4C0E-AC21-9DCF668048E1}">
+				<Condition><![CDATA[DB_AUTHENTICATIONMODE = "0"]]></Condition>
+				<util:XmlFile Id="appconfigwin"
+							  File="[INSTALLFOLDER_WINSERVICE]DeviceManager.WindowsService.exe.config"
+							  Action="setValue"
+							  ElementPath="/configuration/connectionStrings/add[\[]@name='DeviceManagerContext'[\]]/@connectionString"
+							  Value="Data Source=[DB_SERVER];Initial Catalog=DeviceManager;Integrated Security=SSPI;MultipleActiveResultSets=true;" Permanent="yes" />
+			</Component>
+
+			<!-- App.config transform - User authentication -->
+			<Component Id="TransformAppConfigSAUser" KeyPath="yes" Guid="{694E57BB-881F-41B6-A084-6B36A89F7A2B}">
+				<Condition><![CDATA[DB_AUTHENTICATIONMODE = "1"]]></Condition>
+				<util:XmlFile Id="appconfigsa"
+							  File="[INSTALLFOLDER_WINSERVICE]DeviceManager.WindowsService.exe.config"
+							  Action="setValue"
+							  ElementPath="/configuration/connectionStrings/add[\[]@name='DeviceManagerContext'[\]]/@connectionString"
+							  Value="Data Source=[DB_SERVER];Initial Catalog=DeviceManager;User Id=[DB_USER];Password=[DB_PASSWORD];MultipleActiveResultSets=true;" Permanent="yes" />
+			</Component>
+
+		</DirectoryRef>
+		
 	</Fragment>
 </Wix>

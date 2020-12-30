@@ -25,6 +25,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ConfigTransform.wxs" />
+    <Compile Include="GeneratedComponentsWinService.wxs" />
+    <Compile Include="WindowsServiceConfiguration.wxs" />
     <Compile Include="DatabaseConfiguration.wxs" />
     <Compile Include="DatabaseSettingsDlg.wxs" />
     <Compile Include="Directories.wxs" />
@@ -32,7 +34,6 @@
     <Compile Include="IISConfiguration.wxs" />
     <Compile Include="IISSettingsDlg.wxs" />
     <Compile Include="Product.wxs" />
-    <Compile Include="Update\1.1.0\DatabaseConfiguration.wxs" />
     <Compile Include="WixUI_DeviceManager_Server.wxs" />
   </ItemGroup>
   <ItemGroup>
@@ -59,18 +60,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="license.rtf" />
-    <Content Include="Scripts\OnInstall\Data_v1.1.0.sql" />
-    <Content Include="Scripts\OnInstall\Data_v1.0.0.0.sql" />
-    <Content Include="Scripts\OnInstall\Tables_v1.0.0.0.sql" />
+    <Content Include="Scripts\OnInstall\Data_v2.0.0.sql" />
+    <Content Include="Scripts\OnInstall\Tables_v2.0.0.sql" />
     <Content Include="Scripts\OnUninstall\DropDatabase.sql" />
     <Content Include="Scripts\OnUninstall\DropLogin.sql" />
+    <Content Include="Transform\RemoveServiceExecutable.xslt" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Transform" />
     <Folder Include="Update" />
     <Folder Include="Scripts" />
     <Folder Include="Scripts\OnInstall" />
     <Folder Include="Scripts\OnUninstall" />
-    <Folder Include="Update\1.1.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Setup.Server.CustomActions\DeviceManager.Setup.Server.CustomActions.csproj">
@@ -92,13 +93,15 @@
     <WebProjectPath>..\..\Server\$(WebProjectName)</WebProjectPath>
     <PublishPath>$(WebProjectPath)\bin\$(Configuration)\Publish</PublishPath>
     <PublishBinPath>$(PublishPath)\bin</PublishBinPath>
+    <WinServiceOutputPath>..\..\Server\DeviceManager.WindowsService\bin\$(Configuration)</WinServiceOutputPath>
   </PropertyGroup>
   <Target Name="BeforeBuild">
     <!-- Build all necessary projects -->
-    <MSBuild Projects="..\..\Server\DeviceManager.Entity\DeviceManager.Entity.csproj;&#xD;&#xA;                       ..\..\Server\DeviceManager.FileParsing\DeviceManager.FileParsing.csproj;&#xD;&#xA;                       ..\..\Server\DeviceManager.Service\DeviceManager.Service.csproj;&#xD;&#xA;                       $(WebProjectPath)\$(WebProjectName).csproj" Properties="Configuration=$(Configuration);Platform=AnyCPU;" Targets="Clean;Build" ContinueOnError="false" />
+    <MSBuild Projects="..\..\Server\DeviceManager.Entity\DeviceManager.Entity.csproj;&#xD;&#xA;			 ..\..\Common\DeviceManager.Common\DeviceManager.Common.csproj;&#xD;&#xA;			 ..\..\Server\DeviceManager.FileParsing\DeviceManager.FileParsing.csproj;&#xD;&#xA;			 ..\..\Server\DeviceManager.Service\DeviceManager.Service.csproj;&#xD;&#xA;			 $(WebProjectPath)\$(WebProjectName).csproj;&#xD;&#xA;			 ..\..\Common\DeviceManager.Update\DeviceManager.Update.csproj;&#xD;&#xA;			 ..\..\Server\DeviceManager.WindowsService\DeviceManager.WindowsService.csproj;" Properties="Configuration=$(Configuration);Platform=AnyCPU;" Targets="Clean;Build" ContinueOnError="false" />
+    <!--<MSBuild Projects="..\..\Server\DeviceManager.Server.sln" Properties="Configuration=$(Configuration);Platform=AnyCPU;PackageAsSingleFile=False;DeployOnBuild=False;" Targets="Clean;Build" ContinueOnError="false" />-->
     <!-- Publish main project -->
     <MSBuild Projects="$(WebProjectPath)\$(WebProjectName).csproj" Properties="Configuration=$(Configuration);Platform=AnyCPU;WebPublishMethod=FileSystem;DeleteExistingFiles=True;publishUrl=$(PublishPath);" Targets="WebPublish" ContinueOnError="false" />
-    <!-- Get assembly version -->
+    <!-- Get assembly version of web project -->
     <GetAssemblyIdentity AssemblyFiles="$(PublishBinPath)\DeviceManager.Api.dll">
       <Output TaskParameter="Assemblies" ItemName="AssemblyVersion" />
     </GetAssemblyIdentity>
@@ -110,12 +113,14 @@
       <PatchVersion>$(AssemblyVer.Split('.')[2])</PatchVersion>
       <ApplicationVersion>$(MajorVersion).$(MinorVersion).$(PatchVersion)</ApplicationVersion>
       <DefineConstants>
-        BuildVersion=$(ApplicationVersion);
-        PublishPath=..\..\Server\DeviceManager.Api\bin\$(Configuration)\Publish;
-      </DefineConstants>
+		  BuildVersion=$(ApplicationVersion);
+		  PublishPath=..\..\Server\DeviceManager.Api\bin\$(Configuration)\Publish;
+		  WinServiceOutputPath=..\..\Server\DeviceManager.WindowsService\bin\$(Configuration);
+	  </DefineConstants>
     </PropertyGroup>
     <!-- Harvest file components from bin\$(Configuration) folder -->
-    <HeatDirectory OutputFile="GeneratedComponents.wxs" DirectoryRefId="INSTALLFOLDER" ComponentGroupName="PublishedComponents" SuppressCom="true" SuppressUniqueIds="true" Directory="$(PublishPath)" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" AutoGenerateGuids="false" GenerateGuidsNow="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.PublishPath" />
+    <HeatDirectory OutputFile="GeneratedComponents.wxs" DirectoryRefId="INSTALLFOLDER" ComponentGroupName="PublishedComponents" SuppressCom="true" SuppressUniqueIds="false" Directory="$(PublishPath)" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" AutoGenerateGuids="false" GenerateGuidsNow="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.PublishPath" />
+    <HeatDirectory Transforms="Transform\RemoveServiceExecutable.xslt" OutputFile="GeneratedComponentsWinService.wxs" DirectoryRefId="INSTALLFOLDER_WINSERVICE" ComponentGroupName="PublishedComponentsWinService" SuppressCom="true" SuppressUniqueIds="false" Directory="$(WinServiceOutputPath)" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" AutoGenerateGuids="false" GenerateGuidsNow="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.WinServiceOutputPath" />
   </Target>
   <Target Name="AfterBuild">
     <!-- Get assembly version -->

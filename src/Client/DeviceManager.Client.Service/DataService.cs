@@ -32,7 +32,7 @@ namespace DeviceManager.Client.Service
         private async Task<string> GetApiAddress()
         {
 #if DEBUG
-            string serverAddress = "http://localhost:8070/";
+            string serverAddress = "http://localhost/DeviceManager";
 #else
             string serverAddress = await _configService.GetServerAddressAsync();
 #endif

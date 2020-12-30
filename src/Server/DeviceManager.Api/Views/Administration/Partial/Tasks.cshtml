@@ -1,0 +1,104 @@
+﻿@using DeviceManager.Service.Model
+
+@model IList<ScheduledTask>
+
+<div class="col-lg-10 content">
+    <h2>Server Settings</h2>
+    @using (Html.BeginForm("UpdateTasks", "Administration", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="content">
+            <p>This is a list of jobs that run on their defined schedules.</p>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col" hidden="hidden">Job Id</th>
+                        <th scope="col">Job title</th>
+                        <th scope="col">Crontab schedule</th>
+                        <th scope="col">Enabled</th>
+                        <th scope="col">Last run time</th>
+                        <th scope="col">Last run status</th>
+                        <th scope="col">Last run info</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        bool triggerButtonIsDisabled = !@Model[i].CanBeTriggeredManually;
+                        <tr>
+                            <th scope="row">@(i+1)</th>
+                            <td class="task-id" hidden="hidden">@Html.HiddenFor(m => m[i].Id)</td>
+                            <td>@Model[i].Title</td>
+                            <td>@Html.TextBoxFor(m => m[i].Schedule)</td>
+                            <td>@Html.DropDownListFor(m => m[i].IsEnabled, new SelectList(
+                                    new[]
+                                    {
+                                        new { Value = "true", Text = "Yes" },
+                                        new { Value = "false", Text = "No" }
+                                    },
+                                    "Value",
+                                    "Text",
+                                    Model[i].IsEnabled
+                                ))
+                            </td>
+                            <td>@Model[i].LastRun</td>
+                            <td>@Model[i].LastRunStatus</td>
+                            <td>@Model[i].LastRunInformation</td>
+                            <td>@using (Html.BeginForm("ExecuteTask", "Administration", FormMethod.Post, new { @class = "executeTask", enctype = "multipart/form-data" }))
+                                {
+                                    <button disabled="@triggerButtonIsDisabled" class="btn-primary" type="submit">Run now</button>
+                                }
+                            </td>
+                            <td class="error-message" style="color:red;"></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="form-group single-button-container">
+            <input type="submit" value="Update Tasks" class="form-control btn btn-primary" />
+        </div>
+    }
+</div>
+
+<script type="text/javascript">
+
+    $('.executeTask').submit(function (e) {
+        e.preventDefault();
+
+        var taskId = $(this).parent().parent().find('td.task-id')[0].innerText;
+
+        if (!taskId) {
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append('taskId', taskId);
+
+        $.ajax({
+            url: this.action,
+            type: 'POST',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                if (data.Error === false) {
+                    window.location.href = "@Url.Action("Configuration", "Administration")";
+                }
+                else {
+                    $(this).parent().parent().find('td.error-message')[0].innerText = "Error occurred while running this task.";
+                }
+            },
+            error: function (xhr, error, status) {
+                $(this).parent().parent().find('td.error-message')[0].innerText = "Error occurred while running this task.";
+            }
+        });
+    }
+
+</script>

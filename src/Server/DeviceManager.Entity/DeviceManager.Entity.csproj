@@ -71,45 +71,9 @@
     <Compile Include="Context\DeviceManagerContext.cs" />
     <Compile Include="Context\Entity\Identity\UserAccount.cs" />
     <Compile Include="Context\Entity\UpdateJob.cs" />
-    <Compile Include="Migrations\202003172007444_InitialCreate.cs" />
-    <Compile Include="Migrations\202003172007444_InitialCreate.designer.cs">
-      <DependentUpon>202003172007444_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202003181531556_ImprovedModels.cs" />
-    <Compile Include="Migrations\202003181531556_ImprovedModels.designer.cs">
-      <DependentUpon>202003181531556_ImprovedModels.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202003190702036_OrderNumbers.cs" />
-    <Compile Include="Migrations\202003190702036_OrderNumbers.designer.cs">
-      <DependentUpon>202003190702036_OrderNumbers.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202003201517589_DefaultValues.cs" />
-    <Compile Include="Migrations\202003201517589_DefaultValues.designer.cs">
-      <DependentUpon>202003201517589_DefaultValues.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202003252030181_NullableSessionFinishTime.cs" />
-    <Compile Include="Migrations\202003252030181_NullableSessionFinishTime.designer.cs">
-      <DependentUpon>202003252030181_NullableSessionFinishTime.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202003291927348_ModelGeneralization.cs" />
-    <Compile Include="Migrations\202003291927348_ModelGeneralization.designer.cs">
-      <DependentUpon>202003291927348_ModelGeneralization.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202003311515416_DeviceIsActive.cs" />
-    <Compile Include="Migrations\202003311515416_DeviceIsActive.designer.cs">
-      <DependentUpon>202003311515416_DeviceIsActive.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202004010955138_Settings.cs" />
-    <Compile Include="Migrations\202004010955138_Settings.designer.cs">
-      <DependentUpon>202004010955138_Settings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202004171059111_Identity.cs" />
-    <Compile Include="Migrations\202004171059111_Identity.designer.cs">
-      <DependentUpon>202004171059111_Identity.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202007282136345_DeviceGroupAndNameUniqueConstraint.cs" />
-    <Compile Include="Migrations\202007282136345_DeviceGroupAndNameUniqueConstraint.designer.cs">
-      <DependentUpon>202007282136345_DeviceGroupAndNameUniqueConstraint.cs</DependentUpon>
+    <Compile Include="Migrations\202009232305255_Initial-V2.0.cs" />
+    <Compile Include="Migrations\202009232305255_Initial-V2.0.designer.cs">
+      <DependentUpon>202009232305255_Initial-V2.0.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -119,35 +83,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202003172007444_InitialCreate.resx">
-      <DependentUpon>202003172007444_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202003181531556_ImprovedModels.resx">
-      <DependentUpon>202003181531556_ImprovedModels.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202003190702036_OrderNumbers.resx">
-      <DependentUpon>202003190702036_OrderNumbers.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202003201517589_DefaultValues.resx">
-      <DependentUpon>202003201517589_DefaultValues.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202003252030181_NullableSessionFinishTime.resx">
-      <DependentUpon>202003252030181_NullableSessionFinishTime.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202003291927348_ModelGeneralization.resx">
-      <DependentUpon>202003291927348_ModelGeneralization.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202003311515416_DeviceIsActive.resx">
-      <DependentUpon>202003311515416_DeviceIsActive.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202004010955138_Settings.resx">
-      <DependentUpon>202004010955138_Settings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202004171059111_Identity.resx">
-      <DependentUpon>202004171059111_Identity.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202007282136345_DeviceGroupAndNameUniqueConstraint.resx">
-      <DependentUpon>202007282136345_DeviceGroupAndNameUniqueConstraint.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202009232305255_Initial-V2.0.resx">
+      <DependentUpon>202009232305255_Initial-V2.0.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -313,7 +313,9 @@
     <Content Include="Views\Administration\Partial\HardwareAdd.cshtml" />
     <Content Include="Views\Administration\Partial\HardwareUpdate.cshtml" />
     <Content Include="Views\Administration\Partial\HardwareDelete.cshtml" />
-    <Content Include="Views\Administration\Settings.cshtml" />
+    <Content Include="Views\Administration\Configuration.cshtml" />
+    <Content Include="Views\Administration\Partial\Settings.cshtml" />
+    <Content Include="Views\Administration\Partial\Tasks.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common\DeviceManager.Common\DeviceManager.Common.csproj">

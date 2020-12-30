@@ -7,13 +7,13 @@ namespace DeviceManager.Entity.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.0")]
-    public sealed partial class DeviceGroupAndNameUniqueConstraint : IMigrationMetadata
+    public sealed partial class InitialV20 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(DeviceGroupAndNameUniqueConstraint));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialV20));
         
         string IMigrationMetadata.Id
         {
-            get { return "202007282136345_DeviceGroupAndNameUniqueConstraint"; }
+            get { return "202009232305255_Initial-V2.0"; }
         }
         
         string IMigrationMetadata.Source

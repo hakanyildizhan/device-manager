@@ -15,36 +15,64 @@ using Unity;
 
 namespace DeviceManager.Service
 {
-    public class UpdateService : IUpdateService
+    public class TaskService : ITaskService
     {
         [Dependency]
         public DeviceManagerContext DbContext { get; set; }
 
         private readonly ILogService _logService;
 
-        public UpdateService(ILogService<UpdateService> logService)
+        public TaskService(ILogService<TaskService> logService)
         {
             _logService = logService;
         }
 
-        public async Task<bool> ScheduleUpdate()
+        public async Task<bool> TriggerManually(int taskId)
         {
             try
             {
-                var installUpdateJob = DbContext.Jobs.Where(j => j.Type == JobType.InstallUpdate).FirstOrDefault();
-                var installUpdateJobDetail = DbContext.UpdateJobs.Where(j => j.Job == installUpdateJob && j.Status == JobStatus.Registered).FirstOrDefault();
-
-                if (installUpdateJobDetail == null)
+                if (!CanBeTriggeredManually(taskId))
                 {
-                    _logService.LogError("ScheduleUpdate failed. No job is registered yet");
                     return false;
                 }
 
-                installUpdateJobDetail.LastUpdate = DateTime.UtcNow;
-                installUpdateJobDetail.Status = JobStatus.Scheduled;
-                installUpdateJobDetail.Info = "Update scheduled by user";
+                var job = DbContext.Jobs.Where(j => j.Id == taskId).FirstOrDefault();
+
+                if (job == null)
+                {
+                    _logService.LogError($"Job with ID {taskId} was not found.");
+                    return false;
+                }
+
+                UpdateJob jobDetail = null;
+
+                if (job.IsIndependent)
+                {
+                    jobDetail = new UpdateJob();
+                    jobDetail.Job = job;
+                    jobDetail.LastUpdate = DateTime.UtcNow;
+                    jobDetail.Status = JobStatus.UserTriggered;
+                    jobDetail.Info = "Job triggered by user";
+                    DbContext.UpdateJobs.Add(jobDetail);
+                }
+                else
+                {
+                    jobDetail = DbContext.UpdateJobs.Where(j => j.Job == job && j.Status == JobStatus.Pending)
+                    .OrderByDescending(j => j.LastUpdate).FirstOrDefault();
+
+                    if (jobDetail == null)
+                    {
+                        _logService.LogError("Job could not be triggered manually. No job is registered yet");
+                        return false;
+                    }
+
+                    jobDetail.LastUpdate = DateTime.UtcNow;
+                    jobDetail.Status = JobStatus.UserTriggered;
+                    jobDetail.Info = "Job triggered by user";
+                }
+
                 await DbContext.SaveChangesAsync();
-                _logService.LogInformation($"Update ({installUpdateJobDetail.NewVersion}) is scheduled");
+                _logService.LogInformation($"Update ({jobDetail.NewVersion}) is scheduled");
                 return true;
             }
             catch (Exception ex)
@@ -103,12 +131,22 @@ namespace DeviceManager.Service
 
             foreach (var job in jobs)
             {
+                UpdateJob jobDetail = null;
+                if (job.Type == JobType.CheckUpdate || job.Type == JobType.InstallUpdate)
+                {
+                    jobDetail = DbContext.UpdateJobs.Where(u => u.Job == job).OrderByDescending(u => u.LastUpdate).FirstOrDefault();
+                }
+
                 taskList.Add(new ScheduledTask()
                 {
                     Id = job.Id,
                     IsEnabled = job.IsEnabled,
+                    CanBeTriggeredManually = CanBeTriggeredManually(job.Id),
                     Schedule = job.Schedule,
-                    Title = job.Type.GetDescription()
+                    Title = job.Type.GetDescription(),
+                    LastRun = jobDetail?.LastUpdate,
+                    LastRunInformation = jobDetail?.Info,
+                    LastRunStatus = jobDetail == null ? "Not Run" : jobDetail.Status.ToString()
                 });
             }
 
@@ -137,6 +175,33 @@ namespace DeviceManager.Service
             {
                 _logService.LogException(ex, "An error occurred while updating task list");
                 return false;
+            }
+        }
+
+        public bool CanBeTriggeredManually(int taskId)
+        {
+            var job = DbContext.Jobs.SingleOrDefault(j => j.Id == taskId);
+
+            if (job == null)
+            {
+                return false;
+            }
+
+            var jobDetail = DbContext.UpdateJobs.Where(u => u.Job == job)
+                    .OrderByDescending(u => u.LastUpdate)
+                    .FirstOrDefault();
+
+            // Independent jobs do not require a prep-job to be completed beforehand.
+            // Dependent jobs need to be in Pending state; other states will indicate that the job is already running,
+            // or the prep-job was not run in the first place.
+            // For both cases, no other job of the same type should be already running.
+            if (job.IsIndependent)
+            {
+                return jobDetail == null || (jobDetail != null && jobDetail.Status.HasFlag(JobStatus.Completed));
+            }
+            else
+            {
+                return jobDetail != null && jobDetail.Status == JobStatus.Pending;
             }
         }
     }

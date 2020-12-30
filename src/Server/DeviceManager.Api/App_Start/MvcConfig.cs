@@ -35,7 +35,9 @@ namespace DeviceManager.Api
             container.RegisterType<ISessionService, SessionService>(new TransientLifetimeManager());
             container.RegisterType<IClientService, ClientService>(new TransientLifetimeManager());
             container.RegisterType<ISettingsService, SettingsService>(new TransientLifetimeManager());
-            container.RegisterType(typeof(ILogService<>), typeof(NLogLogger<>));
+            container.RegisterSingleton(typeof(ILogService<>), typeof(NLogLogger<>));
+            container.RegisterType<IScheduleParser, CrontabParser>();
+            container.RegisterType<ITaskService, TaskService>();
             container.RegisterFactory<IAuthenticationManager>(c => HttpContext.Current.GetOwinContext().Authentication);
             IdentityStartup.RegisterServices(container);
             DependencyResolver.SetResolver(new UnityResolverMVC(container));

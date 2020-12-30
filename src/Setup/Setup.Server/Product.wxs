@@ -24,12 +24,12 @@
     <!-- Then in order to deliver minor updates again: -->
     <!-- - Uncomment RemoveExistingProducts tag -->
     <!-- - Up the UpgradeVersions below accordingly -->
-		<!--<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed. Setup will now exit." />-->
+	<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed. Setup will now exit." />
 
     <!-- This is for minor updates to get installed side by side -->
     <!-- Always up these versions to the Current product version -->
     <!-- Comment it when delivering a major upgrade -->
-    <Upgrade Id='4AD49979-E74E-4BEE-9930-1389557CF69C'>
+    <!--<Upgrade Id='4AD49979-E74E-4BEE-9930-1389557CF69C'>
       <UpgradeVersion OnlyDetect='yes' Property='SELFFOUND'
           Minimum='$(var.BuildVersion)' IncludeMinimum='yes'
           Maximum='$(var.BuildVersion)' IncludeMaximum='yes' />
@@ -37,7 +37,7 @@
           Minimum='$(var.BuildVersion)' IncludeMinimum='no' />
       <UpgradeVersion OnlyDetect='yes' Property='OLDERFOUND'
           Maximum='$(var.BuildVersion)' IncludeMaximum='no' />
-    </Upgrade>
+    </Upgrade>-->
 
     <InstallExecuteSequence>
       <Custom Action='AlreadyUpdated' After='FindRelatedProducts'>SELFFOUND</Custom>
@@ -78,10 +78,20 @@
              Display='expand'>
 
       <ComponentGroupRef Id="DeviceManagerDatabaseConfiguration" />
-      
-      <!-- Version 1.1.0 -->
-      <ComponentGroupRef Id="Version110DatabaseConfiguration" />
     </Feature>
+
+	<!-- Feature for Windows service files -->
+	<Feature Id="WindowsServiceFeature"
+			Title="Windows service"
+			Description="Installs service components in order to perform tasks (i.e. update) regularly."
+			Display='expand'
+			ConfigurableDirectory='INSTALLFOLDER_WINSERVICE'
+            >
+
+		<ComponentGroupRef Id="PublishedComponentsWinService" />
+		<ComponentGroupRef Id="TransformAppConfig" />
+		<ComponentGroupRef Id="DeviceManagerWinServiceConfiguration"/>
+	</Feature>
 
     <!-- Define main app icon -->
     <Icon Id="icon.ico" SourceFile="$(var.PublishPath)\Content\Images\icon.ico" />

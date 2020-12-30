@@ -23,17 +23,20 @@ namespace DeviceManager.Api.Controllers
         private readonly ILogService _logService;
         private readonly IDeviceService _deviceService;
         private readonly ISessionService _sessionService;
+        private readonly ITaskService _taskService;
 
         public AdministrationController(
             ISettingsService settingsService,
             ILogService<AdministrationController> logService,
             IDeviceService deviceListService,
-            ISessionService sessionService)
+            ISessionService sessionService,
+            ITaskService taskService)
         {
             _settingsService = settingsService;
             _logService = logService;
             _deviceService = deviceListService;
             _sessionService = sessionService;
+            _taskService = taskService;
         }
 
         // GET: Index
@@ -42,13 +45,25 @@ namespace DeviceManager.Api.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // GET: Settings
-        public async Task<ActionResult> Settings()
+        // GET: Configuration
+        public ActionResult Configuration()
         {
-            ViewBag.ActivePage = "Settings";
+            ViewBag.ActivePage = "Configuration";
+            return View();
+        }
 
+        // PartialView: Settings
+        public async Task<PartialViewResult> Settings()
+        {
             var settings = await _settingsService.GetDetailedAsync();
-            return View(settings);
+            return PartialView("~/Views/Administration/Partial/Settings", settings);
+        }
+
+        // PartialView: Tasks
+        public PartialViewResult Tasks()
+        {
+            var tasks = _taskService.GetTaskList();
+            return PartialView("~/Views/Administration/Partial/Tasks", tasks);
         }
 
         // GET: Import
@@ -78,12 +93,51 @@ namespace DeviceManager.Api.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.ActivePage = "Settings";
-                return View("Settings", settings);
+                ViewBag.ActivePage = "Configuration";
+                return View("Configuration", settings);
             }
 
             await _settingsService.UpdateAsync(settings);
-            return RedirectToAction("Settings");
+            return RedirectToAction("Configuration");
+        }
+
+        // POST: UpdateTasks
+        /// <summary>
+        /// Updates tasks according to the changes made on the UI.
+        /// </summary>
+        /// <param name="tasks"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UpdateTasks(IList<ScheduledTask> tasks)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ActivePage = "Configuration";
+                return View("Configuration", tasks);
+            }
+
+            await _taskService.UpdateTaskList(tasks);
+            return RedirectToAction("Configuration");
+        }
+
+        public async Task<JsonResult> ExecuteTask(string taskId)
+        {
+            int id;
+            if (string.IsNullOrEmpty(taskId) || !int.TryParse(taskId, out id))
+            {
+                return Json(new
+                {
+                    Error = true,
+                    Message = "Invalid task ID."
+                });
+            }
+
+            bool result = await _taskService.TriggerManually(id);
+            return Json(new
+            {
+                Error = !result
+            });
         }
 
         // POST: UpdateHardware

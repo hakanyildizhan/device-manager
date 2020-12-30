@@ -1,21 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Fragment>
+	<Fragment>
 
-    <!-- Will default to C:\ if that is the main disk-->
-    <Directory Id="TARGETDIR" Name="SourceDir">
+		<!-- Will default to C:\ if that is the main disk-->
+		<Directory Id="TARGETDIR" Name="SourceDir">
 
-      <!-- Default: C:\inetpub\wwwroot-->
-      <Directory Id="IISROOT" Name='WebDir'>
+			<!-- Default: C:\inetpub\wwwroot-->
+			<Directory Id="IISROOT" Name='WebDir'>
 
-        <!-- Default: C:\inetpub\wwwroot\DeviceManager-->
-        <Directory Id="INSTALLFOLDER" Name="DeviceManager" />
+				<!-- Default: C:\inetpub\wwwroot\DeviceManager-->
+				<Directory Id="INSTALLFOLDER" Name="DeviceManager" />
 
-      </Directory>
-    </Directory>
+			</Directory>
 
-    <!-- Installed files -->
-    <DirectoryRef Id="INSTALLFOLDER" FileSource="..\..\Server\DeviceManager.Api\bin\$(var.Configuration)\Publish\"/>
+			<!-- Default: C:\Program Files (x86) -->
+			<Directory Id="ProgramFilesFolder">
+				
+				<!-- Default: C:\Program Files (x86)\Device Manager Service -->
+				<Directory Id="INSTALLFOLDER_WINSERVICE" Name="Device Manager Service" />
+				
+			</Directory>
+			
+		</Directory>
 
-  </Fragment>
+		<!-- Installed files -->
+		<DirectoryRef Id="INSTALLFOLDER" FileSource="..\..\Server\DeviceManager.Api\bin\$(var.Configuration)\Publish\"/>
+
+		<!-- Windows service files -->
+		<DirectoryRef Id="INSTALLFOLDER_WINSERVICE" FileSource="..\..\Server\DeviceManager.WindowsService\bin\$(var.Configuration)\"/>
+		
+	</Fragment>
 </Wix>
