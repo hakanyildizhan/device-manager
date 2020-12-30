@@ -20,6 +20,7 @@
     <WixVariables>
     </WixVariables>
     <Cultures>en-US</Cultures>
+    <SuppressIces>ICE38;ICE64</SuppressIces>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>

@@ -121,7 +121,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 if (_usedBy != value)
                 {
                     _usedBy = value;
-                    UsedByMe = _usedBy == Utility.GetCurrentUserName();
+                    UsedByMe = Utility.IsSameUser(_usedBy, Utility.GetCurrentUserName());
                     OnPropertyChanged(nameof(UsedBy));
                     OnPropertyChanged(nameof(UsedByMe));
                     OnPropertyChanged(nameof(Tooltip));
@@ -407,7 +407,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 // Info about user that has the item checked out
                 sbTooltip.Append("Checked out by: ");
 
-                if (this.UsedBy == Utility.GetCurrentUserName())
+                if (Utility.IsSameUser(this.UsedBy, Utility.GetCurrentUserName()))
                 {
                     sbTooltip.Append("Me");
                 }

@@ -10,9 +10,24 @@ namespace DeviceManager.Client.Service
 {
     public static class Utility
     {
+        /// <summary>
+        /// Gets the full name of the current Windows user.
+        /// </summary>
+        /// <returns></returns>
         public static string GetCurrentUserName()
         {
             return System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+        }
+
+        /// <summary>
+        /// Compares two user names and returns true if both point to the same user.
+        /// </summary>
+        /// <param name="userName1"></param>
+        /// <param name="userName2"></param>
+        /// <returns></returns>
+        public static bool IsSameUser(string userName1, string userName2)
+        {
+            return string.Compare(userName1, userName2, StringComparison.OrdinalIgnoreCase) == 0;
         }
 
         /// <summary>
