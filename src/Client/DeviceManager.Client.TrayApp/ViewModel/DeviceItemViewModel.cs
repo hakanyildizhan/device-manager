@@ -24,7 +24,12 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         private IConfigurationService _configService => (IConfigurationService)ServiceProvider.GetService<IConfigurationService>();
 
         private string _deviceName;
-        private string _header;
+        private string _header1;
+        private string _header2;
+        private string _header3;
+        private int _header1Width;
+        private int _header2Width;
+        private int _header3Width;
         private bool _isAvailable;
         private string _usedBy;
         private bool _usedByMe;
@@ -75,7 +80,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         public int UsagePromptDuration => _configService.GetUsagePromptDuration();
 
         /// <summary>
-        /// Only the hardware item name part of <see cref="Name"/> shown on the menu item.
+        /// Name of this item.
         /// </summary>
         public string DeviceName
         {
@@ -91,17 +96,97 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         }
 
         /// <summary>
-        /// Header that will be shown on the menu item. This will include name, hardware info as well as address information.
+        /// First part of the header for the menu item that represents this item.
         /// </summary>
-        public string Header
+        public string Header1
         {
-            get { return _header; }
+            get { return _header1; }
             set
             {
-                if (_header != value)
+                if (_header1 != value)
                 {
-                    _header = value;
-                    OnPropertyChanged(nameof(Header));
+                    _header1 = value;
+                    OnPropertyChanged(nameof(Header1));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Width of <see cref="Header1"/>.
+        /// </summary>
+        public int Header1Width
+        {
+            get { return _header1Width; }
+            set
+            {
+                if (_header1Width != value)
+                {
+                    _header1Width = value;
+                    OnPropertyChanged(nameof(Header1Width));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Second part of the header for the menu item that represents this item.
+        /// </summary>
+        public string Header2
+        {
+            get { return _header2; }
+            set
+            {
+                if (_header2 != value)
+                {
+                    _header2 = value;
+                    OnPropertyChanged(nameof(Header2));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Width of <see cref="Header2"/>.
+        /// </summary>
+        public int Header2Width
+        {
+            get { return _header2Width; }
+            set
+            {
+                if (_header2Width != value)
+                {
+                    _header2Width = value;
+                    OnPropertyChanged(nameof(Header2Width));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Third part of the header for the menu item that represents this item.
+        /// </summary>
+        public string Header3
+        {
+            get { return _header3; }
+            set
+            {
+                if (_header3 != value)
+                {
+                    _header3 = value;
+                    OnPropertyChanged(nameof(Header3));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Width of <see cref="Header3"/>.
+        /// </summary>
+        public int Header3Width
+        {
+            get { return _header3Width; }
+            set
+            {
+                if (_header3Width != value)
+                {
+                    _header3Width = value;
+                    OnPropertyChanged(nameof(Header3Width));
                 }
             }
         }

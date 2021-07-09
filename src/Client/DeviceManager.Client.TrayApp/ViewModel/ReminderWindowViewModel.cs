@@ -22,7 +22,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         /// </summary>
         private Window _window;
 
-        private string _deviceNameOnPrompt => DeviceItem?.Header.Replace("\t", "  ");
+        private string _deviceNameOnPrompt => DeviceItem?.DeviceName;
         private Timer _promptActiveTimer;
         private int _promptTimeout;
         private DeviceItemViewModel _deviceItem;

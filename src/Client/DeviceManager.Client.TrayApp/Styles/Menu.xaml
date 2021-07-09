@@ -120,7 +120,9 @@ Copyright © Hakan Yildizhan 2020.
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition MinWidth="22" SharedSizeGroup="MenuItemIconColumnGroup" Width="Auto"/>
                                 <ColumnDefinition Width="13"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="{Binding Header1Width}" />
+                                <ColumnDefinition Width="{Binding Header2Width}" />
+                                <ColumnDefinition Width="{Binding Header3Width}" />
                                 <ColumnDefinition Width="30"/>
                                 <ColumnDefinition SharedSizeGroup="MenuItemIGTColumnGroup" Width="Auto"/>
                                 <ColumnDefinition Width="20"/>
@@ -175,22 +177,52 @@ Copyright © Hakan Yildizhan 2020.
                                       Width="10"
                                     />
                             </Border>
+
+                            <!-- Header 1 -->
                             <ContentPresenter 
-                                    x:Name="menuHeaderContainer" 
-                                    ContentTemplate="{TemplateBinding HeaderTemplate}" 
-                                    Content="{TemplateBinding Header}" 
-                                    Grid.Column="2" 
-                                    ContentStringFormat="{TemplateBinding HeaderStringFormat}" 
-                                    ContentSource="Header" 
-                                    HorizontalAlignment="Left" 
-                                    Margin="{TemplateBinding Padding}"  
-                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
-                                    VerticalAlignment="Center"
-                                    />
+                                x:Name="Header1" 
+                                ContentTemplate="{TemplateBinding HeaderTemplate}" 
+                                Content="{Binding Header1}" 
+                                Grid.Column="2"
+                                ContentStringFormat="{TemplateBinding HeaderStringFormat}" 
+                                ContentSource="Header1" 
+                                HorizontalAlignment="Left"
+                                Margin="{TemplateBinding Padding}"  
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                VerticalAlignment="Center"
+                                />
+
+                            <!-- Header 2 -->
+                            <ContentPresenter 
+                                x:Name="Header2" 
+                                ContentTemplate="{TemplateBinding HeaderTemplate}" 
+                                Content="{Binding Header2}" 
+                                Grid.Column="3"
+                                ContentStringFormat="{TemplateBinding HeaderStringFormat}" 
+                                ContentSource="Header2" 
+                                HorizontalAlignment="Left"
+                                Margin="{TemplateBinding Padding}"  
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                VerticalAlignment="Center"
+                                />
+
+                                <!--Header 3--> 
+                            <ContentPresenter 
+                                x:Name="Header3" 
+                                ContentTemplate="{TemplateBinding HeaderTemplate}" 
+                                Content="{Binding Header3}" 
+                                Grid.Column="4"
+                                ContentStringFormat="{TemplateBinding HeaderStringFormat}" 
+                                ContentSource="Header3" 
+                                HorizontalAlignment="Left"
+                                Margin="{TemplateBinding Padding}"  
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                VerticalAlignment="Center"
+                                />
 
                             <TextBlock 
                                     x:Name="menuGestureText" 
-                                    Grid.Column="4" Margin="{TemplateBinding Padding}" 
+                                    Grid.Column="6" Margin="{TemplateBinding Padding}" 
                                     Opacity="0.7" 
                                     Text="{TemplateBinding InputGestureText}" 
                                     VerticalAlignment="Center"/>

@@ -220,7 +220,9 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                     App.Current.Dispatcher.Invoke((Action)delegate
                     {
                         TeardownDeviceList();
-                        devices.MapDeviceToViewModel().ToList().ForEach(d =>
+                        devices.MapDeviceToViewModel(_configService.Get(ServiceConstants.Settings.HEADER_FORMAT))
+                            .ToList()
+                            .ForEach(d =>
                         {
                             d.DeviceList.ToList().ForEach(di => 
                             {
