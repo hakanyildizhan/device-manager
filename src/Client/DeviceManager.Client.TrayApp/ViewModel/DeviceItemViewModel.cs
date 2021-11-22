@@ -200,13 +200,15 @@ namespace DeviceManager.Client.TrayApp.ViewModel
         public ICommand CheckoutOrReleaseCommand { get; set; }
         public ICommand CopyClipboardToDeviceInfo { get; set; }
 
+        public string ClipboardString { get { return this.Header.Replace("\t", " ") + " " + this.Tooltip; } }
+
         public DeviceItemViewModel()
         {
             CheckoutOrReleaseCommand = new RelayCommand(async () => await CheckoutOrReleaseAsync());
 
             CopyClipboardToDeviceInfo = new RelayCommand(async () =>
             {
-                Clipboard.SetText(this.Header.Replace("\t", " ") + " " + this.Tooltip);
+                Clipboard.SetText(ClipboardString);
             });
         }
 

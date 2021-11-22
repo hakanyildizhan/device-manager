@@ -262,5 +262,8 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\icon_offline.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\copy.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

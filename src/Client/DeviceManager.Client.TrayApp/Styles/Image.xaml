@@ -31,7 +31,7 @@ Copyright © Hakan Yildizhan 2020.
     <BitmapImage x:Key="CopyImage" UriSource="/Resources/Images/copy.png" />
 
 
-    <!-- Reminder window images -->
+    <!-- Reminder window images --> 
     <BitmapImage x:Key="QuestionMarkImage" UriSource="/Resources/Images/questionmark.png" />
 
 </ResourceDictionary>

@@ -244,7 +244,7 @@ Copyright © Hakan Yildizhan 2020.
                             <Setter Property="Visibility" TargetName="GlyphPanel" Value="Visible"/>
                             <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
                         </Trigger>
-                        <Trigger Property="IsHighlighted" Value="True">
+                        <Trigger Property="IsHighlighted" Value="True"> 
                             <Setter Property="Background" TargetName="templateRoot" Value="#3D26A0DA"/>
                             <Setter Property="BorderBrush" TargetName="templateRoot" Value="#FF26A0DA"/>
                         </Trigger>
