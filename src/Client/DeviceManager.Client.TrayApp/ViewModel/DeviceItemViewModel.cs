@@ -157,7 +157,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
             }
         }
 
-        public bool UsedByMe 
+        public bool UsedByMe
         {
             get { return _usedByMe; }
             set
@@ -198,10 +198,16 @@ namespace DeviceManager.Client.TrayApp.ViewModel
 
         public bool ExecutingCommand { get; set; }
         public ICommand CheckoutOrReleaseCommand { get; set; }
+        public ICommand CopyClipboardToDeviceInfo { get; set; }
 
         public DeviceItemViewModel()
         {
             CheckoutOrReleaseCommand = new RelayCommand(async () => await CheckoutOrReleaseAsync());
+
+            CopyClipboardToDeviceInfo = new RelayCommand(async () =>
+            {
+                Clipboard.SetText(this.Header.Replace("\t", " ") + " " + this.Tooltip);
+            });
         }
 
         private async Task CheckoutOrReleaseAsync()
@@ -403,7 +409,7 @@ namespace DeviceManager.Client.TrayApp.ViewModel
                 {
                     sbTooltip.AppendLine();
                 }
-                
+
                 // Info about user that has the item checked out
                 sbTooltip.Append("Checked out by: ");
 

@@ -28,6 +28,8 @@ Copyright © Hakan Yildizhan 2020.
     <BitmapImage x:Key="TickImage" UriSource="/Resources/Images/tick.png" />
     <BitmapImage x:Key="LockedImage" UriSource="/Resources/Images/locked.png" />
     <BitmapImage x:Key="UnlockedImage" UriSource="/Resources/Images/unlocked.png" />
+    <BitmapImage x:Key="CopyImage" UriSource="/Resources/Images/copy.png" />
+
 
     <!-- Reminder window images -->
     <BitmapImage x:Key="QuestionMarkImage" UriSource="/Resources/Images/questionmark.png" />

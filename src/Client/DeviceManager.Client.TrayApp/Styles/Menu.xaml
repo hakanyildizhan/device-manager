@@ -3,7 +3,7 @@ This file is part of Device Manager project released under GNU General Public Li
 See file LICENSE.md or go to https://www.gnu.org/licenses/gpl-3.0.html for full license details.
 Copyright © Hakan Yildizhan 2020.
 -->
-    
+
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:DeviceManager.Client.TrayApp"
@@ -141,6 +141,7 @@ Copyright © Hakan Yildizhan 2020.
                                 <ColumnDefinition Width="30"/>
                                 <ColumnDefinition SharedSizeGroup="MenuItemIGTColumnGroup" Width="Auto"/>
                                 <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="20"/>
                             </Grid.ColumnDefinitions>
 
                             <Button x:Name="Icon"
@@ -211,6 +212,28 @@ Copyright © Hakan Yildizhan 2020.
                                     Opacity="0.7" 
                                     Text="{TemplateBinding InputGestureText}" 
                                     VerticalAlignment="Center"/>
+
+                            <Button x:Name="Iconf"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    Command="{Binding CopyClipboardToDeviceInfo}"
+                                    BorderThickness="0"
+                                    Background="Transparent"
+    
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                    VerticalAlignment="Center"
+                                     Grid.Column="5"
+                                >
+
+                                <StackPanel HorizontalAlignment="Center" >
+                                    <Image Source="{StaticResource CopyImage}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                   />
+
+                                </StackPanel>
+                            </Button>
+
+
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
